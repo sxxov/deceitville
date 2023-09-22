@@ -23,10 +23,6 @@
 
 	type $$Props = Props<THREE.Group>;
 	type $$Events = Events<THREE.Group>;
-	type $$Slots = Slots<THREE.Group> & {
-		fallback: Record<string, unknown>;
-		error: { error: any };
-	};
 
 	const component = forwardEventHandlers();
 	let ref = new THREE.Group();
@@ -40,36 +36,46 @@
 
 	let scrollY = 0;
 	$: scrollY, (rendererSize = rendererSize);
+
+	const cameraProgressStart = 0;
+	const cameraProgressEnd = 0.88;
+	$: cameraProgress = clamp(
+		map01(scrollY, 0, (rendererSize.y || $inner.height) * 10),
+		cameraProgressStart,
+		cameraProgressEnd,
+	);
+
+	const titleProgressStart = 0;
+	const titleProgressEnd = 1;
+	$: titleProgress = clamp(
+		map01(scrollY, 0, Number(rendererSize.y || $inner.height)),
+		titleProgressStart,
+		titleProgressEnd,
+	);
 </script>
 
 <svelte:window bind:scrollY />
 <T
 	is={ref}
-	dispose={false}
+	visible={cameraProgress < cameraProgressEnd}
 	{...$$restProps}
 	bind:this={$component}
 >
 	<InvalidateOnScroll />
-	<VillageSceneCamera
-		progress={clamp(
-			map01(scrollY, 0, (rendererSize.y || $inner.height) * 10),
-			0,
-			0.88,
-		)}
-	/>
-	<VillageSceneEnvironment />
-	<VillageSceneFog />
-	<!-- <VillageSceneLights /> -->
+
 	<VillageSceneMeshes />
-	<ContactShadows />
-	<VillageScenePostProcessing />
-	<VillageSceneTitle
-		progress={clamp(
-			map01(scrollY, 0, Number(rendererSize.y || $inner.height)),
-			0,
-			1,
-		)}
-	/>
+
+	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
+		<VillageSceneCamera progress={cameraProgress} />
+		<VillageSceneEnvironment />
+		<!-- <VillageSceneLights /> -->
+		<VillageSceneFog />
+		<VillageScenePostProcessing />
+	{/if}
+
+	{#if titleProgress >= titleProgressStart && titleProgress < titleProgressEnd}
+		<VillageSceneTitle progress={titleProgress} />
+	{/if}
 
 	<slot {ref} />
 </T>
