@@ -2,18 +2,8 @@
 	import { Composition, Tween } from '@sxxov/ut/animation';
 	import { bezierQuintIn, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { clamp01, lerp, map01 } from '@sxxov/ut/math';
-	import {
-		inner,
-		resolvePointerFromEvent,
-		type Point,
-	} from '@sxxov/ut/viewport';
-	import {
-		currentWritable,
-		useFrame,
-		useLoader,
-		useRender,
-		useThrelte,
-	} from '@threlte/core';
+	import { inner } from '@sxxov/ut/viewport';
+	import { useFrame, useLoader, useRender, useThrelte } from '@threlte/core';
 	import { onDestroy, onMount } from 'svelte';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
@@ -23,36 +13,19 @@
 		type TroikaTextRenderInfo,
 	} from 'troika-three-text';
 	import ttf_bigelow_rules from '../../../assets/village/BigelowRules-Regular.ttf?url';
+	import fence_1 from '../../../assets/village/parts/fence-1';
+	import lader from '../../../assets/village/parts/lader';
+	import mushroom_1 from '../../../assets/village/parts/mushroom-1';
 	import pointer_2 from '../../../assets/village/parts/pointer-2';
 	import pumpkin from '../../../assets/village/parts/pumpkin';
-	import mushroom_1 from '../../../assets/village/parts/mushroom-1';
-	import lader from '../../../assets/village/parts/lader';
 	import tree_2 from '../../../assets/village/parts/tree-2';
-	import fence_1 from '../../../assets/village/parts/fence-1';
-	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-	import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 	// import { MeshTransmissionMaterial } from '@pmndrs/vanilla';
-	import { MeshTransmissionMaterial } from './MeshTransmissionMaterial';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 	import exr_hdri from '../../../assets/village/hdri/dikhololo_night_2k.exr?url';
-	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
+	import { createPart } from '../../../lib/3d/gltf/part';
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';
-	import {
-		BloomEffect,
-		BrightnessContrastEffect,
-		ChromaticAberrationEffect,
-		DotScreenEffect,
-		EffectComposer,
-		EffectPass,
-		HueSaturationEffect,
-		KernelSize,
-		SMAAEffect,
-		SMAAPreset,
-	} from 'postprocessing';
-	import VillageScenePostProcessing from './VillageScenePostProcessing.svelte';
-	import { Store } from '@sxxov/ut/store';
-	import { Svg } from '@sxxov/sv/svg';
-	import { ic_space_bar } from 'maic/two_tone';
+	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
+	import { pointer } from '../../../lib/follow/pointer';
 
 	export let progress = 0;
 
@@ -291,21 +264,14 @@
 	});
 
 	// pointer model
-	const gltfLoader = new GLTFLoader();
-	const dracoLoader = new DRACOLoader();
-	dracoLoader.setDecoderPath(
-		'https://www.gstatic.com/draco/versioned/decoders/1.5.6/',
-	);
-	gltfLoader.setDRACOLoader(dracoLoader);
 	const pointerZ = z + 0.1;
-	let pointerScreenPoint: Point = { x: 0, y: 0 };
 	$: pointerScreenSpaceSize = getScreenSpaceSizeAtWorldZ(camera, pointerZ);
 	$: pointerWorldPoint = getScreenSpacePointOnPlane(
 		$inner,
-		pointerScreenPoint,
+		$pointer,
 		pointerScreenSpaceSize,
 	);
-	let pointerMesh: THREE.Mesh | undefined;
+	let pointerMesh: THREE.Object3D | undefined;
 	const pointerPickableGltfs = [
 		pointer_2,
 		pumpkin,
@@ -316,25 +282,20 @@
 	] as const;
 	let pointerPickI = 0;
 	const pointerPickGltf = async () => {
-		if (pointerMesh) scene.remove(pointerMesh);
+		// if (pointerMesh) scene.remove(pointerMesh);
 		const i = pointerPickI++ % pointerPickableGltfs.length;
-		const pointerGltf = await gltfLoader.parseAsync(
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-			pointerPickableGltfs[i]! as any,
-			'',
-		);
-		pointerMesh = pointerGltf.scene.children[0] as THREE.Mesh;
+		({ object: pointerMesh } = await createPart(pointerPickableGltfs[i]!));
 		// pointerMesh.material = new THREE.MeshPhysicalMaterial({
 		// 	emissive: new THREE.Color(0xff0000),
 		// });
 
-		scene.add(pointerMesh);
+		scene.add(pointerMesh!);
 	};
 	void pointerPickGltf();
 	$: pointerMesh?.position.set(
 		pointerWorldPoint.x,
 		pointerWorldPoint.y,
-		z + 0.1,
+		z + 0.1 + camera.position.z,
 	);
 	useFrame(() => {
 		if (pointerMesh) pointerMesh.rotation.z += 0.01;
@@ -359,20 +320,8 @@
 		scene.remove(...refs);
 		for (const ref of refs) ref.dispose();
 	});
-
-	const onMove = (e: MouseEvent | TouchEvent) => {
-		const { x, y } = resolvePointerFromEvent(e);
-		[pointerScreenPoint.x, pointerScreenPoint.y] = [x, y];
-		pointerScreenPoint = pointerScreenPoint;
-	};
 </script>
 
-<svelte:window
-	on:touchstart={onMove}
-	on:touchmove={onMove}
-	on:mouseover={onMove}
-	on:mousemove={onMove}
-/>
 <div
 	class="title"
 	role="presentation"
