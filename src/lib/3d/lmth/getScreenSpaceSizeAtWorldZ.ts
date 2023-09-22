@@ -7,9 +7,9 @@ export const getScreenSpaceSizeAtWorldZ = (
 	z: number,
 ): Size => {
 	// compensate for cameras not positioned at z=0
-	const cameraOffset = camera.position.z;
-	if (z < cameraOffset) z -= cameraOffset;
-	else z += cameraOffset;
+	// const cameraOffset = camera.position.z;
+	// if (z < cameraOffset) z -= cameraOffset;
+	// else z += cameraOffset;
 
 	// vertical fov in radians
 	const vFov = (camera.fov * Math.PI) / 180;
