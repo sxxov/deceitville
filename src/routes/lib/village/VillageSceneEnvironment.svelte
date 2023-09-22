@@ -16,7 +16,7 @@
 		hdri.mapping = THREE.EquirectangularReflectionMapping;
 
 		scene.environment = hdri;
-		scene.background = hdri;
+		// scene.background = hdri;
 		// renderer.toneMappingExposure = 0.3;
 	});
 
