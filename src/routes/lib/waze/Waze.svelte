@@ -6,19 +6,16 @@
 		bezierQuintInOut,
 		bezierQuintOut,
 	} from '@sxxov/ut/bezier/beziers';
-	import { clamp01, lerp, map, map01 } from '@sxxov/ut/math';
+	import { clamp01, map01 } from '@sxxov/ut/math';
 	import { onDestroy } from 'svelte';
-
-	type Direction = 'straight' | 'left' | 'right';
-	interface Segment {
-		m: number;
-		direction: Direction;
-	}
+	import type { WazeSegment } from './WazeSegment';
+	import { WazeDirection } from './WazeDirection';
+	import type { WazeTimeline } from './WazeTimeline';
 
 	export let m: number;
-	export let timeline: [Segment, ...Segment[]];
+	export let timeline: WazeTimeline;
 
-	let segments: [head: Segment, meat: Segment, tail: Segment] = [
+	let segments: [head: WazeSegment, meat: WazeSegment, tail: WazeSegment] = [
 		timeline[0],
 		timeline[0],
 		timeline[0],
@@ -87,7 +84,7 @@
 					{delay}
 					let:v
 				>
-					{#if direction === 'left'}
+					{#if direction === WazeDirection.LEFT}
 						{@const weightBase = 112}
 						{@const weightExtension = 35}
 						{@const weightHead = 21}
@@ -185,7 +182,7 @@
 								</div>
 							</div>
 						</div>
-					{:else if direction === 'straight'}
+					{:else if direction === WazeDirection.STRAIGHT}
 						{@const weightBase = 112}
 						{@const weightHead = 21}
 						{@const weightTotal = weightBase + weightHead}
@@ -255,7 +252,7 @@
 								</div>
 							</div>
 						</div>
-					{:else if direction === 'right'}
+					{:else if direction === WazeDirection.RIGHT}
 						{@const weightBase = 112}
 						{@const weightExtension = 35}
 						{@const weightHead = 21}
@@ -370,11 +367,11 @@
 		</div>
 		<div class="direction">
 			<p>
-				{#if segments[2].direction === 'left'}
+				{#if segments[2].direction === WazeDirection.LEFT}
 					Turn Left
-				{:else if segments[2].direction === 'straight'}
+				{:else if segments[2].direction === WazeDirection.STRAIGHT}
 					Go Straight
-				{:else if segments[2].direction === 'right'}
+				{:else if segments[2].direction === WazeDirection.RIGHT}
 					Turn Right
 				{:else}
 					???
