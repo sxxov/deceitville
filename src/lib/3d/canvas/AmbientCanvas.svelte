@@ -83,6 +83,10 @@
 			opacity: 0;
 			transition: opacity 1s var(----ease-slow-slow);
 
+			z-index: 1;
+
+			pointer-events: none;
+
 			&.active {
 				opacity: 1;
 			}
