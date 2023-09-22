@@ -2,10 +2,13 @@
 	import { T, useFrame } from '@threlte/core';
 	import * as THREE from 'three';
 	import camera_path from '../../../assets/village/camera_path.json';
+	import { useEphemeralCamera } from '../../../lib/3d/camera/useEphemeralCamera';
 
 	export let progress = 0;
 
-	let camera: THREE.PerspectiveCamera;
+	const ref = new THREE.PerspectiveCamera(30);
+	ref.scale.y = -1;
+	useEphemeralCamera(ref);
 
 	const curve = new THREE.CatmullRomCurve3(
 		camera_path.points.map(({ x, y, z }) => new THREE.Vector3(x, y, z)),
@@ -20,8 +23,6 @@
 	const position = new THREE.Vector3();
 	const lookAt = new THREE.Vector3();
 	useFrame(() => {
-		if (!camera) return;
-
 		// animate camera along spline
 
 		geometry.parameters.path.getPointAt(progress, position);
@@ -52,7 +53,7 @@
 
 		position.add(normal.clone().multiplyScalar(offset));
 
-		camera.position.copy(position);
+		ref.position.copy(position);
 
 		// using arclength for stablization in look ahead
 
@@ -63,19 +64,12 @@
 
 		// camera orientation 2 - up orientation via normal
 
-		camera.matrix.lookAt(camera.position, lookAt, normal);
-		camera.quaternion.setFromRotationMatrix(camera.matrix);
+		ref.matrix.lookAt(ref.position, lookAt, normal);
+		ref.quaternion.setFromRotationMatrix(ref.matrix);
 	});
 </script>
 
-<T.Group>
-	<T.PerspectiveCamera
-		fov={30}
-		near={0.1}
-		far={1000}
-		makeDefault
-		scale.y={-1}
-		{...$$restProps}
-		bind:ref={camera}
-	/>
-</T.Group>
+<T
+	is={ref}
+	{...$$restProps}
+/>
