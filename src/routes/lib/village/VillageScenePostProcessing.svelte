@@ -43,11 +43,11 @@
 		modulationOffset: 0,
 	});
 	const brightnessContrast = new BrightnessContrastEffect({
-		contrast: 0.6,
-		brightness: -0.2,
+		contrast: 0,
+		brightness: -0.3,
 	});
 	const dotScreen = new DotScreenEffect({
-		scale: 1,
+		scale: 0.5,
 	});
 	const vignette = new VignetteEffect({
 		eskil: false,
