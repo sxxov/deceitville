@@ -33,6 +33,14 @@
 			</div>
 			<div class="description">
 				{#if route}
+					<h4>
+						{randomHovered
+							? '00'
+							: String(routes.indexOf(route) + 1).padStart(
+									2,
+									'0',
+							  )}
+					</h4>
 					<h5>{randomHovered ? 'Random' : route.info.name}</h5>
 					<p>
 						{randomHovered
@@ -171,6 +179,8 @@
 					height: 900lvh;
 				}
 				&.end {
+					min-height: 100vh;
+					min-height: 100lvh;
 					height: calc(var(--length) * var(--height-route) + 25vh);
 					height: calc(var(--length) * var(--height-route) + 25lvh);
 				}
@@ -193,20 +203,34 @@
 				}
 
 				& > .description {
-					padding: 112px 0;
+					padding: 56px 0;
 					box-sizing: border-box;
 					display: flex;
 					flex-direction: column;
 					gap: 28px;
+					position: absolute;
 
-					@media (pointer: coarse) {
+					@media (max-width: 1000px) {
 						display: none;
+					}
+
+					& > h4 {
+						margin: 0;
+						color: #fff;
+						font-size: 4rem;
+						line-height: 1;
+						letter-spacing: -0.04em;
+						-webkit-text-fill-color: #fff0;
+						text-fill-color: #fff0;
+						-webkit-text-stroke: 0.1px #fff;
+						text-stroke: 0.1px #fff;
 					}
 
 					& > h5 {
 						text-transform: uppercase;
 						margin: 0;
 						color: #fff;
+						font-size: 1.5rem;
 						letter-spacing: -0.04em;
 						max-width: 300px;
 					}
