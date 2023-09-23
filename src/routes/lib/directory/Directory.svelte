@@ -12,8 +12,8 @@
 	let randomHovered = false;
 	let randomIntervalHandle: ReturnType<typeof setInterval> | undefined;
 	$: if (randomHovered && !exiting) {
-		let i = 0;
-		route = routes[++i % routes.length];
+		let i = Math.floor(Math.random() * routes.length);
+		route = routes[i];
 		randomIntervalHandle = setInterval(() => {
 			route = routes[++i % routes.length];
 		}, 300);
