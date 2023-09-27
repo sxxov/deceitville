@@ -68,7 +68,7 @@
 	let routes: DirectoryRoute[] | undefined;
 	onMount(async () => {
 		const infos: Record<string, BuildingInfo> = import.meta.glob(
-			'/src/routes/building/**/+page.svelte',
+			'./building/**/+page.svelte',
 			{
 				eager: true,
 				import: 'info',
