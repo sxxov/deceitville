@@ -4,6 +4,9 @@
 	import { ic_flag } from 'maic/two_tone';
 	import type { DirectoryRoute } from './DirectoryRoute';
 	import DirectoryScene from './DirectoryScene.svelte';
+	import svg_loop_corner from '../../../assets/directory/loops/corner.svg?raw';
+	import svg_loop_centre from '../../../assets/directory/loops/centre.svg?raw';
+	import { Spacer } from '@sxxov/sv/layout';
 
 	export let routes: DirectoryRoute[];
 
@@ -30,24 +33,104 @@
 		<div class="content">
 			<div class="heading">
 				<h2>Directory</h2>
+				<Spacer height={39} />
+				<hr />
 			</div>
 			<div class="description">
-				{#if route}
-					<h4>
-						{randomHovered
-							? '00'
-							: String(routes.indexOf(route) + 1).padStart(
-									2,
-									'0',
-							  )}
-					</h4>
-					<h5>{randomHovered ? 'Random' : route.info.name}</h5>
-					<p>
-						{randomHovered
-							? 'Let nature decide.'
-							: route.info.description}
-					</p>
-				{/if}
+				<div class="frame">
+					<div class="line left"></div>
+
+					<div class="corner top-left">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_corner}
+						/>
+					</div>
+					<div class="line top-left"></div>
+					<div class="centre top-left">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_centre}
+						/>
+					</div>
+					<div class="centre top-right">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_centre}
+						/>
+					</div>
+					<div class="line top-right"></div>
+					<div class="corner top-right">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_corner}
+						/>
+					</div>
+
+					<div class="line right"></div>
+
+					<div class="corner bottom-left">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_corner}
+						/>
+					</div>
+					<div class="line bottom-left"></div>
+					<div class="centre bottom-left">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_centre}
+						/>
+					</div>
+					<div class="centre bottom-right">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_centre}
+						/>
+					</div>
+					<div class="line bottom-right"></div>
+					<div class="corner bottom-right">
+						<Svg
+							height="100%"
+							width="100%"
+							svg={svg_loop_corner}
+						/>
+					</div>
+				</div>
+				<div class="content">
+					{#if route}
+						<div class="heading">
+							<h4>
+								{randomHovered
+									? '00'
+									: String(
+											routes.indexOf(route) + 1,
+									  ).padStart(2, '0')}
+							</h4>
+							<h5>
+								{randomHovered ? 'Random' : route.info.name}
+							</h5>
+						</div>
+						<p>
+							{randomHovered
+								? 'Let nature decide.'
+								: route.info.description}
+						</p>
+					{:else}
+						<div class="heading">
+							<h4>{routes.length} Places</h4>
+							<!-- <h5>Hi.</h5> -->
+						</div>
+						<p>Where would you like to go?</p>
+					{/if}
+				</div>
 			</div>
 		</div>
 		<div
@@ -194,6 +277,12 @@
 				padding: 14px;
 				box-sizing: border-box;
 
+				display: flex;
+				flex-direction: column;
+				gap: 56px;
+
+				border-top: 1px solid #fff;
+
 				& > .heading {
 					& > h2 {
 						margin: 0;
@@ -203,42 +292,240 @@
 				}
 
 				& > .description {
-					padding: 56px 0;
-					box-sizing: border-box;
-					display: flex;
-					flex-direction: column;
-					gap: 28px;
+					top: 168px;
+					width: calc(100% - 28px);
+					height: calc(100vh - 168px - 28px);
+					height: calc(100lvh - 168px - 28px);
 					position: absolute;
 
 					@media (max-width: 1000px) {
 						display: none;
 					}
 
-					& > h4 {
-						margin: 0;
-						color: #fff;
-						font-size: 4rem;
-						line-height: 1;
-						letter-spacing: -0.04em;
-						-webkit-text-fill-color: #fff0;
-						text-fill-color: #fff0;
-						-webkit-text-stroke: 0.1px #fff;
-						text-stroke: 0.1px #fff;
+					& > .frame {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+
+						pointer-events: none;
+
+						--height-corner: 56px;
+						--width-corner: 56px;
+
+						--height-centre: 28px;
+						--width-centre: 84px;
+
+						--padding-line: 14px;
+						--weight-line: 0.5px;
+						--gap-line: 14px;
+
+						& > .corner {
+							position: absolute;
+
+							height: var(--height-corner);
+							width: var(--width-corner);
+
+							&.top-left {
+								top: 0;
+								left: 0;
+								transform: scale(1, 1);
+							}
+
+							&.top-right {
+								top: 0;
+								right: 0;
+								transform: scale(-1, 1);
+							}
+
+							&.bottom-left {
+								bottom: 0;
+								left: 0;
+								transform: scale(1, -1);
+							}
+
+							&.bottom-right {
+								bottom: 0;
+								right: 0;
+								transform: scale(-1, -1);
+							}
+						}
+
+						& > .centre {
+							position: absolute;
+
+							height: var(--height-centre);
+							width: var(--width-centre);
+
+							&.top-left {
+								top: 0;
+								left: calc(50% - var(--width-centre));
+								transform: scale(1, 1);
+							}
+
+							&.top-right {
+								top: 0;
+								right: calc(50% - var(--width-centre));
+								transform: scale(-1, 1);
+							}
+
+							&.bottom-left {
+								bottom: 0;
+								left: calc(50% - var(--width-centre));
+								transform: scale(1, -1);
+							}
+
+							&.bottom-right {
+								bottom: 0;
+								right: calc(50% - var(--width-centre));
+								transform: scale(-1, -1);
+							}
+						}
+
+						& > .line {
+							position: absolute;
+
+							background: currentColor;
+
+							&.left {
+								top: calc(
+									var(--height-corner) + var(--gap-line)
+								);
+								left: var(--padding-line);
+								width: var(--weight-line);
+								height: calc(
+									100% -
+										(var(--height-corner) + var(--gap-line)) *
+										2
+								);
+							}
+
+							&.top-left {
+								top: var(--padding-line);
+								left: calc(
+									var(--width-corner) + var(--gap-line)
+								);
+								width: calc(
+									50% -
+										(
+											var(--width-corner) +
+												var(--width-centre) +
+												var(--gap-line) * 2
+										)
+								);
+								height: var(--weight-line);
+							}
+
+							&.top-right {
+								top: var(--padding-line);
+								right: calc(
+									var(--width-corner) + var(--gap-line)
+								);
+								width: calc(
+									50% -
+										(
+											var(--width-corner) +
+												var(--width-centre) +
+												var(--gap-line) * 2
+										)
+								);
+								height: var(--weight-line);
+							}
+
+							&.right {
+								top: calc(
+									var(--height-corner) + var(--gap-line)
+								);
+								right: var(--padding-line);
+								width: var(--weight-line);
+								height: calc(
+									100% -
+										(var(--height-corner) + var(--gap-line)) *
+										2
+								);
+							}
+
+							&.bottom-left {
+								bottom: var(--padding-line);
+								left: calc(
+									var(--width-corner) + var(--gap-line)
+								);
+								width: calc(
+									50% -
+										(
+											var(--width-corner) +
+												var(--width-centre) +
+												var(--gap-line) * 2
+										)
+								);
+								height: var(--weight-line);
+							}
+
+							&.bottom-right {
+								bottom: var(--padding-line);
+								right: calc(
+									var(--width-corner) + var(--gap-line)
+								);
+								width: calc(
+									50% -
+										(
+											var(--width-corner) +
+												var(--width-centre) +
+												var(--gap-line) * 2
+										)
+								);
+								height: var(--weight-line);
+							}
+						}
 					}
 
-					& > h5 {
-						text-transform: uppercase;
-						margin: 0;
-						color: #fff;
-						font-size: 1.5rem;
-						letter-spacing: -0.04em;
-						max-width: 300px;
-					}
+					& > .content {
+						display: flex;
+						flex-direction: column;
+						justify-content: space-between;
+						gap: 28px;
+						padding: 56px;
+						box-sizing: border-box;
 
-					& > p {
-						margin: 0;
-						color: #fff;
-						max-width: 300px;
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+
+						& > .heading {
+							display: flex;
+							flex-direction: column;
+							gap: clamp(2rem, 6vw, 6rem);
+
+							& > h4 {
+								margin: 0;
+								color: #fff;
+								font-size: clamp(2rem, 6vw, 6rem);
+								line-height: 1;
+								letter-spacing: -0.04em;
+								-webkit-text-fill-color: #fff0;
+								text-fill-color: #fff0;
+								-webkit-text-stroke: 0.1px #fff;
+								text-stroke: 0.1px #fff;
+							}
+
+							& > h5 {
+								text-transform: uppercase;
+								margin: 0;
+								color: #fff;
+								font-size: 1.5rem;
+								letter-spacing: -0.04em;
+								max-width: 300px;
+							}
+						}
+
+						& > p {
+							margin: 0;
+							color: #fff;
+							max-width: 300px;
+						}
 					}
 				}
 			}
