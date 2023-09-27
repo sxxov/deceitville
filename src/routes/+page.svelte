@@ -65,7 +65,7 @@
 		},
 	] satisfies WazeTimeline as WazeTimeline;
 
-	let routes: DirectoryRoute[] | undefined;
+	let routes: DirectoryRoute[] = [];
 	onMount(async () => {
 		const infos: Record<string, BuildingInfo> = import.meta.glob(
 			'./building/**/+page.svelte',
@@ -108,10 +108,7 @@
 	</div>
 
 	<Story />
-
-	{#if routes}
-		<Directory {routes} />
-	{/if}
+	<Directory {routes} />
 </div>
 
 <style lang="postcss">
