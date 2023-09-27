@@ -6,9 +6,6 @@
 
 <script lang="ts">
 	import src_pace from 'pace-js?url';
-	import { afterNavigate } from '$app/navigation';
-	import Lenis from '@studio-freight/lenis';
-	import { onMount } from 'svelte';
 	import img_favi from '../assets/common/favi/favicon.png?png&imagetools';
 	import ic_favi from '../assets/common/favi/favicon.svg?url';
 	import src_webmanifest from '../assets/common/favi/site.webmanifest?url';
@@ -19,29 +16,9 @@
 	import { client } from '@sxxov/ut/viewport';
 	import * as THREE from 'three';
 	import AmbientCanvas from '../lib/3d/canvas/AmbientCanvas.svelte';
+	import { useLenis } from '../lib/lenis/useLenis';
 
-	let lenis: Lenis | undefined;
-	let lenisRafHandle: number | undefined;
-
-	const recreateLenis = () => {
-		if (lenis) lenis.destroy();
-		if (lenisRafHandle) cancelAnimationFrame(lenisRafHandle);
-
-		lenis = new Lenis({
-			duration: 0.5,
-		});
-		lenis.on('scroll', () => {
-			document.documentElement.dispatchEvent(new CustomEvent('scroll'));
-		});
-
-		lenisRafHandle = requestAnimationFrame(function raf(time) {
-			lenis!.raf(time);
-			lenisRafHandle = requestAnimationFrame(raf);
-		});
-	};
-
-	afterNavigate(recreateLenis);
-	onMount(recreateLenis);
+	useLenis();
 </script>
 
 <svelte:head>
