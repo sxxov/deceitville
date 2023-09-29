@@ -2,7 +2,8 @@ import {
 	GLTFLoader,
 	type GLTF,
 } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import type { gltfs } from '../../../assets/village/parts/index';
+import type * as parts from '../../../assets/village/parts/gltfs.db';
+import type * as text from '../../../assets/village/text/gltfs.db';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 export interface Part extends GLTF {
@@ -16,9 +17,12 @@ dracoLoader.setDecoderPath(
 );
 gltfLoader.setDRACOLoader(dracoLoader);
 
-const partCache = new Map<(typeof gltfs)[keyof typeof gltfs], Part>();
+const partCache = new Map<
+	(typeof parts)[keyof typeof parts] | (typeof text)[keyof typeof text],
+	Part
+>();
 export const createPart = async (
-	gltf: (typeof gltfs)[keyof typeof gltfs],
+	gltf: (typeof parts)[keyof typeof parts] | (typeof text)[keyof typeof text],
 ): Promise<Part> => {
 	let part = partCache.get(gltf);
 

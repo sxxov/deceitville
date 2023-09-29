@@ -8,17 +8,26 @@
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
 	import {
-		Text,
-		preloadFont,
-		type TroikaTextRenderInfo,
-	} from 'troika-three-text';
-	import ttf_bigelow_rules from '../../../assets/village/BigelowRules-Regular.ttf?url';
-	import fence_1 from '../../../assets/village/parts/fence-1';
-	import lader from '../../../assets/village/parts/lader';
-	import mushroom_1 from '../../../assets/village/parts/mushroom-1';
-	import pointer_2 from '../../../assets/village/parts/pointer-2';
-	import pumpkin from '../../../assets/village/parts/pumpkin';
-	import tree_2 from '../../../assets/village/parts/tree-2';
+		fence_1,
+		lader,
+		mushroom_1,
+		pointer_2,
+		pumpkin,
+		tree_2,
+	} from '../../../assets/village/parts/gltfs.db';
+	import {
+		c,
+		d,
+		e,
+		e_x1,
+		e_x2,
+		i,
+		i_x1,
+		l,
+		l_x1,
+		t,
+		v,
+	} from '../../../assets/village/text/gltfs.db';
 	// import { MeshTransmissionMaterial } from '@pmndrs/vanilla';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 	import exr_hdri from '../../../assets/village/hdri/dikhololo_night_2k.exr?url';
@@ -39,218 +48,157 @@
 	camera.lookAt(0, 0, 0);
 
 	// text variables
-	const font = ttf_bigelow_rules;
 	const z = -2;
-	const text = 'Deceitville';
-	const textKerning = [
-		0, -0.007, -0.012, 0.012, -0.022, -0.032, 0.016, -0.012, -0.006, -0.028,
-		0,
-	] as const;
-	const textKeyframes = [
+	const textKeyframesOverlap = 0.5;
+	const textKeyframeFactories = [
 		...Array(4)
 			.fill(0)
-			.map((_, i, { length }) => 1 - (i + 0) / (length - 1))
-			.map(
-				(v, i) =>
-					({
-						position: [0, 0, -(1 - v) * 2 + 1],
-						rotation: [0, 90 * v, 90 * v * (i % 2 > 0 ? 1 : -1)],
-						scale: [1, 1, 1],
-					}) as const,
-			),
-		{
-			position: [0, 0, -2],
-			rotation: [0, 0, 0],
-			scale: [1, 1, 1],
-		} as const,
+			.map((_, i, { length }) => (t: number) => {
+				const n = i;
+				const v = clamp01(
+					map01(
+						t,
+						n / length + -(textKeyframesOverlap * n) / length,
+						(n + 1) / length,
+					),
+				);
+
+				return {
+					position: [0, 0, -(1 - v) * 2 + 1],
+					rotation: [90 * v, 0, 90 * v * (n % 2 > 0 ? 1 : -1)],
+					scale: [1, 1, 1],
+				} as const;
+			}),
+		(v: number) =>
+			({
+				position: [0, 0, v * -2],
+				rotation: [0, 0, 0],
+				scale: [1, 1, 1],
+			}) as const,
 		...Array(6)
 			.fill(0)
-			.map((_, i, { length }) => (i + 0) / (length - 1))
-			.map(
-				(v, i) =>
-					({
-						position: [0, 0, -(1 - v) * 2 + 1],
-						rotation: [0, -90 * v, 90 * v * (i % 2 > 0 ? 1 : -1)],
-						scale: [1, 1, 1],
-					}) as const,
-			),
+			.map((_, i, { length }) => (t: number) => {
+				const n = length - 1 - i;
+				const v = clamp01(
+					map01(
+						t,
+						n / length + -(textKeyframesOverlap * n) / length,
+						(n + 1) / length,
+					),
+				);
+
+				return {
+					position: [0, 0, -(1 - v) * 2 + 1],
+					rotation: [-90 * v, 0, 90 * v * (n % 2 > 0 ? 1 : -1)],
+					scale: [1, 1, 1],
+				} as const;
+			}),
 	] as const;
-	const charset = new Set(text.split(''));
 
 	// setup refs
-	const refs: Text[] = text.split('').map((char) => {
-		const ref = new Text();
-		ref.font = font;
-		ref.text = char;
-		ref.color = 0xffffff;
-		ref.letterSpacing = -0.05;
-
-		return ref;
-	});
-	for (const ref of refs)
-		ref.material = new THREE.MeshStandardMaterial({
-			color: new THREE.Color(0xffffff),
-			depthWrite: false,
-			depthTest: false,
-			// transparent: false,
-			emissive: new THREE.Color(0xffffff),
-			emissiveIntensity: 1,
-		});
-	$: for (const ref of refs) ref.fontSize = ($inner.width * 0.25) / 100;
-
-	let refsBboxes: THREE.Box3[] = [];
-	let refsSizes: THREE.Vector3[] = [];
-	let refsWidthUnkerned = 0;
-	let refsWidth = 0;
-	let refsPositions: THREE.Vector3[] = [];
-	let refsKerningWidth = 0;
-	let refReady = false;
-	$: {
-		$inner.width;
-
-		void Promise.allSettled(
-			refs.map(
-				async (ref) =>
-					new Promise<void>((resolve) => {
-						ref.sync(() => void resolve());
-					}),
-			),
-		).then(() => {
-			refsBboxes = refs.map((ref) => {
-				const [xmin, ymin, xmax, ymax] = ref.textRenderInfo.blockBounds;
-
-				return new THREE.Box3(
-					new THREE.Vector3(xmin, ymin, 0),
-					new THREE.Vector3(xmax, ymax, 0),
-				);
-			});
-			refsSizes = refsBboxes.map((bbox) =>
-				bbox.getSize(new THREE.Vector3()),
-			);
-			refsWidthUnkerned = refsSizes.reduce((acc, { x }) => {
-				return acc + x;
-			}, 0);
-			refsKerningWidth = textKerning.reduce<number>(
-				(acc, v) => acc + v * refsWidthUnkerned,
-				0,
-			);
-
-			// console.log(refsWidth, refsBboxes, refsSizes);
-			// const refsHeight = Math.max(...refsSizes.map(({ y }) => y));
-			refsPositions = [];
-			let cumX = 0;
-			for (let i = 0; i < refs.length; i++) {
-				const ref = refs[i]!;
-				const size = refsSizes[i]!;
-				const kerning = textKerning[i]!;
-				const { letterSpacing } = ref;
-
-				refsPositions.push(
-					new THREE.Vector3(cumX + size.x / 2, size.y / 2, z),
-				);
-				cumX += size.x + kerning * refsWidthUnkerned + letterSpacing;
-			}
-
-			refsWidth = cumX;
-
-			for (const pos of refsPositions)
-				pos.x -= refsWidth / 2 - refsKerningWidth / 2;
-
-			refReady = true;
-		});
-	}
-	$: if (refsPositions.length === refs.length && !introing)
-		for (let i = 0; i < refs.length; i++) {
-			const ref = refs[i]!;
-
-			ref.position.copy(refsPositions[i]!);
-
-			invalidate();
-		}
-	for (const ref of refs) scene.add(ref);
+	let refs: THREE.Mesh[] | undefined;
+	let positions: THREE.Vector3[] | undefined;
+	$: scale = ($inner.width * 0.25) / 100;
 
 	const intro = progress <= 0;
-	$: introing = intro && refReady;
-	$: if (introing) void introComposition!.play();
-	const introTweens = intro
-		? refs.map(() => new Tween(0, 1, 1000))
-		: undefined;
-	const introComposition = intro
-		? new Composition(
-				refs.map((ref, i) => ({
-					tween: introTweens![i]!,
+	$: introing = Boolean(intro && refs);
+	$: if (introing) void introComposition?.play();
+	let introTweens: Tween[] | undefined;
+	let introComposition: Composition | undefined;
+	let introUnsubscribes: (() => void)[] | undefined;
+	onMount(async () => {
+		refs = await Promise.all(
+			[d, e_x2, c, e_x1, i_x1, t, v, i, l_x1, l, e].map(async (gltf) => {
+				const { object } = await createPart(gltf);
+
+				return object! as THREE.Mesh;
+			}),
+		);
+
+		for (const ref of refs) {
+			ref.position.z = z;
+
+			ref.material = new THREE.MeshStandardMaterial({
+				color: new THREE.Color(0xffffff),
+				depthWrite: false,
+				depthTest: false,
+				// transparent: false,
+				emissive: new THREE.Color(0xffffff),
+				emissiveIntensity: 1,
+			});
+
+			scene.attach(ref);
+		}
+
+		positions = refs.map((ref) => ref.position.clone());
+
+		if (intro) {
+			introTweens = refs.map(() => new Tween(0, 1, 1000));
+			introComposition = new Composition(
+				introTweens.map((tween, i) => ({
+					tween,
 					delay: i * 100,
 				})),
-		  )
-		: undefined;
-	const introUnsubscribes = intro
-		? refs.map((ref, i) => {
-				const tween = introTweens![i]!;
+			);
+			introUnsubscribes = introTweens.map((tween, i) => {
+				const ref = refs![i]!;
 
 				ref.visible = false;
 				return tween.subscribeLazy((t) => {
 					ref.visible = true;
+
 					ref.position.y =
-						refsPositions[i]!.y +
+						positions![i]!.y +
 						(1 - bezierQuintOut.at(clamp01(t))) * 2;
-					ref.rotation.x = degToRad(
-						lerp(bezierQuintOut.at(clamp01(t)), -90, 0),
+					ref.rotation.z = degToRad(
+						lerp(bezierQuintOut.at(clamp01(t)), 90, 0),
 					);
-					ref.sync();
+					ref.rotation.x = degToRad(
+						lerp(bezierQuintOut.at(clamp01(t)), 0, 90),
+					);
 
 					invalidate();
 				});
-		  })
-		: undefined;
+			});
+		}
+	});
 
 	// animate on progress change
 	$: {
 		camera.fov = lerp(progress, 100, 180);
 		camera.position.z = lerp(progress, 0, -2);
-		camera.updateProjectionMatrix();
-		camera = camera;
+		// camera.updateProjectionMatrix();
+		// camera = camera;
 
-		if (refsPositions.length > 0)
+		if (refs)
 			for (let i = 0; i < refs.length; i++) {
 				const ref = refs[i]!;
-				const positionInit = refsPositions[i]!;
-				const { position, rotation, scale } = textKeyframes[i]!;
+				const position = positions![i]!;
+				const {
+					position: toPosition,
+					rotation: toRotation,
+					scale: toScale,
+				} = textKeyframeFactories[i]!(progress);
 
 				ref.position.set(
-					positionInit.x + lerp(progress, 0, position[0]),
-					positionInit.y + lerp(progress, 0, position[1]),
-					positionInit.z + lerp(progress, 0, position[2]),
+					position.x + toPosition[0],
+					position.y + toPosition[1],
+					position.z + toPosition[2],
 				);
 				ref.rotation.set(
-					degToRad(lerp(progress, 0, rotation[0])),
-					degToRad(lerp(progress, 0, rotation[1])),
-					degToRad(lerp(progress, 0, rotation[2])),
+					degToRad(toRotation[0] + 90),
+					degToRad(toRotation[1]),
+					degToRad(toRotation[2]),
 				);
 				ref.scale.set(
-					lerp(progress, 1, scale[0]),
-					lerp(progress, 1, scale[1]),
-					lerp(progress, 1, scale[2]),
+					toScale[0] * scale,
+					toScale[1] * scale,
+					toScale[2] * scale,
 				);
 			}
 
 		invalidate();
 	}
-
-	// preload font
-	onMount(async () => {
-		await new Promise<TroikaTextRenderInfo>((resolve) => {
-			preloadFont(
-				{
-					font,
-					characters: [...charset],
-					sdfGlyphSize: 64,
-				},
-				(v) => {
-					resolve(v);
-				},
-			);
-		});
-	});
 
 	// environment
 	const exrLoader = useLoader(EXRLoader);
@@ -317,8 +265,7 @@
 		introing = false;
 		if (introUnsubscribes)
 			for (const unsubscribe of introUnsubscribes) unsubscribe();
-		scene.remove(...refs);
-		for (const ref of refs) ref.dispose();
+		if (refs) scene.remove(...refs);
 	});
 </script>
 
