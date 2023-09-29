@@ -38,7 +38,7 @@
 	$: scrollY, (rendererSize = rendererSize);
 
 	const cameraProgressStart = 0;
-	const cameraProgressEnd = 0.88;
+	const cameraProgressEnd = 1;
 	$: cameraProgress = clamp(
 		map01(scrollY, 0, (rendererSize.y || $inner.height) * 10),
 		cameraProgressStart,
@@ -48,7 +48,7 @@
 	const titleProgressStart = 0;
 	const titleProgressEnd = 1;
 	$: titleProgress = clamp(
-		map01(scrollY, 0, Number(rendererSize.y || $inner.height)),
+		map01(scrollY, 0, Number((rendererSize.y || $inner.height) * 1.5)),
 		titleProgressStart,
 		titleProgressEnd,
 	);
@@ -57,7 +57,7 @@
 <svelte:window bind:scrollY />
 <T
 	is={ref}
-	visible={cameraProgress < cameraProgressEnd}
+	visible={cameraProgress < cameraProgressEnd - 0.1}
 	{...$$restProps}
 	bind:this={$component}
 >
@@ -65,8 +65,10 @@
 
 	<VillageSceneMeshes />
 
-	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
+	{#if cameraProgress >= cameraProgressStart}
 		<VillageSceneCamera progress={cameraProgress} />
+	{/if}
+	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
 		<VillageSceneEnvironment />
 		<!-- <VillageSceneLights /> -->
 		<VillageSceneFog />

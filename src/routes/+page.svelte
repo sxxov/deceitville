@@ -12,6 +12,8 @@
 	import Waze from './lib/waze/Waze.svelte';
 	import { WazeDirection } from './lib/waze/WazeDirection';
 	import type { WazeTimeline } from './lib/waze/WazeTimeline';
+	import Continuation from './lib/continuation/Continuation.svelte';
+	import PseudoHeightContextProvider from './lib/layout/PseudoHeightContextProvider.svelte';
 
 	const { renderer } = useThrelte();
 
@@ -60,7 +62,7 @@
 			direction: WazeDirection.RIGHT,
 		},
 		{
-			m: vh * 9,
+			m: vh * 8,
 			direction: WazeDirection.STRAIGHT,
 		},
 	] satisfies WazeTimeline as WazeTimeline;
@@ -82,6 +84,15 @@
 				object: (await createPart(info.facade)).object!,
 			})),
 		);
+		routes = [
+			...routes,
+			...routes,
+			...routes,
+			...routes,
+			...routes,
+			...routes,
+			...routes,
+		];
 	});
 </script>
 
@@ -93,7 +104,7 @@
 	/>
 
 	<div class="frame">
-		{#if scrollY < vh * 8.8}
+		{#if vh > 0 && scrollY < vh * 8}
 			<div
 				class="waze"
 				in:dropDown
@@ -107,8 +118,11 @@
 		{/if}
 	</div>
 
-	<Story />
-	<Directory {routes} />
+	<PseudoHeightContextProvider>
+		<Story />
+		<Directory {routes} />
+		<Continuation />
+	</PseudoHeightContextProvider>
 </div>
 
 <style lang="postcss">

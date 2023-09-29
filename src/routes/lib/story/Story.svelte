@@ -6,6 +6,7 @@
 	import { whenResize } from '@sxxov/sv/ut/use';
 	import StoryPlane from './StoryPlane.svelte';
 	import VillageScene from '../village/VillageScene.svelte';
+	import { usePseudoHeight } from '../layout/usePseudoHeight';
 
 	const { renderer } = useThrelte();
 	const storyIndexes = [0, 1, 2, 3] as const;
@@ -16,6 +17,9 @@
 		$client.height,
 		renderer.getSize(new THREE.Vector2()).height,
 	);
+
+	const pseudoHeight = usePseudoHeight();
+	$: pseudoHeight.self.set(vh * 9);
 
 	let storyContentDiv: HTMLDivElement | undefined;
 	let storyClientWidth = 0;

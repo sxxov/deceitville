@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { T, useFrame } from '@threlte/core';
 	import * as THREE from 'three';
+	import { clamp } from 'three/src/math/MathUtils.js';
 	import camera_path from '../../../assets/village/camera_path.json';
 	import { useEphemeralCamera } from '../../../lib/3d/camera/useEphemeralCamera';
 
 	export let progress = 0;
 
 	const ref = new THREE.PerspectiveCamera(30);
+	ref.name = 'VillageSceneCamera';
 	ref.scale.y = -1;
 	useEphemeralCamera(ref);
 
@@ -23,14 +25,16 @@
 	const position = new THREE.Vector3();
 	const lookAt = new THREE.Vector3();
 	useFrame(() => {
+		const t = clamp(progress, 0, 0.88);
+
 		// animate camera along spline
 
-		geometry.parameters.path.getPointAt(progress, position);
+		geometry.parameters.path.getPointAt(t, position);
 
 		// interpolation
 
 		const segments = geometry.tangents.length;
-		const pickt = progress * segments;
+		const pickt = t * segments;
 		const pick = Math.floor(pickt);
 		const pickNext = (pick + 1) % segments;
 
@@ -44,7 +48,7 @@
 				.multiplyScalar(pickt - pick)
 				.add(geometry.binormals[pick]!);
 
-		geometry.parameters.path.getTangentAt(progress, direction);
+		geometry.parameters.path.getTangentAt(t, direction);
 		const offset = 0;
 
 		normal.copy(binormal).cross(direction);
@@ -58,7 +62,7 @@
 		// using arclength for stablization in look ahead
 
 		geometry.parameters.path.getPointAt(
-			(progress + 30 / geometry.parameters.path.getLength()) % 1,
+			(t + 30 / geometry.parameters.path.getLength()) % 1,
 			lookAt,
 		);
 

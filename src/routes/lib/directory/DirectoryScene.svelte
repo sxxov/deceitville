@@ -3,7 +3,7 @@
 	import { mounted } from '@sxxov/sv/ut/stores';
 	import { Composition, Tween as Tw } from '@sxxov/ut/animation';
 	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
-	import { inner, type Point } from '@sxxov/ut/viewport';
+	import type { Point } from '@sxxov/ut/viewport';
 	import {
 		forwardEventHandlers,
 		T,
@@ -17,10 +17,14 @@
 	import { pointer } from '../../../lib/follow/pointer';
 	import VillageScenePostProcessing from '../village/VillageScenePostProcessing.svelte';
 	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
+	import type { PseudoHeight } from '../layout/PseudoHeight';
+	import { tick } from 'svelte';
+	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
 
 	type $$Props = Props<THREE.Group> & {
 		ref?: typeof ref;
 		object: typeof object;
+		pseudoHeight: typeof pseudoHeight;
 	};
 	type $$Events = Events<THREE.Group>;
 
@@ -28,6 +32,9 @@
 
 	export let ref = new THREE.Group();
 	export let object: THREE.Object3D | undefined;
+	export let pseudoHeight: PseudoHeight;
+
+	const { top, bottom } = pseudoHeight;
 
 	let exiting = false;
 	export const exit = async () => {
@@ -35,8 +42,10 @@
 		const fogInit = scene.fog;
 		scene.fog = fog;
 		await exitComposition.play();
-		ref.parent?.remove(ref);
 		scene.fog = fogInit;
+		void tick().then(() => {
+			ref.parent?.remove(ref);
+		});
 	};
 
 	const component = forwardEventHandlers();
@@ -67,9 +76,12 @@
 </script>
 
 <svelte:window bind:scrollY />
-{#if scrollY > $inner.height * 8.8}
+{#if scrollY > $top}
 	<DirectorySceneCamera />
+{/if}
+{#if scrollY > $top && scrollY < $bottom}
 	<VillageScenePostProcessing />
+	<VillageSceneEnvironment />
 {/if}
 <T
 	is={ref}

@@ -7,8 +7,25 @@
 	import svg_loop_corner from '../../../assets/directory/loops/corner.svg?raw';
 	import svg_loop_centre from '../../../assets/directory/loops/centre.svg?raw';
 	import { Spacer } from '@sxxov/sv/layout';
+	import { usePseudoHeight } from '../layout/usePseudoHeight';
+	import { useThrelte } from '@threlte/core';
+	import { inner, client } from '@sxxov/ut/viewport';
+	import * as THREE from 'three';
 
 	export let routes: DirectoryRoute[];
+
+	const { renderer } = useThrelte();
+	$: vh = Math.max(
+		$inner.height,
+		$client.height,
+		renderer.getSize(new THREE.Vector2()).height,
+	);
+	const pseudoHeight = usePseudoHeight();
+	$: pseudoHeight.self.set(
+		$inner.width > 1000
+			? Math.max(100 * (routes.length + 1), vh)
+			: 200 + 100 * (routes.length + 1),
+	);
 
 	let route: DirectoryRoute | undefined;
 	let exiting = false;
@@ -153,6 +170,15 @@
 			>
 				<div
 					class="route"
+					on:touchstart={() => {
+						randomHovered = true;
+					}}
+					on:touchmove={() => {
+						randomHovered = true;
+					}}
+					on:touchend={() => {
+						randomHovered = false;
+					}}
 					on:pointerenter={() => {
 						randomHovered = true;
 					}}
@@ -233,6 +259,7 @@
 </div>
 <DirectoryScene
 	object={route?.object}
+	{pseudoHeight}
 	bind:this={directoryScene}
 />
 
@@ -262,10 +289,15 @@
 					height: 900lvh;
 				}
 				&.end {
-					min-height: 100vh;
-					min-height: 100lvh;
-					height: calc(var(--length) * var(--height-route) + 25vh);
-					height: calc(var(--length) * var(--height-route) + 25lvh);
+					min-height: 25vh;
+					min-height: 25lvh;
+					height: calc(
+						0,
+						(var(--length) + 1) * var(--height-route) - 100vh
+					);
+					height: calc(
+						(var(--length) + 1) * var(--height-route) - 100lvh
+					);
 				}
 			}
 
@@ -551,8 +583,12 @@
 					height: 900lvh;
 				}
 				&.end {
-					height: 25vh;
-					height: 25lvh;
+					/* height: 25vh;
+					height: 25lvh; */
+
+					@media (max-width: 1000px) {
+						height: 0;
+					}
 				}
 			}
 

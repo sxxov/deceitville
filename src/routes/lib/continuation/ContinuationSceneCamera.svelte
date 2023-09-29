@@ -12,7 +12,7 @@
 	type $$Events = Events<THREE.PerspectiveCamera>;
 
 	export let ref = new THREE.PerspectiveCamera(30);
-	ref.name = 'DirectorySceneCamera';
+	ref.name = 'ContinuationSceneCamera';
 	useEphemeralCamera(ref);
 
 	const component = forwardEventHandlers();
