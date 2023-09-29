@@ -19,6 +19,9 @@
 	import * as THREE from 'three';
 	import img_lut from '../../../assets/common/3d/lut/django-25.cube?url';
 
+	export let brightness = -0.3;
+	export let contrast = 0;
+
 	const { camera, scene, renderer } = useThrelte();
 
 	const composer = new EffectComposer(renderer);
@@ -43,8 +46,8 @@
 		modulationOffset: 0,
 	});
 	const brightnessContrast = new BrightnessContrastEffect({
-		contrast: 0,
-		brightness: -0.3,
+		contrast,
+		brightness,
 	});
 	const dotScreen = new DotScreenEffect({
 		scale: 0.5,
