@@ -14,6 +14,7 @@
 	import type { WazeTimeline } from './lib/waze/WazeTimeline';
 	import Continuation from './lib/continuation/Continuation.svelte';
 	import PseudoHeightContextProvider from './lib/layout/PseudoHeightContextProvider.svelte';
+	import Health from './lib/health/Health.svelte';
 
 	const { renderer } = useThrelte();
 
@@ -121,6 +122,7 @@
 	<PseudoHeightContextProvider>
 		<Story />
 		<Directory {routes} />
+		<Health />
 		<Continuation />
 	</PseudoHeightContextProvider>
 </div>
