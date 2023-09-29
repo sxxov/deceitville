@@ -652,6 +652,26 @@
 							}
 						}
 
+						&:active {
+							&::before {
+								background: #000;
+							}
+
+							& > h6 {
+								color: #fff;
+							}
+
+							& > .arrow {
+								--colour: #fff;
+								--width-tail: 56px;
+								--width-head: 14px;
+							}
+
+							& > .icon {
+								color: #fff;
+							}
+						}
+
 						& > .arrow {
 							--weight: 2px;
 							--width-tail: 0px;
