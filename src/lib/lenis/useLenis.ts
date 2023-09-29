@@ -1,25 +1,30 @@
 import { afterNavigate } from '$app/navigation';
 import Lenis from '@studio-freight/lenis';
+import { Store } from '@sxxov/ut/store';
 import { onMount } from 'svelte';
 
-let lenis: Lenis | undefined;
+export const lenis = new Store<Lenis | undefined>(undefined);
 let rafHandle: ReturnType<typeof requestAnimationFrame> | undefined;
 
 const onCreate = () => {
-	if (lenis) lenis.destroy();
+	let instance = lenis.get();
+
+	if (instance) instance.destroy();
 	if (rafHandle) cancelAnimationFrame(rafHandle);
 
-	lenis = new Lenis({
+	instance = new Lenis({
 		duration: 0.5,
 	});
-	lenis.on('scroll', () => {
+	instance.on('scroll', () => {
 		document.documentElement.dispatchEvent(new CustomEvent('scroll'));
 	});
 
 	rafHandle = requestAnimationFrame(function raf(time) {
-		lenis!.raf(time);
+		instance!.raf(time);
 		rafHandle = requestAnimationFrame(raf);
 	});
+
+	lenis.set(instance);
 };
 
 export const useLenis = () => {

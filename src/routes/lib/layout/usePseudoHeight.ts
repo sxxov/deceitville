@@ -1,9 +1,10 @@
-import { getAllContexts, getContext, onDestroy, onMount } from 'svelte';
-import type { PseudoHeightContext } from './PseudoHeightContext';
 import { IllegalStateError } from '@sxxov/ut/errors';
-import { pseudoHeightContextKey } from './PseudoHeightContextProvider.svelte';
 import { Store } from '@sxxov/ut/store';
+import { getContext, onDestroy, onMount, tick } from 'svelte';
+import { lenis } from '../../../lib/lenis/useLenis';
 import type { PseudoHeight } from './PseudoHeight';
+import type { PseudoHeightContext } from './PseudoHeightContext';
+import { pseudoHeightContextKey } from './PseudoHeightContextProvider.svelte';
 
 export const usePseudoHeight = (): PseudoHeight => {
 	const ctx = getContext<PseudoHeightContext>(pseudoHeightContextKey);
@@ -15,6 +16,9 @@ export const usePseudoHeight = (): PseudoHeight => {
 
 	const update = () => {
 		ctx.total.set(ctx.heights.reduce((a, b) => a + b.get(), 0));
+		void tick().then(() => {
+			lenis.get()?.resize();
+		});
 	};
 
 	const store = new Store(0);
