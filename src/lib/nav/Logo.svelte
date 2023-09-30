@@ -13,12 +13,10 @@
 <div class="nav logo">
 	<a href="/">
 		<Button
-			{...ButtonVariants.Fab.Md}
-			{...ButtonVariants.Transparent}
-			{...ButtonVariants.Shadow.Sm}
+			{...ButtonVariants.Shadow.None}
 			width="max(56px, 100%)"
 			height="max(56px, 100%)"
-			colourBackground="var(----colour-background-primary)"
+			colourBackground="transparent"
 			{padding}
 		>
 			<Svg

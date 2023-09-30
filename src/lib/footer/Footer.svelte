@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
-	import { ic_arrow_upward } from 'maic/two_tone';
+	import { ic_arrow_outward, ic_arrow_upward } from 'maic/two_tone';
 	import Logo from '../nav/Logo.svelte';
 	import { Tween } from '@sxxov/ut/animation';
 	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
@@ -18,13 +18,13 @@
 		</div>
 	</div>
 	<div class="centre">
-		<p />
+		<p><a href=""><Svg svg={ic_arrow_outward} />Hire me</a></p>
 		<div class="icons" />
 	</div>
-	<p>©&nbsp; Deceitville<br />{new Date().getFullYear()}</p>
+	<p>©&nbsp; Lim Jia Sheng<br />{new Date().getFullYear()}</p>
 	<div class="bottom">
 		<Button
-			{...ButtonVariants.Secondary}
+			{...ButtonVariants.Transparent}
 			width="min(336px, calc(100vw - 56px))"
 			on:click={async () => {
 				const tween = new Tween(
@@ -57,7 +57,7 @@
 
 		position: relative;
 		/* height: 400px; */
-		background: var(----colour-background-secondary);
+		background: var(----colour-background-primary);
 		/* z-index: 9; */
 
 		padding: var(----padding);
@@ -88,6 +88,12 @@
 			& > p {
 				margin: 0;
 				line-height: 1.6;
+
+				& > a {
+					display: flex;
+					align-items: center;
+					gap: 14px;
+				}
 			}
 
 			& > .icons {
