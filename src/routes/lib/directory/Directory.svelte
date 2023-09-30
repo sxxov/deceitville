@@ -50,8 +50,8 @@
 		<div class="content">
 			<div class="heading">
 				<h2>Directory</h2>
-				<Spacer height={39} />
-				<hr />
+				<!-- <Spacer height={39} />
+				<hr /> -->
 			</div>
 			<div class="description">
 				<div class="frame">
@@ -305,17 +305,20 @@
 				position: sticky;
 				top: 0;
 				width: 100%;
-
-				padding: 14px;
-				box-sizing: border-box;
+				height: 100vh;
+				height: 100lvh;
 
 				display: flex;
 				flex-direction: column;
-				gap: 56px;
-
-				border-top: 1px solid #fff;
 
 				& > .heading {
+					padding: 14px;
+					box-sizing: border-box;
+
+					height: 100px;
+					border-top: 1px solid #fff;
+					flex-shrink: 0;
+
 					& > h2 {
 						margin: 0;
 						color: #fff;
@@ -324,18 +327,26 @@
 				}
 
 				& > .description {
-					top: 168px;
-					width: calc(100% - 28px);
-					height: calc(100vh - 168px - 28px);
-					height: calc(100lvh - 168px - 28px);
-					position: absolute;
+					position: relative;
+					/* top: 168px; */
+					/* width: calc(100% - 28px); */
+					/* height: calc(100vh - 168px - 28px);
+					height: calc(100lvh - 168px - 28px); */
+					/* position: absolute; */
+					width: 100%;
+					height: 100%;
+
+					padding: 14px;
+					box-sizing: border-box;
+
+					border-block: 1px solid #fff;
 
 					@media (max-width: 1000px) {
 						display: none;
 					}
 
 					& > .frame {
-						position: absolute;
+						position: relative;
 						top: 0;
 						left: 0;
 						width: 100%;
@@ -344,12 +355,12 @@
 						pointer-events: none;
 
 						--height-corner: 56px;
-						--width-corner: 56px;
+						--width-corner: 42px;
 
 						--height-centre: 28px;
 						--width-centre: 84px;
 
-						--padding-line: 14px;
+						--padding-line: 7px;
 						--weight-line: 0.5px;
 						--gap-line: 14px;
 
