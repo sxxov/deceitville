@@ -8,7 +8,7 @@
 	import { Svg } from '@sxxov/sv/svg';
 	import { LoaderLine } from '@sxxov/sv/loaders';
 
-	export let health = 1;
+	export let health = 0.5;
 
 	const { renderer } = useThrelte();
 	$: vh = Math.max(
@@ -44,7 +44,7 @@
 			<div class="bar">
 				<LoaderLine
 					strokeColour="currentColor"
-					backgroundStrokeColour="#fff3"
+					backgroundStrokeColour="----colour-text-tertiary"
 					completion={Math.max(health, 0.001)}
 				/>
 			</div>
@@ -53,9 +53,11 @@
 				class:visible={hint}
 			>
 				<div class="content">
-					<Svg svg={ic_info} />{#if health >= 1}Explore the town.{:else if health >= 0.75}Explore
-						more of the town.{:else if health >= 0.5}Find clues.{:else if health >= 0.25}Destroy
-						the rest of the town.{:else}Explore the town.{/if}
+					<Svg svg={ic_info} /><b>Hint:</b>
+					{#if health >= 1}Use the directory.{:else if health >= 0.75}Explore
+						the town.{:else if health >= 0.5}Find clues.{:else if health >= 0.25}Almost
+						there.{:else if health >= 0}I am become death, destroyer
+						of towns.{:else}Explore the town.{/if}
 				</div>
 			</div>
 		</div>
@@ -101,7 +103,7 @@
 			pointer-events: auto;
 
 			& > h2 {
-				color: #fff;
+				color: var(----colour-text-primary);
 				letter-spacing: -0.04em;
 			}
 
@@ -113,7 +115,7 @@
 				box-sizing: border-box;
 				/* padding-block: 28px; */
 				border-radius: var(----roundness);
-				border: 1px solid #fff3;
+				border: 1px solid var(----colour-background-tertiary);
 
 				display: flex;
 				align-items: center;
@@ -123,21 +125,21 @@
 				cursor: pointer;
 				-webkit-tap-highlight-color: transparent;
 
-				background: #000;
-				color: #fff;
+				background: var(----colour-background-primary);
+				color: var(----colour-text-primary);
 
 				transition:
 					background 0.2s var(----ease-fast-slow),
 					color 0.2s var(----ease-fast-slow);
 
 				&:hover {
-					background: #fff;
-					color: #000;
+					background: var(----colour-text-primary);
+					color: var(----colour-background-primary);
 				}
 
 				&:active {
-					background: #000;
-					color: #fff;
+					background: var(----colour-background-primary);
+					color: var(----colour-text-primary);
 
 					transition:
 						background 0s var(----ease-fast-slow),
@@ -150,7 +152,7 @@
 					align-items: center;
 					/* position: absolute;
 					padding-inline: 20px;
-					background: #000; */
+					background: var(----colour-background-primary); */
 
 					z-index: 1;
 				}
@@ -184,6 +186,10 @@
 						transition:
 							width 0.2s var(----ease-fast-slow),
 							opacity 0s 0.01s var(----ease-fast-slow);
+
+						@media (max-width: 600px) {
+							width: 400%;
+						}
 					}
 
 					& > .content {
