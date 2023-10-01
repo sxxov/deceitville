@@ -384,7 +384,7 @@
 <style lang="postcss">
 	.waze {
 		--weight: 1.5px;
-		--colour: #fff;
+		--colour: var(----colour-text-primary);
 
 		display: flex;
 		flex-direction: column;
@@ -581,7 +581,7 @@
 				margin: 0;
 				font-size: 1rem;
 				font-weight: 900;
-				color: #fff;
+				color: var(----colour-text-primary);
 				text-shadow: 0px 0px 100px rgba(255, 255, 255, 0.5);
 				text-align: center;
 			}

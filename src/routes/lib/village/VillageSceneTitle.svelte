@@ -318,7 +318,7 @@
 			font-weight: 900;
 			text-transform: uppercase;
 
-			color: white;
+			color: var(----colour-text-primary);
 			text-shadow: 0px 0px 100px rgba(255, 255, 255, 0.5);
 
 			align-self: start;
@@ -364,7 +364,7 @@
 				font-weight: 900;
 				text-transform: uppercase;
 
-				color: white;
+				color: var(----colour-text-primary);
 				text-shadow: 0px 0px 100px rgba(255, 255, 255, 0.5);
 			}
 		}
