@@ -200,7 +200,7 @@
 							></Svg>
 						</div>
 						<Spacer width={14} />
-						<h6 use:revealable><b>De Corp.™</b></h6>
+						<h6 use:revealable><b>De Corp.®</b></h6>
 					</div>
 					<Spacer height={14} />
 					<p use:revealable>Creators & maintainers,</p>

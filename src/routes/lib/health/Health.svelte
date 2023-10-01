@@ -29,7 +29,7 @@
 		style="--top: {$top}px"
 	></div>
 	<div class="content">
-		<h2>De Corp.™</h2>
+		<h2>De Corp.®</h2>
 		<div
 			class="progress"
 			role="presentation"
