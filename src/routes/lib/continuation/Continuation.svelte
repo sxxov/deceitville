@@ -11,7 +11,6 @@
 	import { ic_book, ic_help } from 'maic/two_tone';
 	import { Svg } from '@sxxov/sv/svg';
 	import Footer from '../../../lib/footer/Footer.svelte';
-	import { Spacer } from '@sxxov/sv/layout';
 
 	const { renderer } = useThrelte();
 	$: vh = Math.max(
@@ -73,62 +72,71 @@
 								svg={ic_help}
 							/></span
 						>OK, Educate me.<br /></span
-					>What's all this about?
+					>Deceptive Design?
 				</h2>
 			</div>
 			<div class="content">
-				<section>
-					<blockquote>
-						Deceptive design is widespread in the digital world.
-					</blockquote>
-					<a
-						href="https://www.deceptive.design/"
-						target="_blank"
-					>
-						<Button
-							><svelte:fragment slot="left">
-								<Svg svg={ic_book} />
-							</svelte:fragment> Learn more</Button
-						>
-					</a>
-				</section>
-				<section>
-					<h6>What is it?</h6>
-					<p>
-						Formerly known as "<b>dark patterns</b>", it's a way of
-						tricking users into doing things they didn't want to do,
-						but that the designer wanted them to do.
-					</p>
-				</section>
-				<section>
-					<h6>How does it impact you?</h6>
-					<p>
-						You have probably stumbled across some of these patterns
-						just by simply browsing the web. They are everywhere.
-						When you accept some terms & conditions, when you try to
-						opt out of receiving marketing emails, when you try not
-						to give Facebook all your information & soul, etc.
-					</p>
-				</section>
-				<section>
-					<h6>Where did it come from?</h6>
-					<p>
-						It started as a push by Harry Brignull in 2010 via the
+				<div class="quote">
+					<section>
+						<blockquote>
+							You are being <em>tricked</em> into doing things you
+							don't want.
+						</blockquote>
 						<a
 							href="https://www.deceptive.design/"
-							target="_blank">Deceptive Design</a
-						>
-						website, detailing types & instances of deceptive design
-						found in the wild. It has since been picked up by largely
-						by the acedemic community, with
-						<a
-							href="https://scholar.google.com/scholar?hl=en&q=dark+pattern+brignull"
 							target="_blank"
-							>countless articles being published</a
 						>
-						picking both it and Harry's work apart.
-					</p>
-				</section>
+							<Button
+								><svelte:fragment slot="left">
+									<Svg svg={ic_book} />
+								</svelte:fragment> Learn more</Button
+							>
+						</a>
+					</section>
+				</div>
+				<div class="qna">
+					<section>
+						<h6>What is Deceitville?</h6>
+						<p>
+							Deceitville is a representation of "<b
+								>deceptive design</b
+							>", formerly known as "dark patterns". It is a way
+							of tricking users into doing things they didn't want
+							to do, but that the designer wanted them to do.
+						</p>
+					</section>
+					<section>
+						<h6>How does it impact you?</h6>
+						<p>
+							You have probably stumbled across some of these
+							patterns just by simply browsing the web. They are
+							everywhere. When you accept some terms & conditions,
+							when you try to opt out of receiving marketing
+							emails, when you try not to give Facebook all your
+							information & soul, etc.
+						</p>
+					</section>
+					<section>
+						<h6>Where did it come from?</h6>
+						<p>
+							It started as a push by Harry Brignull in 2010 via
+							the
+							<a
+								href="https://www.deceptive.design/"
+								target="_blank">Deceptive Design</a
+							>
+							website, detailing types & instances of deceptive design
+							found in the wild. It has since been picked up by largely
+							by the acedemic community, with
+							<a
+								href="https://scholar.google.com/scholar?hl=en&q=dark+pattern+brignull"
+								target="_blank"
+								>countless articles being published</a
+							>
+							picking both it and Harry's work apart.
+						</p>
+					</section>
+				</div>
 			</div>
 		</div>
 		<div class="footer"><Footer /></div>
@@ -144,6 +152,10 @@
 		width: 100%;
 
 		pointer-events: none;
+
+		--colour-text: var(----colour-background-primary);
+		--colour-background: var(----colour-text-primary);
+		--colour-selection: var(----colour-text-tertiary);
 
 		/* z-index: 1; */
 
@@ -171,15 +183,15 @@
 				position: relative;
 				z-index: 0;
 
-				padding: 14px;
+				padding: clamp(14px, 5vw, 28px);
 				box-sizing: border-box;
 
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: space-between;
-				gap: 56px;
+				gap: 112px;
 
-				background: #ddd;
+				background: var(--colour-background);
 
 				width: 100%;
 				height: 100%;
@@ -188,7 +200,7 @@
 
 				& > .heading {
 					width: 400px;
-					max-width: 40.5vw;
+					max-width: max(400px, 28vw);
 					flex-grow: 2;
 
 					display: flex;
@@ -206,15 +218,15 @@
 					& > h2 {
 						display: flex;
 						flex-direction: column;
-						justify-content: space-between;
+						/* justify-content: space-between; */
 						height: 100%;
 						max-height: 100vh;
 						max-height: 100lvh;
 
-						font-size: clamp(2rem, 21vw, 19.9rem);
+						font-size: clamp(4rem, 5vw, 20rem);
 						font-weight: 100;
 						letter-spacing: -0.05em;
-						color: #333;
+						color: var(--colour-text);
 						margin: 0;
 
 						/* max-width: 400px; */
@@ -228,10 +240,11 @@
 							font-size: 1rem;
 							font-weight: 900;
 							text-transform: uppercase;
-							color: #333;
+							color: var(--colour-text);
 							margin: 0;
 							margin-bottom: 28px;
 							line-height: 1.5;
+							padding-bottom: 1em;
 
 							& > .icon {
 								display: inline-block;
@@ -240,7 +253,7 @@
 
 								padding: 7px;
 								border-radius: var(----roundness);
-								border: 1px solid #333;
+								border: 1px solid var(--colour-text);
 								margin-right: 7px;
 							}
 						}
@@ -257,63 +270,90 @@
 						auto-fit,
 						minmax(min(calc(100vw - 56px), 400px), 1fr)
 					);
-					gap: 28px;
+					gap: 112px;
 
-					& > section {
-						max-width: 400px;
+					& > .quote {
+						& > section {
+							/* max-width: 400px; */
 
-						& > blockquote {
-							color: #333;
+							display: flex;
+							flex-direction: column;
+							justify-content: space-between;
 
-							font-size: 4em;
-							font-style: normal;
-							font-weight: 100;
-							line-height: 1;
-							letter-spacing: -0.03em;
+							& > blockquote {
+								color: var(--colour-text);
 
-							margin-inline: 0;
-							margin-block: 2.33rem;
-							margin-bottom: 1em;
+								font-size: 4em;
+								font-style: normal;
+								font-weight: 100;
+								line-height: 1;
+								letter-spacing: -0.03em;
 
-							&::selection {
-								background: #0001;
+								margin-inline: 0;
+								margin-block: 2.33rem;
+								margin-top: 0;
+								margin-bottom: 1em;
+
+								border-block: 1px solid var(--colour-text);
+								padding-block: 1em;
+
+								&::selection {
+									background: var(--colour-selection);
+								}
+
+								& > em {
+									font-style: normal;
+									font-weight: 900;
+									letter-spacing: -0.05em;
+								}
 							}
 						}
+					}
 
-						& > h6 {
-							color: #333;
+					& > .qna {
+						display: flex;
+						flex-direction: column;
+						gap: 56px;
 
-							font-size: 1em;
-							font-weight: 900;
-							text-transform: uppercase;
+						& > section {
+							/* max-width: 400px; */
 
-							display: block;
-							padding-bottom: 14px;
-							border-bottom: 1px solid #333;
+							& > h6 {
+								color: var(--colour-text);
 
-							margin-block: 2.33rem;
+								font-size: 1em;
+								font-weight: 900;
+								text-transform: uppercase;
 
-							&::selection {
-								background: #0001;
+								display: block;
+								padding-bottom: 14px;
+								border-bottom: 1px solid var(--colour-text);
+
+								margin-block: 2.33rem;
+								margin-top: 0;
+
+								&::selection {
+									background: var(--colour-selection);
+								}
 							}
-						}
 
-						& > p {
-							color: #000;
-							max-width: 400px;
+							& > p {
+								color: var(--colour-text);
+								/* max-width: 400px; */
 
-							/* columns: 300px;
+								/* columns: 300px;
 					column-gap: 56px; */
-							line-height: 1.5;
+								line-height: 1.5;
 
-							&::selection {
-								background: #0001;
-							}
+								&::selection {
+									background: var(--colour-selection);
+								}
 
-							& > a {
-								color: #333;
+								& > a {
+									color: var(--colour-text);
 
-								text-shadow: none;
+									text-shadow: none;
+								}
 							}
 						}
 					}
