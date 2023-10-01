@@ -550,11 +550,11 @@
 		gap: 56px;
 	}
 
-	.logo {
+	/* .logo {
 		:global(& svg > *) {
 			fill: transparent;
-			stroke: #fff;
+			stroke: var(----colour-text-primary);
 			stroke-width: 0.1px;
 		}
-	}
+	} */
 </style>
