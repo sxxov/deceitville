@@ -316,12 +316,12 @@
 					box-sizing: border-box;
 
 					height: 100px;
-					border-top: 1px solid #fff;
+					border-top: 1px solid var(----colour-text-primary);
 					flex-shrink: 0;
 
 					& > h2 {
 						margin: 0;
-						color: #fff;
+						color: var(----colour-text-primary);
 						letter-spacing: -0.04em;
 					}
 				}
@@ -339,7 +339,7 @@
 					padding: 14px;
 					box-sizing: border-box;
 
-					border-block: 1px solid #fff;
+					border-block: 1px solid var(----colour-text-primary);
 
 					@media (max-width: 1000px) {
 						display: none;
@@ -544,20 +544,21 @@
 
 							& > h4 {
 								margin: 0;
-								color: #fff;
+								color: var(----colour-text-primary);
 								font-size: clamp(2rem, 6vw, 6rem);
 								line-height: 1;
 								letter-spacing: -0.04em;
-								-webkit-text-fill-color: #fff0;
-								text-fill-color: #fff0;
-								-webkit-text-stroke: 0.1px #fff;
-								text-stroke: 0.1px #fff;
+								-webkit-text-fill-color: transparent;
+								text-fill-color: transparent;
+								-webkit-text-stroke: 0.1px
+									var(----colour-text-primary);
+								text-stroke: 0.1px var(----colour-text-primary);
 							}
 
 							& > h5 {
 								text-transform: uppercase;
 								margin: 0;
-								color: #fff;
+								color: var(----colour-text-primary);
 								font-size: 1.5rem;
 								letter-spacing: -0.04em;
 								max-width: 300px;
@@ -566,7 +567,7 @@
 
 						& > p {
 							margin: 0;
-							color: #fff;
+							color: var(----colour-text-primary);
 							max-width: 300px;
 						}
 					}
@@ -609,7 +610,7 @@
 				width: 100%;
 
 				background: #000;
-				border-top: 1px solid #fff;
+				border-top: 1px solid var(----colour-text-primary);
 
 				& > a {
 					text-decoration: none;
@@ -627,7 +628,7 @@
 						gap: 14px;
 						align-items: center;
 						justify-content: flex-start;
-						border-bottom: 1px solid #fff;
+						border-bottom: 1px solid var(----colour-text-primary);
 
 						&::before {
 							content: '';
@@ -636,7 +637,7 @@
 							left: 0;
 							width: 100%;
 							height: 100%;
-							background: #fff;
+							background: var(----colour-text-primary);
 							z-index: -1;
 							clip-path: inset(100% 0 0 0);
 
@@ -649,37 +650,37 @@
 							}
 
 							& > h6 {
-								color: #000;
+								color: var(----colour-background-primary);
 							}
 
 							& > .arrow {
-								--colour: #000;
+								--colour: var(----colour-background-primary);
 								--width-tail: 56px;
 								--width-head: 14px;
 							}
 
 							& > .icon {
-								color: #000;
+								color: var(----colour-background-primary);
 							}
 						}
 
 						&:active {
 							&::before {
-								background: #000;
+								background: var(----colour-background-primary);
 							}
 
 							& > h6 {
-								color: #fff;
+								color: var(----colour-text-primary);
 							}
 
 							& > .arrow {
-								--colour: #fff;
+								--colour: var(----colour-text-primary);
 								--width-tail: 56px;
 								--width-head: 14px;
 							}
 
 							& > .icon {
-								color: #fff;
+								color: var(----colour-text-primary);
 							}
 						}
 
@@ -688,7 +689,7 @@
 							--width-tail: 0px;
 							--width-head: 0px;
 							--hypot-head: 19.79898987322333px;
-							--colour: #fff;
+							--colour: var(----colour-text-primary);
 
 							position: relative;
 							width: var(--width-tail);
@@ -753,14 +754,14 @@
 						}
 
 						& > .icon {
-							color: #fff;
+							color: var(----colour-text-primary);
 
 							transition: color 0.2s 0.1s var(----ease-fast-slow);
 						}
 
 						& > h6 {
 							margin: 0;
-							color: #fff;
+							color: var(----colour-text-primary);
 
 							transition: color 0.2s 0.1s var(----ease-fast-slow);
 						}
