@@ -1,10 +1,8 @@
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import {
 	GLTFLoader,
 	type GLTF,
 } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import type * as parts from '../../../assets/village/parts/gltfs.db';
-import type * as text from '../../../assets/village/text/gltfs.db';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 export interface Part extends GLTF {
 	object: THREE.Object3D | undefined;
@@ -17,12 +15,9 @@ dracoLoader.setDecoderPath(
 );
 gltfLoader.setDRACOLoader(dracoLoader);
 
-const partCache = new Map<
-	(typeof parts)[keyof typeof parts] | (typeof text)[keyof typeof text],
-	Part
->();
-export const createPart = async (
-	gltf: (typeof parts)[keyof typeof parts] | (typeof text)[keyof typeof text],
+const partCache = new Map<Record<any, any>, Part>();
+export const createPart = async <T extends Record<any, any>>(
+	gltf: T,
 ): Promise<Part> => {
 	let part = partCache.get(gltf);
 
