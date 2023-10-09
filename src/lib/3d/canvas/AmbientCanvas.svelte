@@ -8,8 +8,15 @@
 		useThrelte,
 		type ThrelteContext,
 	} from '@threlte/core';
-	import type { ComponentEvents, ComponentProps } from 'svelte';
+	import {
+		onDestroy,
+		type ComponentEvents,
+		type ComponentProps,
+	} from 'svelte';
 	import { inner, client } from '@sxxov/ut/viewport';
+	import { interactivity, useInteractivity } from '@threlte/extras';
+	import { Store } from '@sxxov/ut/store';
+	import { beforeNavigate } from '$app/navigation';
 
 	type $$Props = ComponentProps<Canvas>;
 	type $$Events = ComponentEvents<Canvas>;
@@ -34,12 +41,24 @@
 
 	$: vw = Math.max($inner.width, $client.width);
 	$: vh = Math.max($inner.height, $client.height);
+
+	const interactive = new Store(false);
+	let interactiveHookUnsubscribe: (() => void) | undefined;
+
+	beforeNavigate(() => {
+		interactive.set(false);
+	});
+
+	onDestroy(() => {
+		interactiveHookUnsubscribe?.();
+	});
 </script>
 
 <div class="ambient-canvas">
 	<div
 		class="canvas"
 		class:active
+		class:interactive={$interactive}
 		use:whenResize={({ width: w, height: h }) => {
 			[width, height] = [w, h];
 		}}
@@ -59,6 +78,14 @@
 				active = true;
 			}),
 			(ctx = useThrelte()),
+			interactivity({
+				enabled: $interactive,
+			}),
+			(interactiveHookUnsubscribe = useInteractivity().enabled.subscribe(
+				(value) => {
+					interactive.set(value);
+				},
+			)),
 			'')}
 		</Canvas>
 	</div>
@@ -85,7 +112,9 @@
 
 			z-index: 1;
 
-			pointer-events: none;
+			&:not(.interactive) {
+				pointer-events: none;
+			}
 
 			&.active {
 				opacity: 1;
