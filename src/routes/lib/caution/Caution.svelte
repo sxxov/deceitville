@@ -89,8 +89,8 @@
 
 			pointer-events: auto;
 
-			/* overflow: hidden;
-			overflow: clip; */
+			overflow-x: hidden;
+			overflow-x: clip;
 
 			& > .heading {
 				position: absolute;
