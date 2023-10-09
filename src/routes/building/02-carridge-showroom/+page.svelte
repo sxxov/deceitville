@@ -2,7 +2,7 @@
 	lang="ts"
 	context="module"
 >
-	import type { BuildingInfo } from '../lib/BuildingInfo';
+	import type { BuildingInfo } from '../lib/info/BuildingInfo';
 	import * as gltfs from '../../../assets/village/parts/gltfs.db';
 	import { ic_bedroom_baby } from 'maic/two_tone';
 

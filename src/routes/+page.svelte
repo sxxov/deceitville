@@ -5,7 +5,7 @@
 	import { expoIn, expoOut } from 'svelte/easing';
 	import * as THREE from 'three';
 	import { createPart } from '../lib/3d/gltf/part';
-	import type { BuildingInfo } from './building/lib/BuildingInfo';
+	import type { BuildingInfo } from './building/lib/info/BuildingInfo';
 	import Directory from './lib/directory/Directory.svelte';
 	import type { DirectoryRoute } from './lib/directory/DirectoryRoute';
 	import Story from './lib/story/Story.svelte';
