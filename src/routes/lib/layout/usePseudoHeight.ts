@@ -15,7 +15,7 @@ export const usePseudoHeight = (): PseudoHeight => {
 		);
 
 	const update = () => {
-		ctx.total.set(ctx.heights.reduce((a, b) => a + b.get(), 0));
+		ctx.total.set(ctx.heights.reduce((a, b) => a + (b?.get() ?? 0), 0));
 		void tick().then(() => {
 			lenis.get()?.resize();
 		});
@@ -32,7 +32,7 @@ export const usePseudoHeight = (): PseudoHeight => {
 		for (const height of ctx.heights) {
 			if (height === store) return cum;
 
-			cum += height.get();
+			cum += height?.get() ?? 0;
 		}
 
 		return cum;
@@ -41,21 +41,25 @@ export const usePseudoHeight = (): PseudoHeight => {
 		let cum = 0;
 
 		for (const height of ctx.heights) {
-			if (height === store) return cum + height.get();
+			if (height === store) return cum + (height.get() ?? 0);
 
-			cum += height.get();
+			cum += height?.get() ?? 0;
 		}
 
 		return cum;
 	});
 
+	let i = ctx.heights.length;
+
 	onMount(() => {
-		ctx.heights.push(store);
+		const indexOfUndefined = ctx.heights.indexOf(undefined);
+		i = indexOfUndefined >= 0 ? indexOfUndefined : ctx.heights.length;
+		ctx.heights[i] = store;
 		update();
 	});
 
 	onDestroy(() => {
-		ctx.heights = ctx.heights.filter((h) => h !== store);
+		ctx.heights[i] = undefined;
 		update();
 	});
 
