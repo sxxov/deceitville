@@ -15,6 +15,7 @@
 	import { getScreenSpacePointOnPlane } from './getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from './getScreenSpaceSizeAtWorldZ';
 	import { type Css, css } from '@sxxov/ut/css';
+	import { raise } from '@sxxov/ut/functional';
 
 	export let ref = new THREE.Group();
 	export let width: Css = '100%';
@@ -22,7 +23,9 @@
 	export let z = -10;
 	export let eager = false;
 	export let debug = false;
-	export let strategy: 'fit' | 'put' | 'auto' = 'fit';
+	export let strategy: 'stretch' | 'fit' | 'fill' | 'put' | 'auto' =
+		'stretch';
+	export let align: 'start' | 'centre' | 'end' = 'centre';
 
 	interface $$Props extends Props<THREE.Group> {
 		ref?: typeof ref;
@@ -78,10 +81,6 @@
 		cameraScheduleAddRef = true;
 	}
 
-	$: fit =
-		strategy === 'fit' ||
-		(strategy === 'auto' && rect.width > 0 && rect.height > 0);
-
 	const reflow = () => {
 		if (!div) return;
 
@@ -99,6 +98,9 @@
 		reflow();
 	});
 
+	const groupBbox = new THREE.Box3();
+	const viewport = new THREE.Vector2();
+	// eslint-disable-next-line complexity
 	useFrame(() => {
 		if (eager) reflow();
 
@@ -107,7 +109,7 @@
 			cameraScheduleAddRef = false;
 		}
 
-		const viewport = renderer.getSize(new THREE.Vector2());
+		renderer.getSize(viewport);
 		const plane = getScreenSpaceSizeAtWorldZ(camera, z);
 
 		const planePointTopLeft = getScreenSpacePointOnPlane(
@@ -128,28 +130,86 @@
 		);
 
 		ref.scale.set(1, 1, 1);
-		const groupBbox = new THREE.Box3().setFromObject(ref);
+		groupBbox.setFromObject(ref);
 		const groupWidth = groupBbox.max.x - groupBbox.min.x;
 		const groupHeight = groupBbox.max.y - groupBbox.min.y;
+		const planeWidth = planePointBottomRight.x - planePointTopLeft.x;
+		const planeHeight = -planePointBottomRight.y - -planePointTopLeft.y;
 
-		if (fit) {
-			const planeWidth = planePointBottomRight.x - planePointTopLeft.x;
-			const planeHeight = -planePointBottomRight.y - -planePointTopLeft.y;
-
-			scaleX = groupWidth > 0 ? planeWidth / groupWidth : 1;
-			scaleY = groupHeight > 0 ? planeHeight / groupHeight : 1;
-		} else {
-			scaleX = 1;
-			scaleY = 1;
+		let [fit, fill, stretch, put] = [false, false, false, false];
+		switch (strategy) {
+			case 'auto':
+				if (rect.width > 0 && rect.height > 0) stretch = true;
+				else put = true;
+				break;
+			case 'fit':
+				fit = true;
+				break;
+			case 'fill':
+				fill = true;
+				break;
+			case 'stretch':
+				stretch = true;
+				break;
+			case 'put':
+				put = true;
+				break;
+			default:
+				throw new UnimplementedError(
+					`Unknown strategy: ${String(strategy)}`,
+				);
 		}
+
+		if (stretch) {
+			const [x, y] = [
+				groupWidth > 0 ? planeWidth / groupWidth : 1,
+				groupHeight > 0 ? planeHeight / groupHeight : 1,
+			];
+
+			[scaleX, scaleY] = [x, y];
+		} else if (fill) {
+			const [x, y] = [
+				groupWidth > 0 ? planeWidth / groupWidth : 1,
+				groupHeight > 0 ? planeHeight / groupHeight : 1,
+			];
+			const scale = Math.max(x, y);
+
+			[scaleX, scaleY] = [scale, scale];
+		} else if (fit) {
+			const [x, y] = [
+				groupWidth > 0 ? planeWidth / groupWidth : 1,
+				groupHeight > 0 ? planeHeight / groupHeight : 1,
+			];
+			const scale = Math.min(x, y);
+
+			[scaleX, scaleY] = [scale, scale];
+		} else if (put) [scaleX, scaleY] = [1, 1];
 
 		// set position x & y
 		x = planePointTopLeft.x + (groupWidth * scaleX) / 2;
 		y = planePointTopLeft.y - (groupHeight * scaleY) / 2;
 
 		const cameraPos = camera.getWorldPosition(new THREE.Vector3());
-		ref.position.set(x - cameraPos.x, y - cameraPos.y, z - cameraPos.z);
-		ref.scale.set(scaleX, scaleY, 1);
+		const alignOffsetX =
+			align === 'centre'
+				? planeWidth / 2 - (groupWidth * scaleX) / 2
+				: align === 'start'
+				? 0
+				: align === 'end'
+				? planeWidth - groupWidth * scaleX
+				: raise(
+						new UnimplementedError(
+							`Unknown align: ${String(align)}`,
+						),
+				  );
+		if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(z))
+			ref.position.set(
+				x - cameraPos.x + alignOffsetX,
+				y - cameraPos.y,
+				z - cameraPos.z,
+			);
+		if (Number.isFinite(scaleX) && Number.isFinite(scaleY))
+			ref.scale.set(scaleX, scaleY, 1);
 	});
 
 	onDestroy(() => {
