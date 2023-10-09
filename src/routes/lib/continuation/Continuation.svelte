@@ -71,7 +71,7 @@
 								width="100%"
 								svg={ic_help}
 							/></span
-						>OK, Educate me.<br /></span
+						>Company Philosophy Deck.<br /></span
 					>Deceptive Design?
 				</h2>
 			</div>

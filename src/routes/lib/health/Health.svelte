@@ -29,7 +29,7 @@
 		style="--top: {$top}px"
 	></div>
 	<div class="content">
-		<h2>Status Dashboard</h2>
+		<h2></h2>
 		<div
 			class="progress"
 			role="presentation"
@@ -61,7 +61,19 @@
 				</div>
 			</div>
 		</div>
-		<h2>De Corp.®</h2>
+		<h2>
+			De Corp.®: Status {health >= 1
+				? 'Healthy'
+				: health >= 0.75
+				? 'Compromised'
+				: health >= 0.5
+				? 'Degraded'
+				: health >= 0.25
+				? 'Critical'
+				: health > 0
+				? 'Terminal'
+				: 'Dead'}
+		</h2>
 	</div>
 
 	<div class="padding end"></div>
@@ -102,6 +114,8 @@
 
 			pointer-events: auto;
 
+			/* border-bottom: 1px solid var(----colour-text-primary); */
+
 			& > h2 {
 				color: var(----colour-text-primary);
 				letter-spacing: -0.04em;
@@ -122,7 +136,7 @@
 				justify-content: center;
 				gap: 28px;
 
-				cursor: pointer;
+				cursor: help;
 				-webkit-tap-highlight-color: transparent;
 
 				background: var(----colour-background-primary);

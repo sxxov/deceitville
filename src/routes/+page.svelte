@@ -15,6 +15,8 @@
 	import Continuation from './lib/continuation/Continuation.svelte';
 	import PseudoHeightContextProvider from './lib/layout/PseudoHeightContextProvider.svelte';
 	import Health from './lib/health/Health.svelte';
+	import Letter from './lib/letter/Letter.svelte';
+	import Caution from './lib/caution/Caution.svelte';
 
 	const { renderer } = useThrelte();
 
@@ -123,6 +125,8 @@
 		<Story />
 		<Directory {routes} />
 		<Health />
+		<Caution />
+		<Letter />
 		<Continuation />
 	</PseudoHeightContextProvider>
 </div>
