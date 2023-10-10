@@ -153,11 +153,11 @@
 
 		pointer-events: none;
 
-		--colour-text: var(----colour-background-primary);
-		--colour-background: var(----colour-text-primary);
+		--colour-text: var(----colour-text-primary);
+		--colour-background: black;
 		--colour-selection: var(----colour-text-tertiary);
 
-		/* z-index: 1; */
+		z-index: 1;
 
 		& > .padding {
 			--top: 0px;
@@ -178,6 +178,8 @@
 			top: 0;
 
 			pointer-events: auto;
+
+			border-top: 1px solid var(--colour-text);
 
 			& > .info {
 				position: relative;

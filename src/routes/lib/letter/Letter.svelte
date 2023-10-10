@@ -62,7 +62,7 @@
 					class="paper"
 					class:shred={i > 0}
 					class:visible={scrollY > $top - heightShred &&
-						scrollY < $bottom - heightShred}
+						scrollY < $bottom}
 					class:p={i > 0 && i % 2}
 					class:q={i > 0 && !(i % 2)}
 					style="
@@ -206,8 +206,8 @@
 			top: 0;
 
 			width: 100%;
-			height: 300vh;
-			height: 300lvh;
+			/* height: 300vh;
+			height: 300lvh; */
 			display: flex;
 			flex-direction: column;
 			align-items: center;
@@ -215,13 +215,28 @@
 
 			pointer-events: auto;
 
+			overflow: hidden;
+			overflow: clip;
+
 			/* border-top: 1px solid var(----colour-text-primary); */
+
+			--background: repeating-linear-gradient(
+				180deg,
+				#000,
+				#000 8rem,
+				var(----colour-text-tertiary) 8rem,
+				var(----colour-text-tertiary) calc(8rem + 1px)
+			);
+			background: var(--background);
 
 			& > .cover {
 				position: fixed;
 				top: 0;
 				height: calc(var(--height-shred) - 4px);
 				width: 100%;
+				max-width: 800px;
+				margin: 0 auto;
+				/* background: var(--background); */
 				background: black;
 
 				z-index: 2;
@@ -283,9 +298,19 @@
 							var(--height-shred);
 
 						display: none;
+						opacity: 0;
+
+						transition:
+							opacity 0.3s var(----ease-slow-slow),
+							display 0s 0.3s;
 
 						&.visible {
+							opacity: 1;
 							display: block;
+
+							transition:
+								opacity 0s var(----ease-slow-slow),
+								display 0s 0s;
 						}
 
 						&.p {
@@ -317,7 +342,7 @@
 						background-image: linear-gradient(
 							180deg,
 							rgba(0, 0, 0, 1) 0%,
-							rgba(0, 0, 0, 0.5) calc(var(--height-shred) / 2),
+							rgba(0, 0, 0, 0.2) calc(var(--height-shred) / 2),
 							rgba(0, 0, 0, 0) var(--height-shred)
 						);
 						background-position-y: calc(
@@ -344,20 +369,27 @@
 						/* margin-block: 56px; */
 						box-sizing: border-box;
 
-						background: var(----colour-background-primary);
+						background: var(----colour-text-primary);
 						box-shadow: var(----shadow-sm);
 
-						border-top: 1px solid var(----colour-text-tertiary);
+						border-top: 1px solid
+							var(----colour-background-tertiary);
 						border-inline: 1px solid
 							var(----colour-background-secondary);
 						border-radius: var(----roundness);
 
+						& * {
+							color: var(
+								----colour-background-primary
+							) !important;
+						}
+
 						& .redacted {
-							color: var(----colour-text-primary);
-							background: var(----colour-text-primary);
+							color: var(----colour-background-primary);
+							background: var(----colour-background-primary);
 							border-radius: var(----roundness);
-							border-bottom: var(----colour-text-secondary) 2px
-								solid;
+							border-bottom: var(----colour-background-secondary)
+								2px solid;
 							user-select: none;
 							/* pointer-events: none; */
 							cursor: not-allowed;
@@ -368,7 +400,8 @@
 							display: inline-flex;
 							gap: 7px;
 							align-items: center;
-							border: 1px solid var(----colour-text-tertiary);
+							border: 1px solid
+								var(----colour-background-tertiary);
 							border-radius: 56px;
 							padding: 7px 14px;
 							/* padding-left: 12px; */
@@ -381,13 +414,13 @@
 							justify-content: space-between;
 
 							& > .de {
-								color: var(----colour-text-primary);
+								color: var(----colour-background-primary);
 								letter-spacing: -0.04em;
 								font-size: 1.5rem;
 							}
 
 							& > .date {
-								color: var(----colour-text-secondary);
+								color: var(----colour-background-secondary);
 							}
 						}
 
@@ -400,7 +433,7 @@
 							box-sizing: border-box;
 
 							& > h2 {
-								color: var(----colour-text-primary);
+								color: var(----colour-background-primary);
 								letter-spacing: -0.04em;
 								font-size: 8rem;
 								margin-top: 0;
@@ -416,8 +449,8 @@
 								& > td {
 									padding: 14px;
 									border-bottom: 1px solid
-										var(----colour-text-tertiary);
-									color: var(----colour-text-primary);
+										var(----colour-background-tertiary);
+									color: var(----colour-background-primary);
 									font-weight: 100;
 									font-size: 1.5rem;
 									letter-spacing: -0.04em;
@@ -459,7 +492,7 @@
 							margin-bottom: 1em;
 
 							border-block: 1px solid
-								var(----colour-text-tertiary);
+								var(----colour-background-tertiary);
 							padding-block: 1em;
 						}
 
@@ -473,11 +506,11 @@
 							font-weight: 100;
 
 							border-block: 1px solid
-								var(----colour-text-tertiary);
+								var(----colour-background-tertiary);
 							padding-block: 1em;
 
 							& > li {
-								color: var(----colour-text-primary);
+								color: var(----colour-background-primary);
 								line-height: 1em;
 								margin-block: 1em;
 								padding-left: 2em;

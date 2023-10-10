@@ -92,6 +92,8 @@
 			overflow-x: hidden;
 			overflow-x: clip;
 
+			border-block: 1px solid var(----colour-text-primary);
+
 			& > .heading {
 				position: absolute;
 				top: 0;
@@ -141,15 +143,17 @@
 					45deg,
 					#000,
 					#000 60px,
-					var(----colour-text-primary) 60px,
 					var(----colour-text-primary) 60px
+						/* var(----colour-text-primary) 61px, */
+						/* var(----colour-background-primary) 60px,
+					var(----colour-background-primary) 120px */
 				);
 				border: 1.5px solid var(----colour-text-primary);
 				/* box-shadow: var(----shadow-lg); */
 				box-shadow: 5px 5px 500px -3px rgb(0 0 0 / 50%);
 
 				&._1 {
-					transform: rotate3d(10, 10, 1, 20deg);
+					transform: rotate3d(10, 10, 2, 20deg);
 				}
 
 				&._2 {
