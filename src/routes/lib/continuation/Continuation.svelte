@@ -71,69 +71,72 @@
 								width="100%"
 								svg={ic_help}
 							/></span
-						>Company Philosophy Deck.<br /></span
-					>Deceptive Design?
+						>Company Profile<br /></span
+					>De Corp.®<br />—est. 1969
 				</h2>
 			</div>
 			<div class="content">
 				<div class="quote">
 					<section>
 						<blockquote>
-							You are being <em>tricked</em> into doing things you
-							don't want.
+							We design to <em>
+								<br />
+								<span class="coverable">coerce</span><br />
+								<span class="coverable">manipulate</span><br />
+								<span class="coverable">trick</span><br />
+								<span class="coverable">convince</span>
+							</em> users into doing what we want.
 						</blockquote>
-						<a
-							href="https://www.deceptive.design/"
-							target="_blank"
-						>
-							<Button
-								><svelte:fragment slot="left">
-									<Svg svg={ic_book} />
-								</svelte:fragment> Learn more</Button
-							>
-						</a>
+					</section>
+				</div>
+				<a
+					href="https://www.deceptive.design/"
+					target="_blank"
+				>
+					<Button
+						><svelte:fragment slot="left">
+							<Svg svg={ic_book} />
+						</svelte:fragment> Learn more</Button
+					>
+				</a>
+				<div class="qna">
+					<section>
+						<h6>Vision</h6>
+						<p>
+							To be the world's most <em>trusted</em> company.
+						</p>
 					</section>
 				</div>
 				<div class="qna">
 					<section>
-						<h6>What is Deceitville?</h6>
+						<h6>Mission</h6>
 						<p>
-							Deceitville is a representation of "<b
-								>deceptive design</b
-							>", formerly known as "dark patterns". It is a way
-							of tricking users into doing things they didn't want
-							to do, but that the designer wanted them to do.
+							To design user interfaces that increases the
+							likelihood of users doing what we want.
 						</p>
 					</section>
+				</div>
+				<div class="qna">
 					<section>
-						<h6>How does it impact you?</h6>
+						<h6>Our History</h6>
 						<p>
-							You have probably stumbled across some of these
-							patterns just by simply browsing the web. They are
-							everywhere. When you accept some terms & conditions,
-							when you try to opt out of receiving marketing
-							emails, when you try not to give Facebook all your
-							information & soul, etc.
-						</p>
-					</section>
-					<section>
-						<h6>Where did it come from?</h6>
-						<p>
-							It started as a push by Harry Brignull in 2010 via
-							the
+							We started as an entity to honour Harry Brignull's
+							work in 2010 of
 							<a
 								href="https://www.deceptive.design/"
 								target="_blank">Deceptive Design</a
 							>
-							website, detailing types & instances of deceptive design
+							website, pursuing types & instances of deceptive design
 							found in the wild. It has since been picked up by largely
 							by the acedemic community, with
 							<a
 								href="https://scholar.google.com/scholar?hl=en&q=dark+pattern+brignull"
 								target="_blank"
 								>countless articles being published</a
-							>
-							picking both it and Harry's work apart.
+							>.<br />
+							<br />
+							We believe it we can utilise it in a way to expand our
+							influence & Harry's legacy in the world.
 						</p>
 					</section>
 				</div>
@@ -296,8 +299,8 @@
 								margin-top: 0;
 								margin-bottom: 1em;
 
-								border-block: 1px solid var(--colour-text);
-								padding-block: 1em;
+								/* border-block: 1px solid var(--colour-text); */
+								/* padding-block: 1em; */
 
 								&::selection {
 									background: var(--colour-selection);
@@ -307,6 +310,62 @@
 									font-style: normal;
 									font-weight: 900;
 									letter-spacing: -0.05em;
+								}
+
+								& .coverable {
+									position: relative;
+									/* background: var(----colour-text-primary); */
+
+									&::after {
+										content: '';
+										position: absolute;
+										top: calc(10% + 1px);
+										left: 0;
+										right: 0;
+										bottom: calc(10% + 1px);
+
+										pointer-events: none;
+
+										background: repeating-linear-gradient(
+											-60deg,
+											#000,
+											#000 30px,
+											var(----colour-text-primary) 30px,
+											var(----colour-text-primary) 31px
+										);
+										border: 1.5px solid
+											var(----colour-text-primary);
+										border-radius: var(----roundness);
+
+										clip-path: inset(0 0 0 0);
+
+										transition: top 0.2s
+											var(----ease-slow-slow);
+									}
+
+									&:hover ~ .coverable {
+										&::after {
+											/* clip-path: inset(0 0 0 0); */
+
+											top: calc(10% + 1px);
+										}
+									}
+
+									&:hover {
+										&::after {
+											top: calc(90% - 2px);
+
+											/* clip-path: inset(100% 0 0 0); */
+										}
+									}
+
+									&:last-child {
+										&::after {
+											top: calc(90% - 2px);
+
+											/* clip-path: inset(100% 0 0 0); */
+										}
+									}
 								}
 							}
 						}
@@ -355,6 +414,10 @@
 									color: var(--colour-text);
 
 									text-shadow: none;
+
+									&:hover {
+										letter-spacing: -0.03em;
+									}
 								}
 							}
 						}

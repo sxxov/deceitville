@@ -156,8 +156,8 @@
 							</li>
 						</ol>
 						<p>
-							Refer to the attached company philosophy deck on how
-							to further prepare yourselves for this important
+							Refer to the attached company profile on how to
+							further prepare yourselves for this important
 							milestone. We look forward to your continued support
 							& commitment to De Corp.®.
 						</p>
