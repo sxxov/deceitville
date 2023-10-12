@@ -1,25 +1,28 @@
 <script lang="ts">
-	import { Tween } from '@sxxov/sv/animation';
 	import { mounted } from '@sxxov/sv/ut/stores';
-	import { Composition, Tween as Tw } from '@sxxov/ut/animation';
+	import {
+		Composition as C,
+		Timeline,
+		Tween as Tw,
+	} from '@sxxov/ut/animation';
 	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
 	import type { Point } from '@sxxov/ut/viewport';
 	import {
-		forwardEventHandlers,
 		T,
+		forwardEventHandlers,
 		useFrame,
 		useThrelte,
 		type Events,
 		type Props,
 	} from '@threlte/core';
+	import { tick } from 'svelte';
 	import * as THREE from 'three';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
 	import { pointer } from '../../../lib/follow/pointer';
+	import type { PseudoHeight } from '../layout/PseudoHeight';
+	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
 	import VillageScenePostProcessing from '../village/VillageScenePostProcessing.svelte';
 	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
-	import type { PseudoHeight } from '../layout/PseudoHeight';
-	import { tick } from 'svelte';
-	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
 
 	type $$Props = Props<THREE.Group> & {
 		ref?: typeof ref;
@@ -49,14 +52,26 @@
 	};
 
 	const component = forwardEventHandlers();
-	const hoverComposition = new Composition();
-	const exitComposition = new Composition();
+
+	const hoverScaleTween = new Tw(0, 1, 300, bezierQuintInOut);
+	const hoverComposition = new C(
+		new Timeline([{ tween: hoverScaleTween }] as const),
+	);
+
+	const exitPositionTween = new Tw(0, 1, 1000, bezierQuintInOut);
+	const exitRotationTween = new Tw(0, 1, 1000, bezierQuintInOut);
+	const exitFogTween = new Tw(0, 1, 1000, bezierQuintInOut);
+	const exitComposition = new C(
+		new Timeline([
+			{ tween: exitPositionTween },
+			{ tween: exitRotationTween },
+			{ tween: exitFogTween },
+		] as const),
+	);
 
 	const fog = new THREE.Fog(0x000000, 0, 3);
-	const fogTween = new Tw(0, 1, 1000, bezierQuintInOut);
-	$: fog.near = (1 - $fogTween) * 2;
-	$: fog.far = (1 - $fogTween) * 4;
-	exitComposition.add(fogTween);
+	$: fog.near = (1 - $exitFogTween) * 2;
+	$: fog.far = (1 - $exitFogTween) * 4;
 
 	let scrollY = 0;
 
@@ -76,10 +91,10 @@
 </script>
 
 <svelte:window bind:scrollY />
-{#if scrollY > $top}
+{#if scrollY >= $top && $top > 0}
 	<DirectorySceneCamera />
 {/if}
-{#if scrollY > $top && scrollY < $bottom}
+{#if scrollY >= $top && $top > 0 && scrollY < $bottom}
 	<VillageScenePostProcessing />
 	<VillageSceneEnvironment />
 {/if}
@@ -94,49 +109,26 @@
 		let:z
 	>
 		{#if o}
-			<Tween
-				composition={exitComposition}
-				start={0}
-				end={1}
-				duration={1000}
-				bezier={bezierQuintInOut}
-				let:v={vvv}
-			>
-				<Tween
-					composition={exitComposition}
-					start={0}
-					end={1}
-					duration={1000}
-					bezier={bezierQuintInOut}
-					let:v={vv}
-				>
-					<Tween
-						composition={hoverComposition}
-						start={0}
-						end={1}
-						duration={300}
-						bezier={bezierQuintInOut}
-						let:v
-					>
-						<T
-							is={o}
-							position={[
-								vv * -world.x,
-								vv * -world.y,
-								vv * -z - 0.2,
-							]}
-							rotation={[
-								0,
-								rotation + (Math.PI * 2 - rotation) * vvv,
-								0,
-							]}
-							scale={[0.01 * v, 0.01 * v, 0.01 * v]}
-							receiveShadow
-							castShadow
-						/>
-					</Tween>
-				</Tween>
-			</Tween>
+			<T
+				is={o}
+				position={[
+					$exitPositionTween * -world.x,
+					$exitPositionTween * -world.y,
+					$exitPositionTween * -z - 0.2,
+				]}
+				rotation={[
+					0,
+					rotation + (Math.PI * 2 - rotation) * $exitRotationTween,
+					0,
+				]}
+				scale={[
+					0.01 * $hoverScaleTween,
+					0.01 * $hoverScaleTween,
+					0.01 * $hoverScaleTween,
+				]}
+				receiveShadow
+				castShadow
+			/>
 		{/if}
 	</FollowLocus>
 </T>
