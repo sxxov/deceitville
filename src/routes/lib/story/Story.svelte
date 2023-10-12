@@ -3,7 +3,7 @@
 	import { map01, clamp01 } from '@sxxov/ut/math';
 	import { inner, client } from '@sxxov/ut/viewport';
 	import { useThrelte } from '@threlte/core';
-	import { whenResize } from '@sxxov/sv/ut/use';
+	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import StoryPlane from './StoryPlane.svelte';
 	import VillageScene from '../village/VillageScene.svelte';
 	import { usePseudoHeight } from '../layout/usePseudoHeight';

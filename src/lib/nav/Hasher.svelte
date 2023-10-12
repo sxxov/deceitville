@@ -15,7 +15,7 @@
 <script lang="ts">
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
-	import { dropIn, dropOut } from '@sxxov/sv/ut/transition';
+	import { dropIn, dropOut } from '@sxxov/sv/ut/transition/transitions';
 	import { Store } from '@sxxov/ut/store';
 	import { ArrayStore } from '@sxxov/ut/store/stores';
 	import { ic_expand_less, ic_expand_more } from 'maic/two_tone';

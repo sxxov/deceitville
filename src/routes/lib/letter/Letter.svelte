@@ -6,7 +6,7 @@
 	import { ic_warning } from 'maic/two_tone';
 	import { Svg } from '@sxxov/sv/svg';
 	import { map01 } from '@sxxov/ut/math';
-	import { whenResize } from '@sxxov/sv/ut/use';
+	import { whenResize } from '@sxxov/sv/ut/action/actions';
 
 	const { renderer } = useThrelte();
 	$: vh = Math.max(

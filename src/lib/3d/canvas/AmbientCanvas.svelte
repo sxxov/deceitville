@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { whenResize } from '@sxxov/sv/ut/use';
+	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import type { Size } from '@sxxov/ut/viewport';
 	import {
 		Canvas,
