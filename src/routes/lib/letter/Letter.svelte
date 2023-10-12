@@ -49,7 +49,7 @@
 			<div
 				class="cover"
 				class:visible={scrollY > $top - heightShred &&
-					scrollY < $bottom - heightShred}
+					scrollY <= $bottom - heightShred}
 			></div>
 		{/if}
 		{#each Array(shred ? 13 : 1).fill(undefined) as _, i}
@@ -62,7 +62,7 @@
 					class="paper"
 					class:shred={i > 0}
 					class:visible={scrollY > $top - heightShred &&
-						scrollY < $bottom}
+						scrollY <= $bottom}
 					class:p={i > 0 && i % 2}
 					class:q={i > 0 && !(i % 2)}
 					style="

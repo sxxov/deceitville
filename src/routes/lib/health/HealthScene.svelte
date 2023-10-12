@@ -32,7 +32,7 @@
 {#if scrollY > $top}
 	<HealthSceneCamera />
 {/if}
-{#if scrollY > $top && scrollY < $bottom}
+{#if scrollY > $top && scrollY <= $bottom}
 	<VillageScenePostProcessing />
 	<VillageSceneEnvironment />
 {/if}

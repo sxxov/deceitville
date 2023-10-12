@@ -91,10 +91,10 @@
 </script>
 
 <svelte:window bind:scrollY />
-{#if scrollY >= $top && $top > 0}
+{#if scrollY > $top}
 	<DirectorySceneCamera />
 {/if}
-{#if scrollY >= $top && $top > 0 && scrollY < $bottom}
+{#if scrollY > $top && scrollY <= $bottom}
 	<VillageScenePostProcessing />
 	<VillageSceneEnvironment />
 {/if}
