@@ -316,6 +316,8 @@
 									position: relative;
 									/* background: var(----colour-text-primary); */
 
+									cursor: vertical-text;
+
 									&::after {
 										content: '';
 										position: absolute;
