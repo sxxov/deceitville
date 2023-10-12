@@ -48,23 +48,6 @@
 			}
 		}
 	};
-	let playingInfinitely = false;
-	const cancelPlayInfinite = () => {
-		playingInfinitely = false;
-	};
-	const requestPlayInfinite = async (composition: C) => {
-		playingInfinitely = true;
-
-		// eslint-disable-next-line no-unmodified-loop-condition
-		while (playingInfinitely) {
-			composition.seekToProgress(0);
-			await composition.play();
-		}
-	};
-
-	onDestroy(() => {
-		cancelPlayInfinite();
-	});
 </script>
 
 <div class="waze">
@@ -75,13 +58,14 @@
 				{@const end = i === 0 ? 1 : i === 1 ? 1 : i === 2 ? 0.5 : 0}
 				{@const duration =
 					i === 0 ? 1000 : i === 1 ? 2000 : i === 2 ? 1000 : 0}
-				{@const delay = i === 0 ? 0 : i === 1 ? 0 : i === 2 ? 1000 : 0}
+				{@const at = {
+					time: i === 0 ? 0 : i === 1 ? 0 : i === 2 ? 1000 : 0,
+				}}
 				<Tween
-					{composition}
 					{start}
 					{end}
 					{duration}
-					{delay}
+					{at}
 					let:v
 				>
 					{#if direction === WazeDirection.LEFT}
@@ -358,7 +342,7 @@
 				</Tween>
 			{/each}
 
-			{(requestPlayInfinite(composition), '')}
+			{(composition.play(1, Infinity), '')}
 		</Composition>
 	</div>
 	<div class="text">
