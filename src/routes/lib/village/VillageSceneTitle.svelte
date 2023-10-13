@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { Composition, Tween } from '@sxxov/ut/animation';
+	import {
+		Composition,
+		Timeline,
+		Tween,
+		type TimelineSegment,
+	} from '@sxxov/ut/animation';
 	import { bezierQuintIn, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { clamp01, lerp, map01 } from '@sxxov/ut/math';
 	import { inner } from '@sxxov/ut/viewport';
@@ -64,7 +69,7 @@
 				);
 
 				return {
-					position: [0, 0, -(1 - v) * 2 + 1],
+					position: [0, 0, -(1 - v) + 1],
 					rotation: [90 * v, 0, 90 * v * (n % 2 > 0 ? 1 : -1)],
 					scale: [1, 1, 1],
 				} as const;
@@ -88,7 +93,7 @@
 				);
 
 				return {
-					position: [0, 0, -(1 - v) * 2 + 1],
+					position: [0, 0, -(1 - v) + 1],
 					rotation: [-90 * v, 0, 90 * v * (n % 2 > 0 ? 1 : -1)],
 					scale: [1, 1, 1],
 				} as const;
@@ -135,10 +140,12 @@
 		if (intro) {
 			introTweens = refs.map(() => new Tween(0, 1, 1000));
 			introComposition = new Composition(
-				introTweens.map((tween, i) => ({
-					tween,
-					delay: i * 100,
-				})),
+				new Timeline(
+					introTweens.map((tween, i) => ({
+						tween,
+						at: { time: i * 100 },
+					})) as readonly TimelineSegment[],
+				),
 			);
 			introUnsubscribes = introTweens.map((tween, i) => {
 				const ref = refs![i]!;
