@@ -3,8 +3,9 @@
 	import { client, inner } from '@sxxov/ut/viewport';
 	import { useThrelte } from '@threlte/core';
 	import { usePseudoHeight } from '../layout/usePseudoHeight';
-	import { ic_block } from 'maic/two_tone';
+	import { ic_block, ic_warning } from 'maic/two_tone';
 	import { Svg } from '@sxxov/sv/svg';
+	import Marquee from './Marquee.svelte';
 
 	const { renderer } = useThrelte();
 	$: vh = Math.max(
@@ -38,11 +39,55 @@
 				</span> Corporate Secrets
 			</h2>
 		</div> -->
-		<div class="tape _1"></div>
-		<div class="tape _2"></div>
-		<div class="tape _3"></div>
-		<div class="tape _4"></div>
-		<div class="tape _5"></div>
+		<div class="tape _1">
+			<Marquee duration={100}
+				><span class="de-corp">De Corp.®</span></Marquee
+			>
+		</div>
+		<div class="tape _2">
+			<Marquee
+				><span class="de-caution"
+					><span class="icon"
+						><Svg
+							height="100px"
+							width="100%"
+							svg={ic_warning}
+						/></span
+					>Caution</span
+				></Marquee
+			>
+		</div>
+		<div class="tape _3">
+			<Marquee
+				direction={-1}
+				duration={60}
+				><span class="de-no-entry"
+					><span class="icon"
+						><Svg
+							height="100px"
+							width="100%"
+							svg={ic_block}
+						/></span
+					> No Entry Beyond This Line</span
+				></Marquee
+			>
+		</div>
+		<div class="tape _4">
+			<Marquee direction={-1}
+				><span class="de-caution"
+					><span class="icon"
+						><Svg
+							height="100px"
+							width="100%"
+							svg={ic_warning}
+						/></span
+					>Caution</span
+				></Marquee
+			>
+		</div>
+		<div class="tape _5">
+			<Marquee><span class="de-corp">De Corp.®</span></Marquee>
+		</div>
 	</div>
 
 	<div class="padding end"></div>
@@ -161,7 +206,7 @@
 				}
 
 				&._3 {
-					transform: rotate3d(0, 10, 1, -40deg);
+					transform: rotate3d(0, 10, 3, -10deg);
 				}
 
 				&._4 {
@@ -170,6 +215,51 @@
 
 				&._5 {
 					transform: rotate(-10deg);
+				}
+
+				& .de-corp {
+				}
+
+				& .de-caution {
+					display: inline-flex;
+					gap: 28px;
+					align-items: center;
+					justify-content: center;
+					height: 100%;
+
+					padding-right: 28px;
+
+					font-size: 100px;
+					text-transform: uppercase;
+					font-weight: 900;
+					letter-spacing: -0.04em;
+					-webkit-text-fill-color: transparent;
+					text-fill-color: transparent;
+					-webkit-text-stroke: 2px var(----colour-text-primary);
+					text-stroke: 2px var(----colour-text-primary);
+				}
+
+				& .de-no-entry {
+					display: inline-flex;
+					gap: 28px;
+					align-items: center;
+					justify-content: center;
+					height: 100%;
+
+					padding-right: 28px;
+
+					font-size: 100px;
+					/* text-transform: uppercase; */
+					font-weight: 100;
+					letter-spacing: -0.04em;
+					/* -webkit-text-fill-color: transparent;
+					text-fill-color: transparent;
+					-webkit-text-stroke: 2px var(----colour-text-primary);
+					text-stroke: 2px var(----colour-text-primary); */
+				}
+
+				& .icon {
+					display: inline-block;
 				}
 			}
 		}
