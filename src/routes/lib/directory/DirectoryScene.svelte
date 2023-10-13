@@ -63,9 +63,9 @@
 	const exitFogTween = new Tw(0, 1, 1000, bezierQuintInOut);
 	const exitComposition = new C(
 		new Timeline([
-			{ tween: exitPositionTween },
-			{ tween: exitRotationTween },
-			{ tween: exitFogTween },
+			{ tween: exitPositionTween, at: { start: 0 } },
+			{ tween: exitRotationTween, at: { start: 0 } },
+			{ tween: exitFogTween, at: { start: 0 } },
 		] as const),
 	);
 
