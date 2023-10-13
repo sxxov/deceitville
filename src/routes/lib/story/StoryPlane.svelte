@@ -432,6 +432,13 @@
 		}
 	}
 
+	a:any-link {
+		&:hover {
+			font-weight: 300;
+			letter-spacing: -0.06em;
+		}
+	}
+
 	s {
 		text-decoration: line-through;
 		text-decoration-color: var(----color-text-primary);
