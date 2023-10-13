@@ -7,10 +7,11 @@
 	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
 	import VillageScenePostProcessing from '../village/VillageScenePostProcessing.svelte';
 	import ContinuationSceneCamera from './ContinuationSceneCamera.svelte';
-	import { Button } from '@sxxov/sv/button';
+	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { ic_book, ic_help } from 'maic/two_tone';
 	import { Svg } from '@sxxov/sv/svg';
 	import Footer from '../../../lib/footer/Footer.svelte';
+	import Contact from '../../../lib/footer/Contact.svelte';
 
 	const { renderer } = useThrelte();
 	$: vh = Math.max(
@@ -94,6 +95,11 @@
 					target="_blank"
 				>
 					<Button
+						{...ButtonVariants.Secondary}
+						{...ButtonVariants.Shadow.Sm}
+						colourBackground="----colour-text-primary"
+						colourBackgroundHover="----colour-background-primary"
+						colourText="----colour-background-primary"
 						><svelte:fragment slot="left">
 							<Svg svg={ic_book} />
 						</svelte:fragment> Learn more</Button
@@ -142,6 +148,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="contact"><Contact /></div>
 		<div class="footer"><Footer /></div>
 	</div>
 	<div class="padding end"></div>
@@ -239,6 +246,7 @@
 						& > .sub {
 							display: flex;
 							align-items: center;
+							gap: 7px;
 							font-family: var(----font-family-sans);
 							letter-spacing: 0;
 							line-height: 1;
