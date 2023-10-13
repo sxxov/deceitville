@@ -13,12 +13,14 @@
 		top: 0;
 		right: 100%;
 		width: 100%;
-		height: 2px;
+		height: 1px;
 		opacity: 1;
 
 		mix-blend-mode: difference;
 
-		transition: opacity 1s var(----ease-fast-slow);
+		transition:
+			opacity 1s var(----ease-fast-slow),
+			transform 0.3s var(----ease-slow-slow);
 
 		background: linear-gradient(
 			to right,
@@ -129,7 +131,10 @@
 
 	&.pace-inactive {
 		& > .pace-progress {
-			transition: opacity 1s var(----ease-slow-fast), display 0s 1s;
+			transition:
+				opacity 1s var(----ease-slow-fast),
+				transform 0.3s var(----ease-slow-slow),
+				display 0s 1s;
 
 			opacity: 0;
 		}
