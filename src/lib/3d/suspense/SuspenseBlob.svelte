@@ -5,7 +5,7 @@
 	import { Suspense } from '@threlte/extras';
 	import type { ComponentProps } from 'svelte';
 	import { useLmth } from '../lmth/useLmth';
-	import DePlaceholder from './DePlaceholder.svelte';
+	import DePlaceholder from './LoaderBlob.svelte';
 
 	type $$Props = ComponentProps<Suspense>;
 
