@@ -1,3 +1,10 @@
+<script
+	lang="ts"
+	context="module"
+>
+	export const lmthContextKey = Symbol('lmth');
+</script>
+
 <script lang="ts">
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import { UnimplementedError } from '@sxxov/ut/errors';
@@ -10,12 +17,13 @@
 		type Events,
 		type Props,
 	} from '@threlte/core';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, setContext } from 'svelte';
 	import * as THREE from 'three';
 	import { getScreenSpacePointOnPlane } from './getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from './getScreenSpaceSizeAtWorldZ';
 	import { type Css, css } from '@sxxov/ut/css';
 	import { raise } from '@sxxov/ut/functional';
+	import type { LmthContext } from './LmthContext';
 
 	export let ref = new THREE.Group();
 	export let width: Css = '100%';
@@ -81,34 +89,11 @@
 		cameraScheduleAddRef = true;
 	}
 
-	const reflow = () => {
-		if (!div) return;
-
-		const domRect = div.getBoundingClientRect();
-
-		rect.x = domRect.x;
-		rect.y = domRect.y;
-		rect.width = domRect.width;
-		rect.height = domRect.height;
-
-		rect = rect;
-	};
-
-	onMount(() => {
-		reflow();
-	});
-
 	const groupBbox = new THREE.Box3();
 	const viewport = new THREE.Vector2();
+	let scheduleReupdateThree = false;
 	// eslint-disable-next-line complexity
-	useFrame(() => {
-		if (eager) reflow();
-
-		if (cameraScheduleAddRef) {
-			camera.attach(ref);
-			cameraScheduleAddRef = false;
-		}
-
+	const updateThree = () => {
 		renderer.getSize(viewport);
 		const plane = getScreenSpaceSizeAtWorldZ(camera, z);
 
@@ -165,6 +150,8 @@
 				groupWidth > 0 ? planeWidth / groupWidth : 1,
 				groupHeight > 0 ? planeHeight / groupHeight : 1,
 			];
+			if (groupWidth <= 0 && groupHeight <= 0)
+				scheduleReupdateThree = true;
 
 			[scaleX, scaleY] = [x, y];
 		} else if (fill) {
@@ -172,6 +159,8 @@
 				groupWidth > 0 ? planeWidth / groupWidth : 1,
 				groupHeight > 0 ? planeHeight / groupHeight : 1,
 			];
+			if (groupWidth <= 0 && groupHeight <= 0)
+				scheduleReupdateThree = true;
 			const scale = Math.max(x, y);
 
 			[scaleX, scaleY] = [scale, scale];
@@ -180,6 +169,8 @@
 				groupWidth > 0 ? planeWidth / groupWidth : 1,
 				groupHeight > 0 ? planeHeight / groupHeight : 1,
 			];
+			if (groupWidth <= 0 && groupHeight <= 0)
+				scheduleReupdateThree = true;
 			const scale = Math.min(x, y);
 
 			[scaleX, scaleY] = [scale, scale];
@@ -210,6 +201,54 @@
 			);
 		if (Number.isFinite(scaleX) && Number.isFinite(scaleY))
 			ref.scale.set(scaleX, scaleY, 1);
+	};
+
+	const updateDom = () => {
+		if (!div) return;
+
+		const domRect = div.getBoundingClientRect();
+
+		rect.x = domRect.x;
+		rect.y = domRect.y;
+		rect.width = domRect.width;
+		rect.height = domRect.height;
+
+		rect = rect;
+	};
+
+	$: {
+		rect;
+
+		updateThree();
+	}
+
+	onMount(() => {
+		updateDom();
+	});
+
+	setContext<LmthContext>(lmthContextKey, {
+		updateDom,
+		updateThree,
+	});
+
+	let firstUpdate = true;
+	useFrame(() => {
+		if (eager) updateDom();
+
+		if (scheduleReupdateThree) {
+			updateThree();
+			scheduleReupdateThree = false;
+		}
+
+		if (firstUpdate) {
+			updateThree();
+			firstUpdate = false;
+		}
+
+		if (cameraScheduleAddRef) {
+			camera.attach(ref);
+			cameraScheduleAddRef = false;
+		}
 	});
 
 	onDestroy(() => {
@@ -220,10 +259,10 @@
 
 <svelte:window
 	on:resize={() => {
-		reflow();
+		updateDom();
 	}}
 	on:scroll={() => {
-		reflow();
+		updateDom();
 	}}
 />
 <div
