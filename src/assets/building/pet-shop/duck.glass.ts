@@ -1,5 +1,4 @@
-import base_bin from './base.bin?url';
-import buttonTexture_png from './buttonTexture.png?url';
+import duck_glass_bin from './duck.glass.bin?url';
 
 export default {
 	"asset": {
@@ -7,7 +6,10 @@ export default {
 		"version": "2.0"
 	},
 	"extensionsUsed": [
-		"KHR_draco_mesh_compression"
+		"KHR_draco_mesh_compression",
+		"KHR_materials_transmission",
+		"KHR_materials_specular",
+		"KHR_materials_ior"
 	],
 	"extensionsRequired": [
 		"KHR_draco_mesh_compression"
@@ -24,25 +26,43 @@ export default {
 	"nodes": [
 		{
 			"mesh": 0,
-			"name": "base"
+			"name": "duck.glass",
+			"translation": [
+				4,
+				0.24998164176940918,
+				0
+			]
 		}
 	],
 	"materials": [
 		{
+			"alphaMode": "BLEND",
 			"doubleSided": true,
-			"name": "Material.003",
-			"pbrMetallicRoughness": {
-				"baseColorTexture": {
-					"index": 0
+			"extensions": {
+				"KHR_materials_transmission": {
+					"transmissionFactor": 1
 				},
+				"KHR_materials_specular": {
+					"specularColorFactor": [
+						1,
+						1,
+						1
+					]
+				},
+				"KHR_materials_ior": {
+					"ior": 1.4500000476837158
+				}
+			},
+			"name": "Material.001",
+			"pbrMetallicRoughness": {
 				"metallicFactor": 0,
-				"roughnessFactor": 0.6900347471237183
+				"roughnessFactor": 0.5
 			}
 		}
 	],
 	"meshes": [
 		{
-			"name": "Cylinder.004",
+			"name": "Sphere.001",
 			"primitives": [
 				{
 					"attributes": {
@@ -67,68 +87,49 @@ export default {
 			]
 		}
 	],
-	"textures": [
-		{
-			"sampler": 0,
-			"source": 0
-		}
-	],
-	"images": [
-		{
-			"mimeType": "image/png",
-			"name": "buttonTexture",
-			"uri": buttonTexture_png
-		}
-	],
 	"accessors": [
 		{
 			"componentType": 5126,
-			"count": 140,
+			"count": 1169,
 			"max": [
-				0.6412249803543091,
-				0.6265469789505005,
-				0.21330100297927856
+				0.9999998807907104,
+				2.5000159740448,
+				0.9999997615814209
 			],
 			"min": [
-				-0.6383230090141296,
-				-0.6228929758071899,
-				0.04769499972462654
+				-0.9999997019767761,
+				0.000015974044799804688,
+				-1
 			],
 			"type": "VEC3"
 		},
 		{
 			"componentType": 5126,
-			"count": 140,
+			"count": 1169,
 			"type": "VEC3"
 		},
 		{
 			"componentType": 5126,
-			"count": 140,
+			"count": 1169,
 			"type": "VEC2"
 		},
 		{
 			"componentType": 5123,
-			"count": 264,
+			"count": 6522,
 			"type": "SCALAR"
 		}
 	],
 	"bufferViews": [
 		{
 			"buffer": 0,
-			"byteLength": 1334,
+			"byteLength": 6234,
 			"byteOffset": 0
-		}
-	],
-	"samplers": [
-		{
-			"magFilter": 9729,
-			"minFilter": 9987
 		}
 	],
 	"buffers": [
 		{
-			"byteLength": 1336,
-			"uri": base_bin
+			"byteLength": 6236,
+			"uri": duck_glass_bin
 		}
 	]
 }

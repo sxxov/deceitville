@@ -1,0 +1,9 @@
+export { default as cat_base } from './cat.base.js';
+export { default as cat_glass } from './cat.glass.js';
+export { default as cat_item } from './cat.item.js';
+export { default as duck_base } from './duck.base.js';
+export { default as duck_glass } from './duck.glass.js';
+export { default as duck_item } from './duck.item.js';
+export { default as rock_base } from './rock.base.js';
+export { default as rock_glass } from './rock.glass.js';
+export { default as rock_item } from './rock.item.js';

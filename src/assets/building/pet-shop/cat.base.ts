@@ -1,5 +1,7 @@
-import pressable_bin from './pressable.bin?url';
-import buttonTexture_png from './buttonTexture.png?url';
+import cat_base_bin from './cat.base.bin?url';
+import Wood053_2K_Normal_jpg from './Wood053_2K_Normal.jpg?url';
+import Wood053_2K_Color_jpg from './Wood053_2K_Color.jpg?url';
+import Wood053_2K_Roughness_png from './Wood053_2K_Roughness.jpg?url';
 
 export default {
 	"asset": {
@@ -24,19 +26,32 @@ export default {
 	"nodes": [
 		{
 			"mesh": 0,
-			"name": "pressable"
+			"name": "cat.base",
+			"translation": [
+				-4,
+				0,
+				0
+			]
 		}
 	],
 	"materials": [
 		{
 			"doubleSided": true,
-			"name": "Material.003",
+			"name": "Wood",
+			"normalTexture": {
+				"index": 0,
+				"texCoord": 1
+			},
 			"pbrMetallicRoughness": {
 				"baseColorTexture": {
-					"index": 0
+					"index": 1,
+					"texCoord": 1
 				},
 				"metallicFactor": 0,
-				"roughnessFactor": 0.6900347471237183
+				"metallicRoughnessTexture": {
+					"index": 2,
+					"texCoord": 1
+				}
 			}
 		}
 	],
@@ -48,7 +63,8 @@ export default {
 					"attributes": {
 						"POSITION": 0,
 						"NORMAL": 1,
-						"TEXCOORD_0": 2
+						"TEXCOORD_0": 2,
+						"TEXCOORD_1": 3
 					},
 					"extensions": {
 						"KHR_draco_mesh_compression": {
@@ -56,11 +72,12 @@ export default {
 							"attributes": {
 								"POSITION": 0,
 								"NORMAL": 1,
-								"TEXCOORD_0": 2
+								"TEXCOORD_0": 2,
+								"TEXCOORD_1": 3
 							}
 						}
 					},
-					"indices": 3,
+					"indices": 4,
 					"material": 0,
 					"mode": 4
 				}
@@ -71,51 +88,74 @@ export default {
 		{
 			"sampler": 0,
 			"source": 0
+		},
+		{
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"sampler": 0,
+			"source": 2
 		}
 	],
 	"images": [
 		{
+			"mimeType": "image/jpeg",
+			"name": "Wood053_2K_Normal",
+			"uri": Wood053_2K_Normal_jpg
+		},
+		{
+			"mimeType": "image/jpeg",
+			"name": "Wood053_2K_Color",
+			"uri": Wood053_2K_Color_jpg
+		},
+		{
 			"mimeType": "image/png",
-			"name": "buttonTexture",
-			"uri": buttonTexture_png
+			"name": "Wood053_2K_Roughness",
+			"uri": Wood053_2K_Roughness_png
 		}
 	],
 	"accessors": [
 		{
 			"componentType": 5126,
-			"count": 160,
+			"count": 1190,
 			"max": [
-				0.4761109948158264,
-				0.4761109948158264,
-				0.1014380007982254
+				1.2000000476837158,
+				0.39999762177467346,
+				1.2000000476837158
 			],
 			"min": [
-				-0.4761109948158264,
-				-0.4761109948158264,
-				-0.1053381934762001
+				-1.2000000476837158,
+				-0.000002384185791015625,
+				-1.2000000476837158
 			],
 			"type": "VEC3"
 		},
 		{
 			"componentType": 5126,
-			"count": 160,
+			"count": 1190,
 			"type": "VEC3"
 		},
 		{
 			"componentType": 5126,
-			"count": 160,
+			"count": 1190,
+			"type": "VEC2"
+		},
+		{
+			"componentType": 5126,
+			"count": 1190,
 			"type": "VEC2"
 		},
 		{
 			"componentType": 5123,
-			"count": 282,
+			"count": 4212,
 			"type": "SCALAR"
 		}
 	],
 	"bufferViews": [
 		{
 			"buffer": 0,
-			"byteLength": 1151,
+			"byteLength": 8100,
 			"byteOffset": 0
 		}
 	],
@@ -127,8 +167,8 @@ export default {
 	],
 	"buffers": [
 		{
-			"byteLength": 1152,
-			"uri": pressable_bin
+			"byteLength": 8100,
+			"uri": cat_base_bin
 		}
 	]
 }
