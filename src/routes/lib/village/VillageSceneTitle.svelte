@@ -141,8 +141,8 @@
 			introTweens = refs.map(() => new Tween(0, 1, 1000));
 			introComposition = new Composition(
 				new Timeline(
-					introTweens.map((tween, i) => ({
-						tween,
+					introTweens.map((x, i) => ({
+						x,
 						at: { time: i * 100 },
 					})) as readonly TimelineSegment[],
 				),
