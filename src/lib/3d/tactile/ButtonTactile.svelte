@@ -3,15 +3,13 @@
 	import { bezierQuintInOut, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { Store } from '@sxxov/ut/store';
 	import { T } from '@threlte/core';
-	import { useCursor, useSuspense } from '@threlte/extras';
+	import { useCursor } from '@threlte/extras';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { gltfs } from '../../../assets/de/button/index';
-	import { createPart } from '../gltf/part';
+	import { gltfs } from '../../../assets/tactile/button/index';
+	import Part from '../part/Part.svelte';
 
 	export let ref = new THREE.Group();
-
-	const suspend = useSuspense();
 
 	const { hovering, onPointerEnter, onPointerLeave } = useCursor();
 	const tweenHoverIn = new Tween(0, 1, 50, bezierQuintOut);
@@ -32,32 +30,31 @@
 
 <T
 	is={ref}
-	rotation={[degToRad(180), 0, 0]}
+	on:pointerenter={onPointerEnter}
+	on:pointerenter
+	on:pointerleave={onPointerLeave}
+	on:pointerleave
+	on:pointerdown={() => {
+		$pressing = true;
+	}}
+	on:pointerdown
+	on:pointerup={() => {
+		$pressing = false;
+	}}
+	on:pointerup
 >
-	{#await suspend(createPart(gltfs.base)) then { object }}
-		{#if object}
-			<T
-				is={object.clone(true)}
-				receiveShadow
-				castShadow
-			/>
-		{/if}
-	{/await}
-	{#await suspend(createPart(gltfs.pressable)) then { object }}
-		{#if object}
-			<T
-				is={object.clone(true)}
-				receiveShadow
-				castShadow
+	<slot
+		{ref}
+		hover={$tweenHover}
+		press={$tweenPress}
+		hovering={$hovering}
+		pressing={$pressing}
+	>
+		<T.Group rotation.x={degToRad(180)}>
+			<Part gltf={gltfs.base} />
+			<Part
+				gltf={gltfs.pressable}
 				scale.z={($tweenHover + 1) * 1.5 - $tweenPress}
-				on:pointerenter={onPointerEnter}
-				on:pointerleave={onPointerLeave}
-				on:pointerdown={() => {
-					$pressing = true;
-				}}
-				on:pointerup={() => {
-					$pressing = false;
-				}}
 			/>
 			<T.PointLight
 				position={[0, 0, -2]}
@@ -67,6 +64,6 @@
 				color={new THREE.Color(0x0000ff)}
 				distance={3}
 			/>
-		{/if}
-	{/await}
+		</T.Group>
+	</slot>
 </T>
