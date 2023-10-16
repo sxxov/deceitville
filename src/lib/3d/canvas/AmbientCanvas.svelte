@@ -1,3 +1,10 @@
+<script
+	lang="ts"
+	context="module"
+>
+	export const ambientRendererSizeContextKey = Symbol('ambientRendererSize');
+</script>
+
 <script lang="ts">
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import type { Size } from '@sxxov/ut/viewport';
@@ -12,11 +19,13 @@
 		onDestroy,
 		type ComponentEvents,
 		type ComponentProps,
+		setContext,
 	} from 'svelte';
 	import { inner, client } from '@sxxov/ut/viewport';
 	import { interactivity, useInteractivity } from '@threlte/extras';
 	import { Store } from '@sxxov/ut/store';
 	import { beforeNavigate } from '$app/navigation';
+	import type { AmbientRendererSizeContext } from './AmbientRendererSizeContext';
 
 	type $$Props = ComponentProps<Canvas>;
 	type $$Events = ComponentEvents<Canvas>;
@@ -42,6 +51,17 @@
 	$: vw = Math.max($inner.width, $client.width);
 	$: vh = Math.max($inner.height, $client.height);
 
+	const rendererSize = new Store<Size>({
+		width: vw || 1,
+		height: vh || 1,
+	});
+	$: $rendererSize.width = width || vw || 1;
+	$: $rendererSize.height = height || vh || 1;
+	setContext<AmbientRendererSizeContext>(
+		ambientRendererSizeContextKey,
+		rendererSize,
+	);
+
 	const interactive = new Store(false);
 	let interactiveHookUnsubscribe: (() => void) | undefined;
 
@@ -65,10 +85,7 @@
 	>
 		<Canvas
 			{...$$restProps}
-			size={{
-				width: width || vw || 1,
-				height: height || vh || 1,
-			}}
+			size={$rendererSize}
 			bind:this={$component}
 		>
 			<div use:portal={portalDiv}>

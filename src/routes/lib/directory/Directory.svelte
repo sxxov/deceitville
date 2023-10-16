@@ -1,25 +1,20 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Svg } from '@sxxov/sv/svg';
+	import { inner } from '@sxxov/ut/viewport';
 	import { ic_flag } from 'maic/two_tone';
+	import svg_loop_centre from '../../../assets/directory/loops/centre.svg?raw';
+	import svg_loop_corner from '../../../assets/directory/loops/corner.svg?raw';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
+	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import type { DirectoryRoute } from './DirectoryRoute';
 	import DirectoryScene from './DirectoryScene.svelte';
-	import svg_loop_corner from '../../../assets/directory/loops/corner.svg?raw';
-	import svg_loop_centre from '../../../assets/directory/loops/centre.svg?raw';
-	import { Spacer } from '@sxxov/sv/layout';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
-	import { useThrelte } from '@threlte/core';
-	import { inner, client } from '@sxxov/ut/viewport';
-	import * as THREE from 'three';
 
 	export let routes: DirectoryRoute[];
 
-	const { renderer } = useThrelte();
-	$: vh = Math.max(
-		$inner.height,
-		$client.height,
-		renderer.getSize(new THREE.Vector2()).height,
-	);
+	const rendererSize = useAmbientRendererSize();
+	$: ({ height: vh } = $rendererSize ?? { height: 0 });
+
 	const pseudoHeight = usePseudoHeight();
 	$: pseudoHeight.self.set(
 		$inner.width > 1000

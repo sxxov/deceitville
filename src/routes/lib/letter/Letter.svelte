@@ -1,19 +1,11 @@
 <script lang="ts">
-	import * as THREE from 'three';
-	import { client, inner } from '@sxxov/ut/viewport';
-	import { useThrelte } from '@threlte/core';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
-	import { ic_warning } from 'maic/two_tone';
 	import { Svg } from '@sxxov/sv/svg';
-	import { map01 } from '@sxxov/ut/math';
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
+	import { map01 } from '@sxxov/ut/math';
+	import { inner } from '@sxxov/ut/viewport';
+	import { ic_warning } from 'maic/two_tone';
+	import { usePseudoHeight } from '../layout/usePseudoHeight';
 
-	const { renderer } = useThrelte();
-	$: vh = Math.max(
-		$inner.height,
-		$client.height,
-		renderer.getSize(new THREE.Vector2()).height,
-	);
 	const pseudoHeight = usePseudoHeight();
 	const { self, top, bottom } = pseudoHeight;
 	$: self.set(height);

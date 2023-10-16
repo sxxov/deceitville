@@ -1,21 +1,16 @@
 <script lang="ts">
-	import * as THREE from 'three';
-	import { client, inner } from '@sxxov/ut/viewport';
-	import { useThrelte } from '@threlte/core';
+	import { LoaderLine } from '@sxxov/sv/loaders';
+	import { Svg } from '@sxxov/sv/svg';
+	import { ic_favorite, ic_info } from 'maic/two_tone';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import HealthScene from './HealthScene.svelte';
-	import { ic_favorite, ic_info } from 'maic/two_tone';
-	import { Svg } from '@sxxov/sv/svg';
-	import { LoaderLine } from '@sxxov/sv/loaders';
 
 	export let health = 0.5;
 
-	const { renderer } = useThrelte();
-	$: vh = Math.max(
-		$inner.height,
-		$client.height,
-		renderer.getSize(new THREE.Vector2()).height,
-	);
+	const rendererSize = useAmbientRendererSize();
+	$: ({ height: vh } = $rendererSize ?? { height: 0 });
+
 	const pseudoHeight = usePseudoHeight();
 	const { self, top } = pseudoHeight;
 	$: self.set(vh);

@@ -2,21 +2,18 @@
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
 	import { Store } from '@sxxov/ut/store';
-	import { client, inner, type Point } from '@sxxov/ut/viewport';
-	import { useFrame, useThrelte } from '@threlte/core';
+	import { inner, type Point } from '@sxxov/ut/viewport';
+	import { useFrame } from '@threlte/core';
 	import { ic_book, ic_help } from 'maic/two_tone';
-	import * as THREE from 'three';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import Contact from '../../../lib/footer/Contact.svelte';
 	import Footer from '../../../lib/footer/Footer.svelte';
 	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import ContinuationSceneCamera from './ContinuationSceneCamera.svelte';
 
-	const { renderer } = useThrelte();
-	$: vh = Math.max(
-		$inner.height,
-		$client.height,
-		renderer.getSize(new THREE.Vector2()).height,
-	);
+	const rendererSize = useAmbientRendererSize();
+	$: ({ height: vh } = $rendererSize ?? { height: 0 });
+
 	const { self, top, bottom } = usePseudoHeight();
 	$: self.set(vh * 2);
 

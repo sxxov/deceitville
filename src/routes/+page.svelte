@@ -17,6 +17,7 @@
 	import Health from './lib/health/Health.svelte';
 	import Letter from './lib/letter/Letter.svelte';
 	import Caution from './lib/caution/Caution.svelte';
+	import { useAmbientRendererSize } from '../lib/3d/canvas/useAmbientRendererSize';
 
 	const { renderer } = useThrelte();
 
@@ -41,11 +42,8 @@
 	};
 
 	let scrollY = 0;
-	$: vh = Math.max(
-		$inner.height,
-		$client.height,
-		renderer.getSize(new THREE.Vector2()).height,
-	);
+	const rendererSize = useAmbientRendererSize();
+	$: ({ height: vh } = $rendererSize ?? { height: 0 });
 
 	$: wazeTimeline = [
 		{

@@ -1,22 +1,16 @@
 <script lang="ts">
-	import * as THREE from 'three';
-	import { map01, clamp01 } from '@sxxov/ut/math';
-	import { inner, client } from '@sxxov/ut/viewport';
-	import { useThrelte } from '@threlte/core';
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
-	import StoryPlane from './StoryPlane.svelte';
-	import VillageScene from '../village/VillageScene.svelte';
+	import { clamp01, map01 } from '@sxxov/ut/math';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import { usePseudoHeight } from '../layout/usePseudoHeight';
+	import VillageScene from '../village/VillageScene.svelte';
+	import StoryPlane from './StoryPlane.svelte';
 
-	const { renderer } = useThrelte();
 	const storyIndexes = [0, 1, 2, 3] as const;
 	let scrollY = 0;
 
-	$: vh = Math.max(
-		$inner.height,
-		$client.height,
-		renderer.getSize(new THREE.Vector2()).height,
-	);
+	const rendererSize = useAmbientRendererSize();
+	$: ({ height: vh } = $rendererSize ?? { height: 0 });
 
 	const pseudoHeight = usePseudoHeight();
 	$: pseudoHeight.self.set(vh * 9);
