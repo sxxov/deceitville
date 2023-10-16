@@ -17,6 +17,8 @@
 	import * as THREE from 'three';
 	import AmbientCanvas from '../lib/3d/canvas/AmbientCanvas.svelte';
 	import { useLenis } from '../lib/lenis/useLenis';
+	import DefaultPostProcessingProvider from './lib/environment/DefaultPostProcessingProvider.svelte';
+	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
 
 	useLenis();
 </script>
@@ -64,7 +66,11 @@
 			premultipliedAlpha: false,
 		}}
 	>
-		<slot />
+		<DefaultExrHdriProvider>
+			<DefaultPostProcessingProvider>
+				<slot />
+			</DefaultPostProcessingProvider>
+		</DefaultExrHdriProvider>
 	</AmbientCanvas>
 	<!-- <Footer /> -->
 </main>

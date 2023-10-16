@@ -1,17 +1,15 @@
 <script lang="ts">
+	import { Button, ButtonVariants } from '@sxxov/sv/button';
+	import { Svg } from '@sxxov/sv/svg';
 	import { Store } from '@sxxov/ut/store';
 	import { client, inner, type Point } from '@sxxov/ut/viewport';
 	import { useFrame, useThrelte } from '@threlte/core';
-	import * as THREE from 'three';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
-	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
-	import VillageScenePostProcessing from '../village/VillageScenePostProcessing.svelte';
-	import ContinuationSceneCamera from './ContinuationSceneCamera.svelte';
-	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { ic_book, ic_help } from 'maic/two_tone';
-	import { Svg } from '@sxxov/sv/svg';
-	import Footer from '../../../lib/footer/Footer.svelte';
+	import * as THREE from 'three';
 	import Contact from '../../../lib/footer/Contact.svelte';
+	import Footer from '../../../lib/footer/Footer.svelte';
+	import { usePseudoHeight } from '../layout/usePseudoHeight';
+	import ContinuationSceneCamera from './ContinuationSceneCamera.svelte';
 
 	const { renderer } = useThrelte();
 	$: vh = Math.max(
@@ -38,10 +36,6 @@
 <svelte:window bind:scrollY />
 {#if scrollY > $top}
 	<ContinuationSceneCamera />
-{/if}
-{#if scrollY > $top && scrollY <= $bottom}
-	<VillageScenePostProcessing />
-	<VillageSceneEnvironment />
 {/if}
 <div class="continuation">
 	<div
@@ -284,6 +278,10 @@
 						minmax(min(calc(100vw - 56px), 400px), 1fr)
 					);
 					gap: 112px;
+
+					@media (max-width: 980px) {
+						gap: 56px;
+					}
 
 					& > .quote {
 						& > section {

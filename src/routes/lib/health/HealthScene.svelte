@@ -1,16 +1,13 @@
 <script lang="ts">
-	import { createPart } from '../../../lib/3d/gltf/part';
-	import { gltfs } from '../../../assets/village/parts/index';
-	import { T, useFrame, useThrelte } from '@threlte/core';
-	import HealthSceneCamera from './HealthSceneCamera.svelte';
-	import VillageScenePostProcessing from '../village/VillageScenePostProcessing.svelte';
-	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
-	import type { PseudoHeight } from '../layout/PseudoHeight';
 	import { Store } from '@sxxov/ut/store';
-	import { client, inner, type Point } from '@sxxov/ut/viewport';
-	import * as THREE from 'three';
-	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
+	import { inner, type Point } from '@sxxov/ut/viewport';
+	import { T, useFrame } from '@threlte/core';
 	import { degToRad } from 'three/src/math/MathUtils.js';
+	import { gltfs } from '../../../assets/village/parts/index';
+	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
+	import { createPart } from '../../../lib/3d/gltf/part';
+	import type { PseudoHeight } from '../layout/PseudoHeight';
+	import HealthSceneCamera from './HealthSceneCamera.svelte';
 
 	export let pseudoHeight: PseudoHeight;
 
@@ -31,10 +28,6 @@
 <svelte:window bind:scrollY />
 {#if scrollY > $top}
 	<HealthSceneCamera />
-{/if}
-{#if scrollY > $top && scrollY <= $bottom}
-	<VillageScenePostProcessing />
-	<VillageSceneEnvironment />
 {/if}
 {#await createPart(gltfs.building_10) then { object }}
 	{#if object}

@@ -69,10 +69,8 @@
 		<VillageSceneCamera progress={cameraProgress} />
 	{/if}
 	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
-		<VillageSceneEnvironment />
 		<!-- <VillageSceneLights /> -->
 		<VillageSceneFog />
-		<VillageScenePostProcessing />
 	{/if}
 
 	{#if titleProgress >= titleProgressStart && titleProgress < titleProgressEnd}

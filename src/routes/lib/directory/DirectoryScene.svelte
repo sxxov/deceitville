@@ -20,8 +20,6 @@
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
 	import { pointer } from '../../../lib/follow/pointer';
 	import type { PseudoHeight } from '../layout/PseudoHeight';
-	import VillageSceneEnvironment from '../village/VillageSceneEnvironment.svelte';
-	import VillageScenePostProcessing from '../village/VillageScenePostProcessing.svelte';
 	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
 
 	type $$Props = Props<THREE.Group> & {
@@ -93,10 +91,6 @@
 <svelte:window bind:scrollY />
 {#if scrollY > $top}
 	<DirectorySceneCamera />
-{/if}
-{#if scrollY > $top && scrollY <= $bottom}
-	<VillageScenePostProcessing />
-	<VillageSceneEnvironment />
 {/if}
 <T
 	is={ref}
