@@ -15,7 +15,7 @@
 		type Events,
 		type Props,
 	} from '@threlte/core';
-	import { tick } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import * as THREE from 'three';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
 	import { pointer } from '../../../lib/follow/pointer';
@@ -38,22 +38,24 @@
 	const { top, bottom } = pseudoHeight;
 
 	let exiting = false;
+	let fogInit = scene.fog;
 	export const exit = async () => {
 		exiting = true;
-		const fogInit = scene.fog;
+		fogInit = scene.fog;
 		scene.fog = fog;
 		await exitComposition.play();
-		scene.fog = fogInit;
-		void tick().then(() => {
-			ref.parent?.remove(ref);
-		});
 	};
+
+	onDestroy(() => {
+		scene.fog = fogInit;
+		ref.parent?.remove(ref);
+	});
 
 	const component = forwardEventHandlers();
 
 	const hoverScaleTween = new Tw(0, 1, 300, bezierQuintInOut);
 	const hoverComposition = new C(
-		new Timeline([{ tween: hoverScaleTween }] as const),
+		new Timeline([{ x: hoverScaleTween }] as const),
 	);
 
 	const exitPositionTween = new Tw(0, 1, 1000, bezierQuintInOut);
@@ -61,9 +63,9 @@
 	const exitFogTween = new Tw(0, 1, 1000, bezierQuintInOut);
 	const exitComposition = new C(
 		new Timeline([
-			{ tween: exitPositionTween, at: { start: 0 } },
-			{ tween: exitRotationTween, at: { start: 0 } },
-			{ tween: exitFogTween, at: { start: 0 } },
+			{ x: exitPositionTween, at: { start: 0 } },
+			{ x: exitRotationTween, at: { start: 0 } },
+			{ x: exitFogTween, at: { start: 0 } },
 		] as const),
 	);
 
