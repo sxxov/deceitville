@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { T } from '@threlte/core';
-	import { onMount } from 'svelte';
-	import * as THREE from 'three';
-	import { gltfs } from '../../../../assets/building/tt/button/index';
-	import { createPart, type Part } from '../../../../lib/3d/gltf/part';
-	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { building_10 } from '../../../../assets/village/parts/gltfs.db';
-	import { useCursor } from '@threlte/extras';
 	import { Tween } from '@sxxov/ut/animation';
 	import { bezierQuintInOut, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { Store } from '@sxxov/ut/store';
+	import { T } from '@threlte/core';
+	import { useCursor, useSuspense } from '@threlte/extras';
+	import * as THREE from 'three';
+	import { degToRad } from 'three/src/math/MathUtils.js';
+	import { gltfs } from '../../../assets/de/button/index';
+	import { createPart } from '../gltf/part';
 
 	export let ref = new THREE.Group();
+
+	const suspend = useSuspense();
 
 	const { hovering, onPointerEnter, onPointerLeave } = useCursor();
 	const tweenHoverIn = new Tween(0, 1, 50, bezierQuintOut);
@@ -34,7 +34,7 @@
 	is={ref}
 	rotation={[degToRad(180), 0, 0]}
 >
-	{#await createPart(gltfs.base) then { object }}
+	{#await suspend(createPart(gltfs.base)) then { object }}
 		{#if object}
 			<T
 				is={object.clone(true)}
@@ -43,7 +43,7 @@
 			/>
 		{/if}
 	{/await}
-	{#await createPart(gltfs.pressable) then { object }}
+	{#await suspend(createPart(gltfs.pressable)) then { object }}
 		{#if object}
 			<T
 				is={object.clone(true)}
