@@ -16,19 +16,23 @@
 </script>
 
 <script lang="ts">
-	import LMTH from '../../../lib/3d/lmth/LMTH.svelte';
-	import { Tt } from '../lib/tt/Tt';
-	import EphemeralCamera from '../../../lib/3d/camera/EphemeralCamera.svelte';
-	import VillageScenePostProcessing from '../../lib/village/VillageScenePostProcessing.svelte';
-	import VillageSceneEnvironment from '../../lib/village/VillageSceneEnvironment.svelte';
+	import { Composition, Tween } from '@sxxov/sv/animation';
+	import { createTransitionStagger } from '@sxxov/sv/ut/transition';
+	import { dropIn } from '@sxxov/sv/ut/transition/transitions';
+	import { useInteractivity } from '@threlte/extras';
 	import exr_hdri from '../../../assets/building/hdri/kloofendal_misty_morning_puresky_2k.exr?url';
+	import EphemeralCamera from '../../../lib/3d/camera/EphemeralCamera.svelte';
+	import DeButton from '../../../lib/3d/de/DeButton.svelte';
 	import Hdri from '../../../lib/3d/environment/Hdri.svelte';
-	import { interactivity, useInteractivity } from '@threlte/extras';
-	import { injectPlugin } from '@threlte/core';
-	import Meta from '../../../lib/meta/Meta.svelte';
+	import Lmth from '../../../lib/3d/lmth/Lmth.svelte';
+	import VillageScenePostProcessing from '../../lib/village/VillageScenePostProcessing.svelte';
 	import BuildingMeta from '../lib/info/BuildingMeta.svelte';
+	import DeSus from '../../../lib/3d/de/DeSus.svelte';
+	import Revealer from './lib/Revealer.svelte';
 
 	useInteractivity().enabled.set(true);
+
+	const stagger = createTransitionStagger(100);
 </script>
 
 <BuildingMeta {info} />
@@ -36,69 +40,148 @@
 <VillageScenePostProcessing brightness={0.2} />
 <Hdri exr={exr_hdri} />
 <div class="building pet-shop">
-	<div class="heading">
+	<div
+		class="heading"
+		in:dropIn={stagger}
+	>
 		<hr />
 		<h1>Pick a pet.</h1>
 		<hr />
 	</div>
 	<div class="choices">
-		<section>
-			<div class="info">
-				<div class="letter">Fluffernutter</div>
-				<ul>
-					<li class="pro">
-						Harbours a latent, tumultuous potentiality within.
-					</li>
-					<li class="con">
-						Known to beguile and then unleash its capricious
-						tempest.
-					</li>
-				</ul>
-			</div>
-			<div class="button">
-				<LMTH strategy="fit">
-					<Tt.Button />
-				</LMTH>
-			</div>
-		</section>
-		<section>
-			<div class="info">
-				<div class="letter">Whiskerflop</div>
-				<ul>
-					<li class="pro">
-						Radiates a bewitching allure that veils potential peril.
-					</li>
-					<li class="con">
-						Conceals a mysterious fortification mechanism.
-					</li>
-				</ul>
-			</div>
-			<div class="button">
-				<LMTH strategy="fit">
-					<Tt.Button />
-				</LMTH>
-			</div>
-		</section>
-		<section>
-			<div class="info">
-				<div class="letter">Snugglemonster</div>
-				<ul>
-					<li class="pro">
-						Effuses a comforting presence tinged with concealed
-						jeopardy.
-					</li>
-					<li class="con">
-						Possesses the propensity for unrestrained chaos when
-						incited.
-					</li>
-				</ul>
-			</div>
-			<div class="button">
-				<LMTH strategy="fit">
-					<Tt.Button />
-				</LMTH>
-			</div>
-		</section>
+		<div class="revealer">
+			<Revealer />
+		</div>
+		<Composition let:composition>
+			<section>
+				<div class="info">
+					<div
+						class="letter"
+						in:dropIn={stagger}
+					>
+						Fluffernutter
+					</div>
+					<ul>
+						<li
+							class="pro"
+							in:dropIn={stagger}
+						>
+							Harbours a latent, tumultuous potentiality within.
+						</li>
+						<li
+							class="con"
+							in:dropIn={stagger}
+						>
+							Known to beguile and then unleash its capricious
+							tempest.
+						</li>
+					</ul>
+				</div>
+				<Tween
+					start={0}
+					end={1}
+					duration={1}
+					at={{ time: 300 }}
+					let:v
+				>
+					<div class="button">
+						<Lmth strategy="fit">
+							<DeSus>
+								{#if v > 0}
+									<DeButton />
+								{/if}
+							</DeSus>
+						</Lmth>
+					</div>
+				</Tween>
+			</section>
+			<section>
+				<div class="info">
+					<div
+						class="letter"
+						in:dropIn={stagger}
+					>
+						Whiskerflop
+					</div>
+					<ul>
+						<li
+							class="pro"
+							in:dropIn={stagger}
+						>
+							Radiates a bewitching allure that veils potential
+							peril.
+						</li>
+						<li
+							class="con"
+							in:dropIn={stagger}
+						>
+							Conceals a mysterious fortification mechanism.
+						</li>
+					</ul>
+				</div>
+				<Tween
+					start={0}
+					end={1}
+					duration={1}
+					at={{ time: 600 }}
+					let:v
+				>
+					<div class="button">
+						<Lmth strategy="fit">
+							<DeSus>
+								{#if v > 0}
+									<DeButton />
+								{/if}
+							</DeSus>
+						</Lmth>
+					</div>
+				</Tween>
+			</section>
+			<section>
+				<div class="info">
+					<div
+						class="letter"
+						in:dropIn={stagger}
+					>
+						Snugglemonster
+					</div>
+					<ul>
+						<li
+							class="pro"
+							in:dropIn={stagger}
+						>
+							Effuses a comforting presence tinged with concealed
+							jeopardy.
+						</li>
+						<li
+							class="con"
+							in:dropIn={stagger}
+						>
+							Possesses the propensity for unrestrained chaos when
+							incited.
+						</li>
+					</ul>
+				</div>
+				<Tween
+					start={0}
+					end={1}
+					duration={1}
+					at={{ time: 900 }}
+					let:v
+				>
+					<div class="button">
+						<Lmth strategy="fit">
+							<DeSus>
+								{#if v > 0}
+									<DeButton />
+								{/if}
+							</DeSus>
+						</Lmth>
+					</div>
+				</Tween>
+			</section>
+			{(composition.play(), '')}
+		</Composition>
 	</div>
 </div>
 
@@ -157,12 +240,25 @@
 
 			display: flex;
 			flex-wrap: wrap;
+			position: relative;
 			/* gap: 14px; */
 
 			width: 100%;
 			height: 100%;
 
-			section {
+			& > .revealer {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+
+				pointer-events: none;
+
+				z-index: 2;
+			}
+
+			& > section {
 				display: flex;
 				flex-direction: column;
 
@@ -248,21 +344,28 @@
 						/* padding: 14px 28px; */
 						box-sizing: border-box;
 
-						width: 100%;
+						width: calc(100% - 40px);
 						text-align: center;
 						padding-inline: 0.2em;
 
-						background: var(----colour-background-primary);
+						/* background: var(----colour-background-primary); */
 						border-radius: 112px;
-						border: 1px solid var(----colour-background-tertiary);
+						border: 1px solid var(----colour-text-primary);
 						/* border-block: 1px solid
 							var(----colour-background-tertiary); */
 						padding-block: 0.4em;
 						margin-bottom: 0.05em;
 
+						z-index: 1;
+
 						@media (max-width: 800px) {
 							text-align: start;
 							padding-left: 2rem;
+						}
+
+						@media (max-width: 500px) {
+							text-align: center;
+							padding-inline: 0;
 						}
 					}
 				}
