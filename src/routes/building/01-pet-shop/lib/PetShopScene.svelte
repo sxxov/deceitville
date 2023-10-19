@@ -3,7 +3,7 @@
 	import { Composition as C, Tween as Tw } from '@sxxov/ut/animation';
 	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
 	import { lerp } from '@sxxov/ut/math';
-	import { traversePropertyMap } from '@sxxov/ut/traverse';
+	import { traversePropertyElements } from '@sxxov/ut/traverse';
 	import { T, useFrame, useThrelte } from '@threlte/core';
 	import { useInteractivity } from '@threlte/extras';
 	import { Box, Flex } from '@threlte/flex';
@@ -85,17 +85,19 @@
 	});
 
 	const onPointerIn = (ref: THREE.Group) => {
-		outline?.selection.set(
-			traversePropertyMap(ref, 'children', (child) =>
-				child instanceof THREE.Mesh
-					? child
-					: traversePropertyMap.continue(),
-			),
-		);
+		if (!outline) return;
+
+		traversePropertyElements(ref, 'children', (child) => {
+			if (child instanceof THREE.Mesh) outline!.selection.add(child);
+		});
 	};
 
-	const onPointerOut = () => {
-		outline?.selection.clear();
+	const onPointerOut = (ref: THREE.Group) => {
+		if (!outline) return;
+
+		traversePropertyElements(ref, 'children', (child) => {
+			if (outline!.selection.has(child)) outline!.selection.delete(child);
+		});
 	};
 </script>
 
@@ -126,7 +128,8 @@
 				let:hovering
 				let:pressing
 			>
-				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(), '')}
+				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref),
+				'')}
 				<T.Group
 					position.y={lerp(
 						$catBaseIntroTween,
@@ -183,7 +186,8 @@
 				let:hovering
 				let:pressing
 			>
-				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(), '')}
+				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref),
+				'')}
 				<T.Group
 					position.y={lerp(
 						$rockBaseIntroTween,
@@ -240,7 +244,8 @@
 				let:hovering
 				let:pressing
 			>
-				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(), '')}
+				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref),
+				'')}
 				<T.Group
 					position.y={lerp(
 						$duckBaseIntroTween,
