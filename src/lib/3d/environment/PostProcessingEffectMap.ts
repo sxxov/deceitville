@@ -23,29 +23,27 @@ type TuplifyUnion<
 > = true extends N ? [] : Push<TuplifyUnion<Exclude<T, L>>, L>;
 type UnionObjectFromArrayOfPairs<Arr extends EntriesType> =
 	Arr extends (infer R)[]
-		? R extends [infer key, infer val]
-			? { [prop in key & PropertyKey]: val }
+		? R extends [infer K, infer V]
+			? { [prop in K & PropertyKey]: V }
 			: never
 		: never;
-type MergeIntersectingObjects<ObjT> = { [key in keyof ObjT]: ObjT[key] };
+type MergeIntersectingObjects<O> = { [key in keyof O]: O[key] };
 type FromEntries<Arr extends EntriesType> = MergeIntersectingObjects<
 	UnionToIntersection<UnionObjectFromArrayOfPairs<Arr>>
 >;
 type EffectKeys = Extract<keyof typeof p, `${string}Effect`>;
 
-type StrictCamelCaseImpl<
-	S extends string,
-	First extends boolean = true,
-> = S extends `${infer P1 extends Uppercase<string>}${infer P2 extends
-	Uppercase<string>}${infer P3}`
-	? `${Lowercase<P1>}${StrictCamelCaseImpl<`${P2}${P3}`, false>}`
-	: S extends `${infer P1 extends Uppercase<string>}${infer P2 extends
-			Lowercase<string>}${infer P3}`
-	? First extends true
-		? `${Lowercase<P1>}${P2}${P3}`
-		: S
-	: Lowercase<S>;
-type StrictCamelCase<S extends string> = StrictCamelCaseImpl<S>;
+type StrictCase<S extends string> = S extends `${infer P1 extends
+	Uppercase<string>}${infer P2 extends Uppercase<string>}${infer P3}`
+	? `${Lowercase<P1>}${StrictCase<`${P2}${P3}`>}`
+	: S extends `${infer P1}${infer P2}`
+	? P2 extends ''
+		? Lowercase<P1>
+		: `${P1}${StrictCase<P2>}`
+	: S;
+type StrictPascalCase<S extends string> = Capitalize<StrictCase<S>>;
+type StrictCamelCase<S extends string> = Uncapitalize<StrictCase<S>>;
+
 type EffectCombination<K extends EffectKeys> = K extends `${infer Name}Effect`
 	? [StrictCamelCase<Name>, InstanceType<(typeof p)[K]> | undefined]
 	: never;
