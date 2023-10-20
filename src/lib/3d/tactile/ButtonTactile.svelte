@@ -8,10 +8,16 @@
 	import { degToRad } from 'three/src/math/MathUtils.js';
 	import { gltfs } from '../../../assets/tactile/button/index';
 	import Part from '../part/Part.svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let ref = new THREE.Group();
+	export let disabled = false;
 
-	const { hovering, onPointerEnter, onPointerLeave } = useCursor();
+	const { onPointerEnter, onPointerLeave } = useCursor();
+
+	const hovering = new Store(false);
 	const tweenHoverIn = new Tween(0, 1, 50, bezierQuintOut);
 	const tweenHoverOut = new Tween(1, 0, 300, bezierQuintOut);
 	$: tweenHover = $hovering ? tweenHoverIn : tweenHoverOut;
@@ -26,22 +32,59 @@
 	const tweenPulse = new Tween(0, 1, 1000, bezierQuintInOut);
 	$: if ($tweenPulse >= 1) void tweenPulse.play(-1);
 	else if ($tweenPulse <= 0) void tweenPulse.play(1);
+
+	$: if (disabled) {
+		$hovering = false;
+		$pressing = false;
+	}
+
+	// BUG: pointer* events seem to fire multiple times
+	// use a store to dedupe them
+	onMount(() => {
+		const hoverUnsubscribe = hovering.subscribeLazy((hovering) => {
+			if (hovering) dispatch('pointerenter');
+			else dispatch('pointerleave');
+		});
+
+		const pressUnsubscribe = pressing.subscribeLazy((pressing) => {
+			if (pressing) dispatch('pointerdown');
+			else {
+				dispatch('pointerup');
+				dispatch('click');
+			}
+		});
+
+		return () => {
+			hoverUnsubscribe();
+			pressUnsubscribe();
+		};
+	});
 </script>
 
 <T
 	is={ref}
-	on:pointerenter={onPointerEnter}
-	on:pointerenter
-	on:pointerleave={onPointerLeave}
-	on:pointerleave
+	on:pointerenter={() => {
+		if (disabled) return;
+
+		onPointerEnter();
+		$hovering = true;
+	}}
+	on:pointerleave={() => {
+		if (disabled) return;
+
+		onPointerLeave();
+		$hovering = false;
+	}}
 	on:pointerdown={() => {
+		if (disabled) return;
+
 		$pressing = true;
 	}}
-	on:pointerdown
 	on:pointerup={() => {
+		if (disabled) return;
+
 		$pressing = false;
 	}}
-	on:pointerup
 >
 	<slot
 		{ref}
