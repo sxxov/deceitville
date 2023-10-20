@@ -3,6 +3,8 @@
 	import { useSuspense } from '@threlte/extras';
 	import type { Object3D } from 'three';
 	import { createPart } from '../gltf/part';
+	import { raise } from '@sxxov/ut/functional';
+	import { UnreachableError } from '@sxxov/ut/errors';
 
 	type $$Props = Props<Object3D> & {
 		gltf: typeof gltf;
@@ -12,6 +14,7 @@
 
 	export let gltf: Record<any, any>;
 	export let clone = true;
+	const setRef = (r: Object3D) => (ref = r);
 	export let ref: Object3D | undefined = undefined;
 
 	const suspend = useSuspense();
@@ -20,14 +23,16 @@
 
 {#await suspend(createPart(gltf)) then { object }}
 	{#if object}
+		{@const ref = clone ? object.clone(true) : object}
+		{(setRef(ref), '')}
 		<T
-			is={(ref = clone ? object.clone(true) : object)}
+			is={ref}
 			bind:this={$component}
 			receiveShadow
 			castShadow
 			{...$$restProps}
 		>
-			<slot {ref} />
+			<slot ref={ref ?? raise(new UnreachableError())} />
 		</T>
 	{/if}
 {/await}
