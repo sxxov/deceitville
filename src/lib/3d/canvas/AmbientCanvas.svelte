@@ -3,28 +3,23 @@
 	context="module"
 >
 	export const ambientRendererSizeContextKey = Symbol('ambientRendererSize');
+	export const ambientInteractivityContextKey = Symbol('ambientInteractive');
 </script>
 
 <script lang="ts">
+	import { beforeNavigate } from '$app/navigation';
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
+	import { Store } from '@sxxov/ut/store';
 	import type { Size } from '@sxxov/ut/viewport';
+	import { client, inner } from '@sxxov/ut/viewport';
+	import { Canvas, forwardEventHandlers, useFrame } from '@threlte/core';
+	import { interactivity, useInteractivity } from '@threlte/extras';
 	import {
-		Canvas,
-		forwardEventHandlers,
-		useFrame,
-		useThrelte,
-		type ThrelteContext,
-	} from '@threlte/core';
-	import {
-		onDestroy,
+		setContext,
 		type ComponentEvents,
 		type ComponentProps,
-		setContext,
 	} from 'svelte';
-	import { inner, client } from '@sxxov/ut/viewport';
-	import { interactivity, useInteractivity } from '@threlte/extras';
-	import { Store } from '@sxxov/ut/store';
-	import { beforeNavigate } from '$app/navigation';
+	import type { AmbientInteractivity } from './AmbientInteractivity';
 	import type { AmbientRendererSizeContext } from './AmbientRendererSizeContext';
 
 	type $$Props = ComponentProps<Canvas>;
@@ -35,7 +30,6 @@
 
 	let width = 0;
 	let height = 0;
-	let ctx: ThrelteContext | undefined;
 
 	let portalDiv: HTMLDivElement;
 	const portal = (content: HTMLElement, portal: HTMLElement) => {
@@ -62,16 +56,22 @@
 		rendererSize,
 	);
 
-	const interactive = new Store(false);
-	let interactiveHookUnsubscribe: (() => void) | undefined;
+	const setInteractivity = (v: ReturnType<typeof interactivity>) => {
+		interactivityCtx.interactivity = v;
+	};
+	let interactivityCtx: AmbientInteractivity = {
+		interactivity: undefined as any,
+	};
+	$: interactive = interactivityCtx.interactivity?.enabled;
 
 	beforeNavigate(() => {
 		interactive.set(false);
 	});
 
-	onDestroy(() => {
-		interactiveHookUnsubscribe?.();
-	});
+	setContext<AmbientInteractivity>(
+		ambientInteractivityContextKey,
+		interactivityCtx,
+	);
 </script>
 
 <div class="ambient-canvas">
@@ -94,15 +94,8 @@
 			{(useFrame(() => {
 				active = true;
 			}),
-			(ctx = useThrelte()),
-			interactivity({
-				enabled: $interactive,
-			}),
-			(interactiveHookUnsubscribe = useInteractivity().enabled.subscribe(
-				(value) => {
-					interactive.set(value);
-				},
-			)),
+			setInteractivity(interactivity()),
+			useInteractivity(),
 			'')}
 		</Canvas>
 	</div>
@@ -128,6 +121,11 @@
 			transition: opacity 1s var(----ease-slow-slow);
 
 			z-index: 1;
+
+			& > :global(canvas) {
+				user-select: none;
+				-webkit-tap-highlight-color: transparent;
+			}
 
 			&:not(.interactive) {
 				pointer-events: none;
