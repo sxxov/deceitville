@@ -96,6 +96,8 @@
 			}
 
 			& > p {
+				text-align: center;
+
 				animation: drop-in 0.6s 0.3s cubic-bezier(0.3, 1.27, 0.25, 1)
 					both;
 
