@@ -58,8 +58,9 @@
 
 	const setInteractivity = (v: ReturnType<typeof interactivity>) => {
 		interactivityCtx.interactivity = v;
+		v.enabled.set(false);
 	};
-	let interactivityCtx: AmbientInteractivity = {
+	const interactivityCtx: AmbientInteractivity = {
 		interactivity: undefined as any,
 	};
 	$: interactive = interactivityCtx.interactivity?.enabled;
@@ -94,7 +95,8 @@
 			{(useFrame(() => {
 				active = true;
 			}),
-			setInteractivity(interactivity()),
+			!interactivityCtx.interactivity &&
+				setInteractivity(interactivity()),
 			useInteractivity(),
 			'')}
 		</Canvas>
