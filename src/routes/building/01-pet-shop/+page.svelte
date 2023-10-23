@@ -1,46 +1,29 @@
-<script
-	lang="ts"
-	context="module"
->
-	import * as gltfs from '../../../assets/village/parts/gltfs.db';
-
-	import PetShopScene from './lib/PetShopScene.svelte';
-	import BuildingNav from '../lib/nav/BuildingNav.svelte';
-	import type { BuildingInfo } from '../lib/info/BuildingInfo';
-
-	export const info = {
-		name: 'Pet Shop',
-		description:
-			"The local pet shop, where all kids' dream come true. You will need to pick between 3 unknown animals, based on their vague & incomplete descriptions.",
-		lessons: [
-			'Learn how websites can obstruct your comparison process.',
-			'Know the difficulty of making a decision based on incomplete information.',
-		],
-		brignull: {
-			kind: 'Comparison Prevention',
-			url: 'https://www.deceptive.design/types/comparison-prevention',
-		},
-		icon: ic_pets,
-		facade: gltfs.building_1,
-	} as const satisfies BuildingInfo;
-</script>
-
 <script lang="ts">
-	import { useBuildingInfo } from '../lib/info/useBuildingInfo';
-	import { Pet } from './lib/Pet';
+	import { goto } from '$app/navigation';
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
-	import { ic_done, ic_arrow_back, ic_pets } from 'maic/two_tone';
 	import { fadeIn } from '@sxxov/sv/ut/transition/transitions';
-	import BuildingSuccess from '../lib/ending/BuildingSuccess.svelte';
+	import { ic_arrow_back, ic_done } from 'maic/two_tone';
+	import { completable } from '../../lib/health/completion';
 	import BuildingFailure from '../lib/ending/BuildingFailure.svelte';
+	import BuildingSuccess from '../lib/ending/BuildingSuccess.svelte';
+	import { useBuildingInfo } from '../lib/info/useBuildingInfo';
+	import { info } from './info';
+	import { Pet } from './lib/Pet';
+	import BuildingNav from '../lib/nav/BuildingNav.svelte';
+	import PetShopScene from './lib/PetShopScene.svelte';
 
 	useBuildingInfo(info);
 
-	let selected: Pet | 0;
-	let chosen: Pet | 0;
-
+	let selected: Pet | 0 = 0;
+	let chosen: Pet | 0 = 0;
 	let ok: boolean | undefined;
+
+	const reset = () => {
+		selected = 0;
+		chosen = 0;
+		ok = undefined;
+	};
 </script>
 
 <BuildingNav />
@@ -105,9 +88,24 @@
 </div>
 {#if ok !== undefined}
 	{#if ok}
-		<BuildingSuccess />
+		<BuildingSuccess
+			on:complete={() => {
+				completable[info.id]?.set(true);
+				history.back();
+			}}
+			on:retry={() => {
+				reset();
+			}}
+		/>
 	{:else}
-		<BuildingFailure />
+		<BuildingFailure
+			on:exit={() => {
+				history.back();
+			}}
+			on:retry={() => {
+				reset();
+			}}
+		/>
 	{/if}
 {/if}
 <PetShopScene

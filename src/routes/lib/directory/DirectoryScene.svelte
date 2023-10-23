@@ -21,6 +21,7 @@
 	import { pointer } from '../../../lib/follow/pointer';
 	import type { PseudoHeight } from '../layout/PseudoHeight';
 	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
+	import { useAmbientInteractivity } from '../../../lib/3d/canvas/useAmbientInteractivity';
 
 	type $$Props = Props<THREE.Group> & {
 		ref?: typeof ref;
@@ -30,6 +31,7 @@
 	type $$Events = Events<THREE.Group>;
 
 	const { camera, scene } = useThrelte();
+	useAmbientInteractivity(false);
 
 	export let ref = new THREE.Group();
 	export let object: THREE.Object3D | undefined;

@@ -5,8 +5,7 @@
 	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import HealthScene from './HealthScene.svelte';
-
-	export let health = 0.5;
+	import { health } from './completion';
 
 	const rendererSize = useAmbientRendererSize();
 	$: ({ height: vh } = $rendererSize ?? { height: 0 });
@@ -34,13 +33,13 @@
 				<div class="icon">
 					<Svg svg={ic_favorite} />
 				</div>
-				<p class="percent">{(health * 100).toFixed(0)}</p>
+				<p class="percent">{($health * 100).toFixed(0)}</p>
 			</div>
 			<div class="bar">
 				<LoaderLine
 					strokeColour="currentColor"
 					backgroundStrokeColour="----colour-text-tertiary"
-					completion={Math.max(health, 0.001)}
+					completion={Math.max($health, 0.001)}
 				/>
 			</div>
 			<div
@@ -49,23 +48,23 @@
 			>
 				<div class="content">
 					<Svg svg={ic_info} /><b>Hint:</b>
-					{#if health >= 1}Use the directory.{:else if health >= 0.75}Explore
-						the town.{:else if health >= 0.5}Find clues.{:else if health >= 0.25}Almost
-						there.{:else if health >= 0}I am become death, destroyer
-						of towns.{:else}Explore the town.{/if}
+					{#if $health >= 1}Use the directory.{:else if $health >= 0.75}Explore
+						the town.{:else if $health >= 0.5}Find clues.{:else if $health >= 0.25}Almost
+						there.{:else if $health >= 0}I am become death,
+						destroyer of towns.{:else}Explore the town.{/if}
 				</div>
 			</div>
 		</div>
 		<h2>
-			De Corp.®: Status {health >= 1
+			De Corp.®: Status {$health >= 1
 				? 'Healthy'
-				: health >= 0.75
+				: $health >= 0.75
 				? 'Compromised'
-				: health >= 0.5
+				: $health >= 0.5
 				? 'Degraded'
-				: health >= 0.25
+				: $health >= 0.25
 				? 'Critical'
-				: health > 0
+				: $health > 0
 				? 'Terminal'
 				: 'Dead'}
 		</h2>

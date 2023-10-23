@@ -18,8 +18,7 @@
 	import Letter from './lib/letter/Letter.svelte';
 	import Caution from './lib/caution/Caution.svelte';
 	import { useAmbientRendererSize } from '../lib/3d/canvas/useAmbientRendererSize';
-
-	const { renderer } = useThrelte();
+	import { infos } from './building/lib/info/infos';
 
 	export const dropDown = (
 		element: Element,
@@ -70,18 +69,10 @@
 
 	let routes: DirectoryRoute[] = [];
 	onMount(async () => {
-		const infos: Record<string, BuildingInfo> = import.meta.glob(
-			'./building/**/+page.svelte',
-			{
-				eager: true,
-				import: 'info',
-			},
-		);
-
 		routes = await Promise.all(
 			Object.entries(infos).map(async ([k, info]) => ({
 				info,
-				url: /(building\/.*?)\/\+page.svelte/.exec(k)![1]!,
+				url: k,
 				object: (await createPart(info.facade)).object!,
 			})),
 		);
