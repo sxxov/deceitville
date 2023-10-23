@@ -96,7 +96,16 @@
 			on:retry={() => {
 				reset();
 			}}
-		/>
+		>
+			{#if chosen === Pet.CAT}
+				<!---->
+			{:else if chosen === Pet.ROCK}
+				"..."<br />
+				A beauty of nature.
+			{:else if chosen === Pet.DUCK}
+				<!---->
+			{/if}</BuildingSuccess
+		>
 	{:else}
 		<BuildingFailure
 			on:exit={() => {
@@ -105,7 +114,17 @@
 			on:retry={() => {
 				reset();
 			}}
-		/>
+		>
+			{#if chosen === Pet.CAT}
+				"Awww... so cute! Wait where is it-"<br />
+				You already lost the cat.
+			{:else if chosen === Pet.ROCK}
+				<!---->
+			{:else if chosen === Pet.DUCK}
+				A low quality rubber duck.<br />
+				It sinks.
+			{/if}
+		</BuildingFailure>
 	{/if}
 {/if}
 <PetShopScene
