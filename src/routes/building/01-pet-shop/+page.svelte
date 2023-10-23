@@ -91,7 +91,13 @@
 		<BuildingSuccess
 			on:complete={() => {
 				completable[info.id]?.set(true);
-				history.back();
+
+				if (
+					document.referrer &&
+					document.referrer.startsWith(window.location.origin)
+				)
+					history.back();
+				else void goto('/');
 			}}
 			on:retry={() => {
 				reset();
@@ -109,7 +115,12 @@
 	{:else}
 		<BuildingFailure
 			on:exit={() => {
-				history.back();
+				if (
+					document.referrer &&
+					document.referrer.startsWith(window.location.origin)
+				)
+					history.back();
+				else void goto('/');
 			}}
 			on:retry={() => {
 				reset();
