@@ -7,4 +7,6 @@ export const useAmbientInteractivity = (enabled = true) => {
 		ambientInteractivityContextKey,
 	);
 	interactivity.enabled.set(enabled);
+
+	return interactivity;
 };
