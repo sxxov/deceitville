@@ -338,12 +338,12 @@
 			}
 		}
 
-		:global(.revealable) {
+		& :global(.revealable) {
 			clip-path: inset(0 0 100% 0);
 			transform: translateY(100%);
 		}
 
-		:global(.revealable.revealed) {
+		& :global(.revealable.revealed) {
 			clip-path: inset(0 0 0 0);
 			transform: translateY(0);
 
