@@ -106,8 +106,8 @@
 			{#if chosen === Pet.CAT}
 				<!---->
 			{:else if chosen === Pet.ROCK}
-				"..."<br />
-				A beauty of nature.
+				A pet rock.<br />
+				Nature was right all along.
 			{:else if chosen === Pet.DUCK}
 				<!---->
 			{/if}</BuildingSuccess
