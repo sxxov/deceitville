@@ -24,9 +24,7 @@ export default {
 		],
 	},
 	plugins: [
-		maicHelper({
-			enabled: !production,
-		}),
+		maicHelper({}),
 		vitePluginRemoteModuleLoader(),
 		vitePluginRemoteAssetLoader(),
 		vitePluginFileDirPathConstants(),
