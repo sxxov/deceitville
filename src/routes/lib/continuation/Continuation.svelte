@@ -118,14 +118,14 @@
 						<h6>Our History</h6>
 						<p>
 							We started as an entity to honour Harry Brignull's
-							work in 2010 of
+							2010 work of
 							<a
 								href="https://www.deceptive.design/"
 								target="_blank">Deceptive Design</a
-							>
-							website, pursuing types & instances of deceptive design
-							found in the wild. It has since been picked up by largely
-							by the acedemic community, with
+							>, pursuing types & instances of maliciously
+							designed User Interfaces (UIs) found in the wild. It
+							has since been picked up by largely by the acedemic
+							community, with
 							<a
 								href="https://scholar.google.com/scholar?hl=en&q=dark+pattern+brignull"
 								target="_blank"

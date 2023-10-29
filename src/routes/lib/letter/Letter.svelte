@@ -142,8 +142,8 @@
 							<li>
 								<div class="chip">Important</div>
 								&nbsp;Always be mindful of the implemented production
-								design features &&nbsp;<b
-									>avoid them internally</b
+								coersions &&nbsp;<b
+									>avoid falling for them yourself</b
 								>.
 							</li>
 						</ol>
