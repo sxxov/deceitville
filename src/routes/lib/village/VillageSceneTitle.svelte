@@ -167,6 +167,14 @@
 					invalidate();
 				});
 			});
+		} else {
+			for (const [i, ref] of refs.entries()) {
+				ref.visible = true;
+
+				ref.position.y = positions[i]!.y;
+				ref.rotation.z = 0;
+				ref.rotation.x = 0;
+			}
 		}
 	});
 
