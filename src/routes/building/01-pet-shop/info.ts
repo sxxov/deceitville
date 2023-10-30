@@ -8,7 +8,7 @@ export const info = {
 	name: 'Pet Shop',
 	description:
 		"The local pet shop, where all kids' dream come true. You will need to pick between 3 unknown animals, based on their vague & incomplete descriptions.",
-	objective: 'Pick the correct pet for you.',
+	objective: "Pick the pet that won't kill you.",
 	lessons: [
 		'Learn how websites can obstruct your comparison process.',
 		'Know the difficulty of making a decision based on incomplete information.',

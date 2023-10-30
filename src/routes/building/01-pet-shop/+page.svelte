@@ -37,13 +37,13 @@
 			<div class="content">
 				{#if selected & Pet.CAT}
 					<h3>???</h3>
-					<p>Sneaky rascal that will keep you company.</p>
+					<p>Ex-assasin rascal that will keep you company.</p>
 				{:else if selected & Pet.ROCK}
 					<h3>????</h3>
-					<p>Calm buddy that won't leave your side.</p>
+					<p>Battle hardened being that will rock your world.</p>
 				{:else if selected & Pet.DUCK}
 					<h3>????</h3>
-					<p>Swimmer friend that will float your boat.</p>
+					<p>Navy-trained friend that will float your boat.</p>
 				{/if}
 
 				<div class="buttons">
@@ -127,13 +127,13 @@
 			}}
 		>
 			{#if chosen === Pet.CAT}
-				"Awww... so cute! Wait where is it-"<br />
-				You already lost the cat.
+				A pet cat.<br />
+				You attempt to pet it. You die by amputation.
 			{:else if chosen === Pet.ROCK}
 				<!---->
 			{:else if chosen === Pet.DUCK}
-				A low quality rubber duck.<br />
-				It sinks.
+				A rubber duck.<br />
+				Unfortunately, you are in the bathtub & your lover is Oppenheimer.
 			{/if}
 		</BuildingFailure>
 	{/if}
