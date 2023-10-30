@@ -35,11 +35,18 @@
 	} from '../../../assets/village/text/gltfs.db';
 	// import { MeshTransmissionMaterial } from '@pmndrs/vanilla';
 	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
-	import exr_hdri from '../../../assets/village/hdri/dikhololo_night_2k.exr?url';
+	import exr_hdri from '../../../assets/common/3d/hdri/dancing_hall_256.exr?url';
 	import { createPart } from '../../../lib/3d/gltf/part';
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
 	import { pointer } from '../../../lib/follow/pointer';
+	import {
+		BrightnessContrastEffect,
+		EffectComposer,
+		EffectPass,
+		HueSaturationEffect,
+		RenderPass,
+	} from 'postprocessing';
 
 	export let progress = 0;
 
@@ -215,8 +222,18 @@
 
 		scene.environment = hdri;
 		// scene.background = hdri;
-		renderer.toneMappingExposure = 3;
+		renderer.toneMappingExposure = 1;
 	});
+
+	const composer = new EffectComposer(renderer);
+	composer.addPass(new RenderPass(scene, camera));
+	composer.addPass(
+		new EffectPass(
+			camera,
+			new HueSaturationEffect({ hue: 0, saturation: -1 }),
+			new BrightnessContrastEffect({ brightness: -0.1, contrast: 0.5 }),
+		),
+	);
 
 	// pointer model
 	const pointerZ = z + 0.1;
@@ -263,9 +280,10 @@
 		camera.updateProjectionMatrix();
 	});
 
-	useRender(() => {
+	useRender((_, delta) => {
 		// renderer.clearDepth();
-		renderer.render(scene, camera);
+		// renderer.render(scene, camera);
+		composer.render(delta);
 	});
 
 	onDestroy(() => {
