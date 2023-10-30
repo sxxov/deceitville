@@ -8,18 +8,14 @@
 		useThrelte,
 		type Events,
 		type Props,
-		type Slots,
 	} from '@threlte/core';
-	import { ContactShadows } from '@threlte/extras';
 	import * as THREE from 'three';
 	import { clamp } from 'three/src/math/MathUtils.js';
+	import InvalidateOnScroll from '../../../lib/3d/lmth/InvalidateOnScroll.svelte';
 	import VillageSceneCamera from './VillageSceneCamera.svelte';
-	import VillageSceneEnvironment from './VillageSceneEnvironment.svelte';
 	import VillageSceneFog from './VillageSceneFog.svelte';
 	import VillageSceneMeshes from './VillageSceneMeshes.svelte';
-	import VillageScenePostProcessing from './VillageScenePostProcessing.svelte';
 	import VillageSceneTitle from './VillageSceneTitle.svelte';
-	import InvalidateOnScroll from '../../../lib/3d/lmth/InvalidateOnScroll.svelte';
 
 	type $$Props = Props<THREE.Group>;
 	type $$Events = Events<THREE.Group>;
@@ -69,7 +65,6 @@
 		<VillageSceneCamera progress={cameraProgress} />
 	{/if}
 	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
-		<!-- <VillageSceneLights /> -->
 		<VillageSceneFog />
 	{/if}
 
