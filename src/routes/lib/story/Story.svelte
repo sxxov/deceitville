@@ -2,7 +2,6 @@
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import { clamp01, map01 } from '@sxxov/ut/math';
 	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import VillageScene from '../village/VillageScene.svelte';
 	import StoryPlane from './StoryPlane.svelte';
 
@@ -11,9 +10,6 @@
 
 	const rendererSize = useAmbientRendererSize();
 	$: ({ height: vh } = $rendererSize ?? { height: 0 });
-
-	const pseudoHeight = usePseudoHeight();
-	$: pseudoHeight.self.set(vh * 9);
 
 	let storyContentDiv: HTMLDivElement | undefined;
 	let storyClientWidth = 0;
@@ -69,7 +65,7 @@
 
 <style lang="postcss">
 	.story {
-		position: absolute;
+		position: relative;
 		top: 0;
 		min-width: 100%;
 

@@ -2,26 +2,14 @@
 	import { LoaderLine } from '@sxxov/sv/loaders';
 	import { Svg } from '@sxxov/sv/svg';
 	import { ic_favorite, ic_info } from 'maic/two_tone';
-	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import HealthScene from './HealthScene.svelte';
 	import { health } from './completion';
-
-	const rendererSize = useAmbientRendererSize();
-	$: ({ height: vh } = $rendererSize ?? { height: 0 });
-
-	const pseudoHeight = usePseudoHeight();
-	const { self, top } = pseudoHeight;
-	$: self.set(vh);
 
 	let hint = false;
 </script>
 
+<HealthScene />
 <div class="health">
-	<div
-		class="padding start"
-		style="--top: {$top}px"
-	></div>
 	<div class="content">
 		<h2></h2>
 		<div
@@ -72,30 +60,15 @@
 
 	<div class="padding end"></div>
 </div>
-<HealthScene {pseudoHeight} />
 
 <style lang="postcss">
 	.health {
-		position: absolute;
+		position: relative;
 		top: 0;
 		width: 100%;
 		pointer-events: none;
 
 		z-index: 1;
-
-		& > .padding {
-			pointer-events: none;
-
-			&.start {
-				--top: 0px;
-
-				height: var(--top);
-			}
-			&.end {
-				height: 100vh;
-				height: 100lvh;
-			}
-		}
 
 		& > .content {
 			width: 100%;

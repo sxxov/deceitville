@@ -1,24 +1,16 @@
 <script lang="ts">
-	import { client, inner } from '@sxxov/ut/viewport';
-	import { T, useThrelte } from '@threlte/core';
-	import { onMount } from 'svelte';
 	import { expoIn, expoOut } from 'svelte/easing';
-	import * as THREE from 'three';
-	import { createPart } from '../lib/3d/gltf/part';
-	import type { BuildingInfo } from './building/lib/info/BuildingInfo';
+	import { useAmbientRendererSize } from '../lib/3d/canvas/useAmbientRendererSize';
+	import Caution from './lib/caution/Caution.svelte';
+	import Continuation from './lib/continuation/Continuation.svelte';
 	import Directory from './lib/directory/Directory.svelte';
-	import type { DirectoryRoute } from './lib/directory/DirectoryRoute';
+	import Health from './lib/health/Health.svelte';
+	import PseudoHeightContextProvider from './lib/layout/PseudoHeightContextProvider.svelte';
+	import Letter from './lib/letter/Letter.svelte';
 	import Story from './lib/story/Story.svelte';
 	import Waze from './lib/waze/Waze.svelte';
 	import { WazeDirection } from './lib/waze/WazeDirection';
 	import type { WazeTimeline } from './lib/waze/WazeTimeline';
-	import Continuation from './lib/continuation/Continuation.svelte';
-	import PseudoHeightContextProvider from './lib/layout/PseudoHeightContextProvider.svelte';
-	import Health from './lib/health/Health.svelte';
-	import Letter from './lib/letter/Letter.svelte';
-	import Caution from './lib/caution/Caution.svelte';
-	import { useAmbientRendererSize } from '../lib/3d/canvas/useAmbientRendererSize';
-	import { infos } from './building/lib/info/infos';
 
 	export const dropDown = (
 		element: Element,
@@ -66,35 +58,10 @@
 			direction: WazeDirection.STRAIGHT,
 		},
 	] satisfies WazeTimeline as WazeTimeline;
-
-	let routes: DirectoryRoute[] = [];
-	onMount(async () => {
-		routes = await Promise.all(
-			Object.entries(infos).map(async ([k, info]) => ({
-				info,
-				url: k,
-				object: (await createPart(info.facade)).object!,
-			})),
-		);
-		routes = [
-			...routes,
-			...routes,
-			...routes,
-			...routes,
-			...routes,
-			...routes,
-			...routes,
-		];
-	});
 </script>
 
 <svelte:window bind:scrollY />
 <div class="route home">
-	<T.PerspectiveCamera
-		makeDefault
-		position={[0, 0, 0]}
-	/>
-
 	<div class="frame">
 		{#if vh > 0 && scrollY < vh * 8}
 			<div
@@ -112,7 +79,7 @@
 
 	<PseudoHeightContextProvider>
 		<Story />
-		<Directory {routes} />
+		<Directory />
 		<Health />
 		<Caution />
 		<Letter />

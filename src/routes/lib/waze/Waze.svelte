@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Composition as C } from '@sxxov/ut/animation';
+	import { browser } from '$app/environment';
 	import { Composition, Tween } from '@sxxov/sv/animation';
 	import {
 		bezierQuintIn,
@@ -7,9 +7,8 @@
 		bezierQuintOut,
 	} from '@sxxov/ut/bezier/beziers';
 	import { clamp01, map01 } from '@sxxov/ut/math';
-	import { onDestroy } from 'svelte';
-	import type { WazeSegment } from './WazeSegment';
 	import { WazeDirection } from './WazeDirection';
+	import type { WazeSegment } from './WazeSegment';
 	import type { WazeTimeline } from './WazeTimeline';
 
 	export let m: number;
@@ -342,7 +341,7 @@
 				</Tween>
 			{/each}
 
-			{(composition.play(1, Infinity), '')}
+			{(browser && composition.play(1, Infinity), '')}
 		</Composition>
 	</div>
 	<div class="text">

@@ -6,27 +6,30 @@
 	import { gltfs } from '../../../assets/village/parts/index';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
 	import { createPart } from '../../../lib/3d/gltf/part';
-	import type { PseudoHeight } from '../layout/PseudoHeight';
 	import HealthSceneCamera from './HealthSceneCamera.svelte';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
+	import ScrollPosition from '../layout/ScrollPosition.svelte';
 
-	export let pseudoHeight: PseudoHeight;
+	const rendererSize = useAmbientRendererSize();
+	$: ({ height: vh } = $rendererSize ?? { height: 0 });
 
-	const { top, bottom, self } = pseudoHeight;
 	const point = new Store<Point>({ x: 0, y: 0 });
 	let scrollY = 0;
+	let top = 0;
 
 	let rotation = 0;
 	useFrame(() => {
 		rotation += 0.01;
 		point.set({
 			x: $inner.width / 2,
-			y: $top + $self / 2 - scrollY,
+			y: top + vh / 2 - scrollY,
 		});
 	});
 </script>
 
 <svelte:window bind:scrollY />
-{#if scrollY > $top}
+<ScrollPosition bind:top />
+{#if scrollY > top}
 	<HealthSceneCamera />
 {/if}
 {#await createPart(gltfs.building_10) then { object }}

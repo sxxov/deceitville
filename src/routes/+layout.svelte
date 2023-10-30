@@ -10,17 +10,16 @@
 	import ic_favi from '../assets/common/favi/favicon.svg?url';
 	import src_webmanifest from '../assets/common/favi/site.webmanifest?url';
 	import '../app.pcss';
-	import Nav from '../lib/nav/Nav.svelte';
 	import { Toaster } from '@sxxov/sv/toast';
 	// import Footer from '../lib/footer/Footer.svelte';
 	import { client } from '@sxxov/ut/viewport';
 	import * as THREE from 'three';
 	import AmbientCanvas from '../lib/3d/canvas/AmbientCanvas.svelte';
-	import { useLenis } from '../lib/lenis/useLenis';
+	import { createLenis } from '../lib/lenis/useLenis';
 	import DefaultPostProcessingProvider from './lib/environment/DefaultPostProcessingProvider.svelte';
 	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
 
-	useLenis();
+	createLenis();
 </script>
 
 <svelte:head>

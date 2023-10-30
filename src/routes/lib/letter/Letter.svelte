@@ -1,14 +1,9 @@
 <script lang="ts">
 	import { Svg } from '@sxxov/sv/svg';
-	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import { map01 } from '@sxxov/ut/math';
 	import { inner } from '@sxxov/ut/viewport';
 	import { ic_warning } from 'maic/two_tone';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
-
-	const pseudoHeight = usePseudoHeight();
-	const { self, top, bottom } = pseudoHeight;
-	$: self.set(height);
+	import ScrollPosition from '../layout/ScrollPosition.svelte';
 
 	const dtf = new Intl.DateTimeFormat(undefined, {
 		year: 'numeric',
@@ -17,31 +12,25 @@
 	});
 
 	let scrollY = 0;
-	let height = 0;
+	let top = 0;
+	let bottom = 0;
 	const heightShred = 224;
 
 	$: shred = $inner.width > 400;
 </script>
 
 <svelte:window bind:scrollY />
+<ScrollPosition bind:top />
 <div class="letter">
-	<div
-		class="padding start"
-		style="--top: {$top}px"
-	></div>
-
 	<div
 		class="content"
 		style="--height-shred: {heightShred}px;"
-		use:whenResize={({ height: h }) => {
-			height = h;
-		}}
 	>
 		{#if shred}
 			<div
 				class="cover"
-				class:visible={scrollY > $top - heightShred &&
-					scrollY <= $bottom - heightShred}
+				class:visible={scrollY > top - heightShred &&
+					scrollY <= bottom - heightShred}
 			></div>
 		{/if}
 		{#each Array(shred ? 13 : 1).fill(undefined) as _, i}
@@ -53,8 +42,8 @@
 				<div
 					class="paper"
 					class:shred={i > 0}
-					class:visible={scrollY > $top - heightShred &&
-						scrollY <= $bottom}
+					class:visible={scrollY > top - heightShred &&
+						scrollY <= bottom}
 					class:p={i > 0 && i % 2}
 					class:q={i > 0 && !(i % 2)}
 					style="
@@ -62,14 +51,14 @@
 						--n: {1 / 12}; 
 						--l: {12};
 						--r: {Math.random()};
-						--p: {Math.abs((map01($top - scrollY, $top, $bottom) * 30 + i) % Math.PI)}rad;
+						--p: {Math.abs((map01(top - scrollY, top, bottom) * 30 + i) % Math.PI)}rad;
 					"
 				>
 					<div class="shadow"></div>
 					<div
 						class="content"
 						style="
-							transform: {i > 0 ? `translateY(${$top - scrollY}px)` : undefined};
+							transform: {i > 0 ? `translateY(${top - scrollY}px)` : undefined};
 						"
 					>
 						<div class="bar">
@@ -164,32 +153,17 @@
 		{/each}
 		<!-- <div class="fader"></div> -->
 	</div>
-
-	<div class="padding end"></div>
 </div>
+<ScrollPosition bind:top={bottom} />
 
 <style lang="postcss">
 	.letter {
-		position: absolute;
+		position: relative;
 		top: 0;
 		width: 100%;
 		pointer-events: none;
 
 		z-index: 1;
-
-		& > .padding {
-			pointer-events: none;
-
-			&.start {
-				--top: 0px;
-
-				height: var(--top);
-			}
-			/* &.end {
-				height: 200vh;
-				height: 200lvh;
-			} */
-		}
 
 		& > .content {
 			/* position: sticky;

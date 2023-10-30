@@ -7,6 +7,9 @@
 </script>
 
 <script lang="ts">
+	import 'use-unsafe-threlte';
+
+	import { browser } from '$app/environment';
 	import { beforeNavigate } from '$app/navigation';
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
 	import { Store } from '@sxxov/ut/store';
@@ -19,6 +22,7 @@
 		type ComponentEvents,
 		type ComponentProps,
 	} from 'svelte';
+	import { useLenis } from '../../lenis/useLenis';
 	import type { AmbientInteractivity } from './AmbientInteractivity';
 	import type { AmbientRendererSizeContext } from './AmbientRendererSizeContext';
 
@@ -31,9 +35,16 @@
 	let width = 0;
 	let height = 0;
 
+	let initialScrollY = 0;
+	const updateInitialScrollY = () => {
+		initialScrollY = window.scrollY;
+	};
+
+	const lenis = useLenis();
 	let portalDiv: HTMLDivElement;
 	const portal = (content: HTMLElement, portal: HTMLElement) => {
 		portal.appendChild(content);
+		$lenis?.scrollTo(initialScrollY);
 
 		return {
 			destroy() {
@@ -84,27 +95,36 @@
 			[width, height] = [w, h];
 		}}
 	>
-		<Canvas
-			{...$$restProps}
-			size={$rendererSize}
-			bind:this={$component}
-		>
-			<div use:portal={portalDiv}>
-				<slot />
-			</div>
-			{(useFrame(() => {
-				active = true;
-			}),
-			!interactivityCtx.interactivity &&
-				setInteractivity(interactivity()),
-			useInteractivity(),
-			'')}
-		</Canvas>
+		{#if browser}
+			{(updateInitialScrollY(), '')}
+			<Canvas
+				{...$$restProps}
+				size={$rendererSize}
+				bind:this={$component}
+			>
+				<div use:portal={portalDiv}>
+					<slot />
+				</div>
+				{(useFrame(() => {
+					active = true;
+				}),
+				!interactivityCtx.interactivity &&
+					setInteractivity(interactivity()),
+				useInteractivity(),
+				'')}
+			</Canvas>
+		{/if}
 	</div>
 	<div
 		class="portal"
 		bind:this={portalDiv}
-	></div>
+	>
+		{#if !browser}
+			<div>
+				<slot />
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style lang="postcss">

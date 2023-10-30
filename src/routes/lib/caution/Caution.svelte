@@ -1,27 +1,13 @@
 <script lang="ts">
 	import { Svg } from '@sxxov/sv/svg';
 	import { ic_block, ic_warning } from 'maic/two_tone';
-	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
 	import Marquee from './Marquee.svelte';
-
-	const rendererSize = useAmbientRendererSize();
-	$: ({ height: vh } = $rendererSize ?? { height: 0 });
-
-	const pseudoHeight = usePseudoHeight();
-	const { self, top } = pseudoHeight;
-	$: self.set(vh);
 
 	let scrollY = 0;
 </script>
 
 <svelte:window bind:scrollY />
 <div class="caution">
-	<div
-		class="padding start"
-		style="--top: {$top}px"
-	></div>
-
 	<div class="content">
 		<!-- <div class="heading">
 			<h2>
@@ -84,32 +70,16 @@
 			<Marquee><span class="de-corp">De Corp.®</span></Marquee>
 		</div>
 	</div>
-
-	<div class="padding end"></div>
 </div>
 
 <style lang="postcss">
 	.caution {
-		position: absolute;
+		position: relative;
 		top: 0;
 		width: 100%;
 		pointer-events: none;
 
 		z-index: 2;
-
-		& > .padding {
-			pointer-events: none;
-
-			&.start {
-				--top: 0px;
-
-				height: var(--top);
-			}
-			&.end {
-				height: 100vh;
-				height: 100lvh;
-			}
-		}
 
 		& > .content {
 			/* position: sticky;

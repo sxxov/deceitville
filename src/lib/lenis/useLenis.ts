@@ -27,7 +27,9 @@ const onCreate = () => {
 	lenis.set(instance);
 };
 
-export const useLenis = () => {
+export const createLenis = () => {
 	afterNavigate(onCreate);
 	onMount(onCreate);
 };
+
+export const useLenis = () => lenis;

@@ -1,26 +1,35 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Svg } from '@sxxov/sv/svg';
-	import { inner } from '@sxxov/ut/viewport';
 	import { ic_flag } from 'maic/two_tone';
+	import { onMount } from 'svelte';
+	import type * as THREE from 'three';
 	import svg_loop_centre from '../../../assets/directory/loops/centre.svg?raw';
 	import svg_loop_corner from '../../../assets/directory/loops/corner.svg?raw';
-	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
+	import { createPart } from '../../../lib/3d/gltf/part';
+	import { infos } from '../../building/lib/info/infos';
 	import type { DirectoryRoute } from './DirectoryRoute';
 	import DirectoryScene from './DirectoryScene.svelte';
 
-	export let routes: DirectoryRoute[];
-
-	const rendererSize = useAmbientRendererSize();
-	$: ({ height: vh } = $rendererSize ?? { height: 0 });
-
-	const pseudoHeight = usePseudoHeight();
-	$: pseudoHeight.self.set(
-		$inner.width > 1000
-			? Math.max(100 * (routes.length + 1), vh)
-			: 200 + 100 * (routes.length + 1),
-	);
+	const routes: DirectoryRoute[] = [
+		...Object.entries(infos),
+		...Object.entries(infos),
+		...Object.entries(infos),
+		...Object.entries(infos),
+	].map(([k, info]) => ({
+		info,
+		url: k,
+	}));
+	let routeObject: THREE.Object3D | undefined;
+	let routeObjects: THREE.Object3D[] = [];
+	onMount(async () => {
+		routeObjects = await Promise.all(
+			routes.map(
+				async ({ info }) => (await createPart(info.facade)).object!,
+			),
+		);
+	});
+	$: routeObject = route ? routeObjects[routes.indexOf(route)] : undefined;
 
 	let route: DirectoryRoute | undefined;
 	let exiting = false;
@@ -39,9 +48,12 @@
 	let directoryScene: DirectoryScene | undefined;
 </script>
 
+<DirectoryScene
+	object={routeObject}
+	bind:this={directoryScene}
+/>
 <div class="directory">
 	<div class="info">
-		<div class="padding start"></div>
 		<div class="content">
 			<div class="heading">
 				<h2>Directory</h2>
@@ -145,10 +157,6 @@
 				</div>
 			</div>
 		</div>
-		<div
-			class="padding end"
-			style="--length: {routes.length};"
-		></div>
 	</div>
 	<div class="routes">
 		<div class="padding start"></div>
@@ -252,48 +260,28 @@
 		<div class="padding end"></div>
 	</div>
 </div>
-<DirectoryScene
-	object={route?.object}
-	{pseudoHeight}
-	bind:this={directoryScene}
-/>
 
 <style lang="postcss">
 	.directory {
 		--height-route: 100px;
 
-		display: contents;
+		position: relative;
+		top: 0;
+		display: flex;
+
+		@media (max-width: 1000px) {
+			flex-direction: column;
+		}
 
 		& > .info {
-			position: absolute;
-			top: 0;
+			position: relative;
+
 			width: 33.33%;
 
 			@media (max-width: 1000px) {
 				left: 0;
 				width: 100%;
-			}
-
-			& > .padding {
-				--length: 0;
-
-				pointer-events: none;
-
-				&.start {
-					height: 900vh;
-					height: 900lvh;
-				}
-				&.end {
-					min-height: 25vh;
-					min-height: 25lvh;
-					height: calc(
-						0,
-						(var(--length) + 1) * var(--height-route) - 100vh
-					);
-					height: calc(
-						(var(--length) + 1) * var(--height-route) - 100lvh
-					);
-				}
+				height: 200px;
 			}
 
 			& > .content {
@@ -571,7 +559,7 @@
 		}
 
 		& > .routes {
-			position: absolute;
+			position: sticky;
 			top: 0;
 			left: 33.33%;
 			width: 66.67%;
@@ -580,23 +568,6 @@
 				top: 200px;
 				left: 0;
 				width: 100%;
-			}
-
-			& > .padding {
-				pointer-events: none;
-
-				&.start {
-					height: 900vh;
-					height: 900lvh;
-				}
-				&.end {
-					/* height: 25vh;
-					height: 25lvh; */
-
-					@media (max-width: 1000px) {
-						height: 0;
-					}
-				}
 			}
 
 			& > .content {

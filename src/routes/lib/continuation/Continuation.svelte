@@ -1,60 +1,25 @@
 <script lang="ts">
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
-	import { Store } from '@sxxov/ut/store';
-	import { inner, type Point } from '@sxxov/ut/viewport';
-	import { useFrame } from '@threlte/core';
 	import { ic_book, ic_help } from 'maic/two_tone';
-	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import Contact from '../../../lib/footer/Contact.svelte';
 	import Footer from '../../../lib/footer/Footer.svelte';
-	import { usePseudoHeight } from '../layout/usePseudoHeight';
+	import ScrollPosition from '../layout/ScrollPosition.svelte';
 	import ContinuationSceneCamera from './ContinuationSceneCamera.svelte';
 
-	const rendererSize = useAmbientRendererSize();
-	$: ({ height: vh } = $rendererSize ?? { height: 0 });
-
-	const { self, top, bottom } = usePseudoHeight();
-	$: self.set(vh * 2);
-
 	let scrollY = 0;
-	const point = new Store<Point>({ x: 0, y: 0 });
-	let rotation = 0;
-
-	useFrame(() => {
-		point.set({
-			x: $inner.width / 2,
-			y: $bottom - scrollY,
-		});
-		rotation = (rotation + 0.01) % (Math.PI * 2);
-	});
+	let top = 0;
 </script>
 
 <svelte:window bind:scrollY />
-{#if scrollY > $top}
+<ScrollPosition bind:top />
+{#if scrollY > top}
 	<ContinuationSceneCamera />
 {/if}
 <div class="continuation">
-	<div
-		class="padding start"
-		style="--top: {$top}px"
-	></div>
 	<div class="content">
 		<div class="info">
 			<div class="heading">
-				<!-- <FollowLocus point={$point}>
-					{#await createPart(gltfs.pumpkin) then { object }}
-						{#if scrollY > $top - vh}
-							<T
-								is={object}
-								position={[0, -0.6, 0]}
-								scale={1}
-								rotation={[0, rotation, 0]}
-							/>
-						{/if}
-					{/await}
-				</FollowLocus> -->
-
 				<h2>
 					<span class="sub"
 						><span class="icon"
@@ -142,12 +107,11 @@
 		<div class="contact"><Contact /></div>
 		<div class="footer"><Footer /></div>
 	</div>
-	<div class="padding end"></div>
 </div>
 
 <style lang="postcss">
 	.continuation {
-		position: absolute;
+		position: relative;
 		top: 0;
 
 		width: 100%;
@@ -159,20 +123,6 @@
 		--colour-selection: var(----colour-text-tertiary);
 
 		z-index: 1;
-
-		& > .padding {
-			--top: 0px;
-
-			pointer-events: none;
-
-			&.start {
-				height: var(--top);
-			}
-			/* &.end {
-				height: 200vh;
-				height: 200lvh;
-			} */
-		}
 
 		& > .content {
 			position: sticky;

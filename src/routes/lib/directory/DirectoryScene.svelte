@@ -19,13 +19,12 @@
 	import * as THREE from 'three';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
 	import { pointer } from '../../../lib/follow/pointer';
-	import type { PseudoHeight } from '../layout/PseudoHeight';
 	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
+	import ScrollPosition from '../layout/ScrollPosition.svelte';
 
 	type $$Props = Props<THREE.Group> & {
 		ref?: typeof ref;
 		object: typeof object;
-		pseudoHeight: typeof pseudoHeight;
 	};
 	type $$Events = Events<THREE.Group>;
 
@@ -33,9 +32,6 @@
 
 	export let ref = new THREE.Group();
 	export let object: THREE.Object3D | undefined;
-	export let pseudoHeight: PseudoHeight;
-
-	const { top, bottom } = pseudoHeight;
 
 	let exiting = false;
 	let fogInit = scene.fog;
@@ -74,6 +70,7 @@
 	$: fog.far = (1 - $exitFogTween) * 4;
 
 	let scrollY = 0;
+	let top = 0;
 
 	let o: typeof object;
 	$: if (object) o = object;
@@ -91,7 +88,8 @@
 </script>
 
 <svelte:window bind:scrollY />
-{#if scrollY > $top}
+<ScrollPosition bind:top />
+{#if scrollY > top}
 	<DirectorySceneCamera />
 {/if}
 <T
