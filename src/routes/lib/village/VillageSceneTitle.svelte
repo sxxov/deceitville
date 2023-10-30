@@ -40,13 +40,6 @@
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
 	import { pointer } from '../../../lib/follow/pointer';
-	import {
-		BrightnessContrastEffect,
-		EffectComposer,
-		EffectPass,
-		HueSaturationEffect,
-		RenderPass,
-	} from 'postprocessing';
 
 	export let progress = 0;
 
@@ -132,11 +125,11 @@
 
 			ref.material = new THREE.MeshStandardMaterial({
 				color: new THREE.Color(0xffffff),
-				depthWrite: false,
-				depthTest: false,
+				// depthWrite: false,
+				// depthTest: false,
 				// transparent: false,
 				emissive: new THREE.Color(0xffffff),
-				emissiveIntensity: 1,
+				emissiveIntensity: 100,
 			});
 
 			scene.attach(ref);
@@ -222,18 +215,8 @@
 
 		scene.environment = hdri;
 		// scene.background = hdri;
-		renderer.toneMappingExposure = 1;
+		renderer.toneMappingExposure = 0.01;
 	});
-
-	const composer = new EffectComposer(renderer);
-	composer.addPass(new RenderPass(scene, camera));
-	composer.addPass(
-		new EffectPass(
-			camera,
-			new HueSaturationEffect({ hue: 0, saturation: -1 }),
-			new BrightnessContrastEffect({ brightness: -0.1, contrast: 0.5 }),
-		),
-	);
 
 	// pointer model
 	const pointerZ = z + 0.1;
@@ -257,9 +240,13 @@
 		// if (pointerMesh) scene.remove(pointerMesh);
 		const i = pointerPickI++ % pointerPickableGltfs.length;
 		({ object: pointerMesh } = await createPart(pointerPickableGltfs[i]!));
-		// pointerMesh.material = new THREE.MeshPhysicalMaterial({
-		// 	emissive: new THREE.Color(0xff0000),
-		// });
+		if (pointerMesh instanceof THREE.Mesh) {
+			pointerMesh.material = new THREE.MeshPhysicalMaterial({
+				roughness: 0,
+				thickness: 0.5,
+				transmission: 1,
+			});
+		}
 
 		scene.add(pointerMesh!);
 	};
@@ -280,10 +267,9 @@
 		camera.updateProjectionMatrix();
 	});
 
-	useRender((_, delta) => {
+	useRender(() => {
 		// renderer.clearDepth();
-		// renderer.render(scene, camera);
-		composer.render(delta);
+		renderer.render(scene, camera);
 	});
 
 	onDestroy(() => {
