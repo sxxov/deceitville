@@ -35,16 +35,17 @@
 	let width = 0;
 	let height = 0;
 
-	let initialScrollY = 0;
+	let initialScrollY = -1;
 	const updateInitialScrollY = () => {
 		initialScrollY = window.scrollY;
 	};
-
 	const lenis = useLenis();
+	$: if (initialScrollY >= 0) window.scrollY = initialScrollY;
+	$: if (initialScrollY >= 0 && $lenis) $lenis.scrollTo(initialScrollY);
+
 	let portalDiv: HTMLDivElement;
 	const portal = (content: HTMLElement, portal: HTMLElement) => {
 		portal.appendChild(content);
-		$lenis?.scrollTo(initialScrollY);
 
 		return {
 			destroy() {
