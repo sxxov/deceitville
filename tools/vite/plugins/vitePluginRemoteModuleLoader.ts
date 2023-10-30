@@ -6,7 +6,7 @@ export const vitePluginRemoteModuleLoader = () =>
 	({
 		name: 'remote module loader',
 
-		resolveId(id: string) {
+		resolveId(id) {
 			if (
 				id.startsWith('remote|module:http:/') ||
 				id.startsWith('remote|module:https:/')
@@ -14,7 +14,7 @@ export const vitePluginRemoteModuleLoader = () =>
 				return `\0${id}`;
 		},
 
-		async load(id: string) {
+		async load(id) {
 			if (
 				!(
 					id.startsWith('\0remote:http:/') ||

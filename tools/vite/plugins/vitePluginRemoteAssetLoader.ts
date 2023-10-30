@@ -12,14 +12,14 @@ export const vitePluginRemoteAssetLoader = () =>
 	({
 		name: 'remote asset loader',
 
-		resolveId(/** @type {string} */ id) {
+		resolveId(id) {
 			if (
 				id.startsWith('remote|asset:http:/') ||
 				id.startsWith('remote|asset:https:/')
 			)
 				return `\0${id}`;
 		},
-		async load(/** @type {string} */ id) {
+		async load(id) {
 			if (
 				!(
 					id.startsWith('\0remote|asset:http:/') ||
