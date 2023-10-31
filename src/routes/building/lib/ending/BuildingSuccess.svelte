@@ -3,7 +3,6 @@
 	import { Svg } from '@sxxov/sv/svg';
 	import {
 		ic_arrow_back,
-		ic_arrow_forward,
 		ic_assignment_turned_in,
 		ic_restart_alt,
 	} from 'maic/two_tone';
