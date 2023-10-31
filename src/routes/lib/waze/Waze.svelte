@@ -20,6 +20,9 @@
 		timeline[0],
 	];
 
+	$: nextM = Math.max(segments[2].m - m, 0);
+	$: nextDirection = segments[2].direction;
+
 	const getNextSegment = (m: number) => {
 		for (const segment of timeline) if (m < segment.m) return segment;
 
@@ -346,15 +349,19 @@
 	</div>
 	<div class="text">
 		<div class="m">
-			<h6>{Math.max(segments[2].m - m, 0).toFixed(0)}m</h6>
+			<h6>
+				{nextM > 1000
+					? `${(nextM / 1000).toFixed(2)}km`
+					: `${nextM.toFixed(0)}m`}
+			</h6>
 		</div>
 		<div class="direction">
 			<p>
-				{#if segments[2].direction === WazeDirection.LEFT}
+				{#if nextDirection === WazeDirection.LEFT}
 					Turn Left
-				{:else if segments[2].direction === WazeDirection.STRAIGHT}
+				{:else if nextDirection === WazeDirection.STRAIGHT}
 					Go Straight
-				{:else if segments[2].direction === WazeDirection.RIGHT}
+				{:else if nextDirection === WazeDirection.RIGHT}
 					Turn Right
 				{:else}
 					???
