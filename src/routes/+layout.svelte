@@ -20,6 +20,8 @@
 	import { useLenisInitialisation } from '../lib/lenis/useLenis';
 	import { useClientHistoryInitialisation } from '../lib/history/clientHistory';
 
+	THREE.Cache.enabled = true;
+
 	useLenisInitialisation();
 	useClientHistoryInitialisation();
 </script>
