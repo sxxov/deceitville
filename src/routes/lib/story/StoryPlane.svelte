@@ -123,8 +123,8 @@
 		<div class="segment">
 			<div class="sparse-y h-fill wrap">
 				<div class="sparse-x wrap">
-					<h6 use:revealable>The</h6>
-					<h6 use:revealable>Town</h6>
+					<h6 use:revealable>It's</h6>
+					<h6 use:revealable>common</h6>
 					<span></span>
 				</div>
 				<div class="put-y">
@@ -155,9 +155,10 @@
 		</div>
 		<div class="segment h-fill">
 			<div class="sparse-y wrap">
-				<h6 use:revealable>is mostly known for</h6>
+				<h6 use:revealable>on the internet,</h6>
+				<h6 use:revealable>for towns to be</h6>
 				<h6 use:revealable>
-					being <a href="#">designed</a> to<br />Harm
+					<a href="#">designed</a> to<br />harm
 				</h6>
 				<div class="put-y">
 					<p use:revealable>its own</p>
@@ -170,21 +171,21 @@
 	<div class="story plane _2">
 		<div class="segment">
 			<div class="sparse-x wrap align-start">
-				<h6 use:revealable>You are</h6>
+				<h6 use:revealable>Learn about the</h6>
 				<div class="put-y">
-					<h6 use:revealable><s>advised</s></h6>
-					<h6 use:revealable>tasked</h6>
+					<h6 use:revealable><s>culture</s></h6>
+					<h6 use:revealable>coersion</h6>
 				</div>
 				<span></span>
 			</div>
 		</div>
 		<div class="segment">
 			<div class="sparse-x wrap align-start">
-				<h6 use:revealable>to</h6>
+				<h6 use:revealable>of the town &</h6>
 				<div class="put-y">
 					<div class="put-y">
-						<h6 use:revealable><s>steer cleer of</s></h6>
-						<h6 use:revealable>destroy</h6>
+						<h6 use:revealable><s>avoid</s></h6>
+						<h6 use:revealable>exfiltrate</h6>
 					</div>
 				</div>
 				<div class="put-y">
@@ -222,7 +223,7 @@
 						<Spacer width="4rem" /><Spacer width={14} />
 					</div>
 
-					<div class="put-x">
+					<div class="traveller put-x">
 						<div
 							class="icon"
 							use:revealable
@@ -235,7 +236,9 @@
 						</div>
 						<Spacer width={14} />
 						<h6 use:revealable>traveller</h6>
-						<Spacer width="4rem" /><Spacer width={14} />
+						<div class="spacer">
+							<Spacer width="4rem" /><Spacer width={14} />
+						</div>
 					</div>
 				</div>
 				<span></span>
@@ -261,7 +264,7 @@
 			<div class="sparse-y justify-end">
 				<div class="sparse-x align-end wrap">
 					<span></span>
-					<h6 use:revealable>Town.</h6>
+					<h6 use:revealable>town.</h6>
 				</div>
 			</div>
 		</div>
@@ -335,6 +338,14 @@
 				--cols: 1fr;
 				--rows: max-content 1fr;
 				--gap-y: 56px;
+			}
+
+			& .traveller > .spacer {
+				display: contents;
+
+				@media (max-width: 768px) {
+					display: none;
+				}
 			}
 		}
 
