@@ -43,8 +43,6 @@ export const vitePluginThrelteSsrShim = () =>
 		transform(code, id, { ssr = false } = {}) {
 			if (!ssr) return;
 
-			console.log('ssr', id);
-
 			if (
 				id.endsWith('.svelte') &&
 				!id.includes('node_modules') &&
