@@ -12,5 +12,5 @@ export const resolveRouteUrl = (path: string) => {
 		route,
 	)?.[0];
 
-	return file ? route.slice(0, -file.length - 1) : route;
+	return `/${file ? route.slice(0, -file.length - 1) : route}`;
 };
