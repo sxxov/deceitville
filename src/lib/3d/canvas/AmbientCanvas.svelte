@@ -9,6 +9,7 @@
 <script lang="ts">
 	import 'use-unsafe-threlte';
 
+	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { beforeNavigate } from '$app/navigation';
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
@@ -40,8 +41,14 @@
 		initialScrollY = window.scrollY;
 	};
 	const lenis = useLenis();
+	let shouldRestoreUnhydratedScroll = true;
 	$: if (initialScrollY >= 0) window.scrollY = initialScrollY;
-	$: if (initialScrollY >= 0 && $lenis) $lenis.scrollTo(initialScrollY);
+	$: if (initialScrollY >= 0 && $lenis && shouldRestoreUnhydratedScroll) {
+		$lenis.scrollTo(initialScrollY);
+	}
+	beforeNavigate(() => {
+		shouldRestoreUnhydratedScroll = false;
+	});
 
 	let portalDiv: HTMLDivElement;
 	const portal = (content: HTMLElement, portal: HTMLElement) => {
@@ -58,11 +65,11 @@
 	$: vh = Math.max($inner.height, $client.height);
 
 	const rendererSize = new Store<Size>({
-		width: vw || 1,
-		height: vh || 1,
+		width: vw || (browser ? 1 : 0),
+		height: vh || (browser ? 1 : 0),
 	});
-	$: $rendererSize.width = width || vw || 1;
-	$: $rendererSize.height = height || vh || 1;
+	$: $rendererSize.width = width || vw || (browser ? 1 : 0);
+	$: $rendererSize.height = height || vh || (browser ? 1 : 0);
 	setContext<AmbientRendererSizeContext>(
 		ambientRendererSizeContextKey,
 		rendererSize,
