@@ -27,9 +27,9 @@ export const T = new Proxy(class {}, {
 });
 `.trim();
 
-export const vitePluginThrelteSsrShim = () =>
+export const vitePluginThrelteSsrStub = () =>
 	({
-		name: 'threlte ssr shim',
+		name: 'threlte ssr stub',
 		resolveId(id) {
 			if (id === 'use-unsafe-threlte') return `\0${id}`;
 		},
