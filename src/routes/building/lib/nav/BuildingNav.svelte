@@ -1,10 +1,15 @@
+<script
+	lang="ts"
+	context="module"
+>
+	export const buildingNavContextKey = Symbol('buildingNav');
+</script>
+
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { Button, ButtonVariants, Ripple } from '@sxxov/sv/button';
 	import { BottomSheet, BottomSheetStates } from '@sxxov/sv/layout';
 	import { Svg } from '@sxxov/sv/svg';
-	import type { Transition } from '@sxxov/sv/ut/transition';
-	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
 	import {
 		ic_arrow_outward,
 		ic_close,
@@ -12,655 +17,634 @@
 		ic_logout,
 	} from 'maic/two_tone';
 	import { useBuildingInfo } from '../info/useBuildingInfo';
+	import { setContext } from 'svelte';
+	import type { BuildingNavContext } from './BuildingNavContext';
+	import { Store } from '@sxxov/ut/store';
+	import { clientHistory } from '../../../../lib/history/clientHistory';
 
 	const info = useBuildingInfo()!;
 
-	let infoSheetState = BottomSheetStates.IDLE;
+	const bottomSheetState = new Store<BottomSheetStates>(
+		BottomSheetStates.IDLE,
+	);
+	setContext<BuildingNavContext>(buildingNavContextKey, {
+		bottomSheetState,
+	});
 
 	let objectiveActive = true;
-
-	const revealIn: Transition = (
-		element,
-		{
-			delay = 0,
-			duration = 0,
-			easing = (t: number) => bezierQuintInOut.at(t),
-		} = {},
-	) => {
-		return {
-			delay,
-			duration,
-			easing,
-			css: (t, u) => `
-				clip-path: ${t === 1 ? 'unset' : `inset(0 0 ${u * 100}% 0)`};
-				transform: translateY(${u * 100}%);
-			`,
-		};
-	};
-
-	const revealOut: Transition = (
-		element,
-		{
-			delay = 0,
-			duration = 0,
-			easing = (t: number) => bezierQuintInOut.at(t),
-		} = {},
-	) => {
-		return {
-			delay,
-			duration,
-			easing,
-			css: (t, u) => `
-				clip-path: ${t === 1 ? 'unset' : `inset(${u * 100}% 0 0 0)`};
-				transform: translateY(-${u * 100}%);
-			`,
-		};
-	};
 </script>
 
 <div class="building-nav">
-	<div class="exit">
-		<Button
-			{...ButtonVariants.Fab.Md}
-			{...ButtonVariants.Transparent}
-			{...ButtonVariants.Shadow.Sm}
-			on:click={() => {
-				if (
-					document.referrer &&
-					document.referrer.startsWith(window.location.origin)
-				)
-					history.back();
-				else void goto('/');
-			}}
-		>
-			<Svg svg={ic_logout} />
-		</Button>
-	</div>
-	<div class="heading">
-		<h1>{info.name}</h1>
-	</div>
-	<div class="info">
-		<div class="button">
+	<div class="content">
+		<div class="exit">
 			<Button
+				{...ButtonVariants.Fab.Md}
 				{...ButtonVariants.Transparent}
 				{...ButtonVariants.Shadow.Sm}
-				roundness={28}
 				on:click={() => {
-					infoSheetState = BottomSheetStates.PEEK;
+					clientHistory.back();
 				}}
 			>
-				<Svg svg={ic_info} />
-				Info
+				<Svg svg={ic_logout} />
 			</Button>
 		</div>
-		<div class="objective">
-			<div
-				class="background"
-				class:active={objectiveActive}
-			></div>
-			<div
-				class="ripple"
-				class:active={objectiveActive}
-				role="presentation"
-				on:click={() => {
-					objectiveActive = false;
-				}}
-				on:keydown={(e) => {
-					if (e.key === 'Enter') objectiveActive = false;
-				}}
-			>
-				<Ripple
-					durationMin={2000}
-					durationMax={5000}
-				/>
+		<div class="heading">
+			<h1>{info.name}</h1>
+		</div>
+		<div class="info">
+			<div class="button">
+				<Button
+					{...ButtonVariants.Transparent}
+					{...ButtonVariants.Shadow.Sm}
+					roundness={28}
+					padding="14px 21px"
+					on:click={() => {
+						$bottomSheetState = BottomSheetStates.PEEK;
+					}}
+				>
+					<Svg svg={ic_info} />
+					Info
+				</Button>
 			</div>
-			<div
-				class="outer"
-				class:out={!objectiveActive}
-			>
-				<div class="content">
-					<h2
-						class:in={objectiveActive}
-						class:out={!objectiveActive}
-					>
-						Objective
-					</h2>
-					<p class="text">
-						{#if 1}
-							{@const words = info.objective.split(' ')}
-							{#each words as word, i}
-								<span
-									style="
-										--i: {i};
-										--l: {words.length};
-									"
+		</div>
+	</div>
+
+	<div class="objective">
+		<div
+			class="background"
+			class:active={objectiveActive}
+		></div>
+		<div
+			class="ripple"
+			class:active={objectiveActive}
+			role="presentation"
+			on:click={() => {
+				objectiveActive = false;
+			}}
+			on:keydown={(e) => {
+				if (e.key === 'Enter') objectiveActive = false;
+			}}
+		>
+			<Ripple
+				durationMin={2000}
+				durationMax={5000}
+			/>
+		</div>
+		<div
+			class="outer"
+			class:out={!objectiveActive}
+		>
+			<div class="content">
+				<h2
+					class:in={objectiveActive}
+					class:out={!objectiveActive}
+				>
+					Objective
+				</h2>
+				<p class="text">
+					{#if 1}
+						{@const words = info.objective.split(' ')}
+						{#each words as word, i}
+							<span
+								style="
+									--i: {i};
+									--l: {words.length};
+								"
+								class:in={objectiveActive}
+								class:out={!objectiveActive}
+								>{word}{#if i < words.length - 1}&nbsp;{/if}</span
+							>
+						{/each}
+					{/if}
+				</p>
+				<p class="prompt">
+					<!-- <Svg svg={ic_touch_app} /> -->
+					{#if 1}
+						{@const words = 'Press anywhere to continue.'.split(
+							' ',
+						)}
+						{#each words as word, i}
+							<span
+								style="
+									--i: {i};
+									--l: {words.length};
+								"
+								><span
 									class:in={objectiveActive}
 									class:out={!objectiveActive}
 									>{word}{#if i < words.length - 1}&nbsp;{/if}</span
-								>
-							{/each}
-						{/if}
-					</p>
-					<p class="prompt">
-						<!-- <Svg svg={ic_touch_app} /> -->
-						{#if 1}
-							{@const words = 'Press anywhere to continue.'.split(
-								' ',
-							)}
-							{#each words as word, i}
-								<span
-									style="
-										--i: {i};
-										--l: {words.length};
-									"
-									><span
-										class:in={objectiveActive}
-										class:out={!objectiveActive}
-										>{word}{#if i < words.length - 1}&nbsp;{/if}</span
-									></span
-								>
-							{/each}
-						{/if}
-					</p>
-				</div>
+								></span
+							>
+						{/each}
+					{/if}
+				</p>
 			</div>
 		</div>
+	</div>
 
-		<div class="sheet">
-			<BottomSheet
-				colourBackground="----colour-background-primary"
-				width="min(100%, 600px)"
-				roundness={28}
-				bind:state={infoSheetState}
-			>
-				<div class="content">
-					<div class="close">
-						<Button
-							{...ButtonVariants.Fab.Md}
-							{...ButtonVariants.Transparent}
-							{...ButtonVariants.Shadow.None}
-							roundness={56}
-							on:click={() => {
-								infoSheetState = BottomSheetStates.IDLE;
-							}}
-						>
-							<Svg svg={ic_close} />
-						</Button>
-					</div>
-					<div class="heading">
-						<div class="chip">
-							<Svg
-								width="1em"
-								height="1em"
-								svg={ic_info}
-							/>
-							Info
-						</div>
-						<h2>{info.name}</h2>
-					</div>
-					<section>
-						<h3>Objective</h3>
-						<p>{info.objective}</p>
-					</section>
-					<section>
-						<h3>Description</h3>
-						<p>{info.description}</p>
-					</section>
-					<section>
-						<h3>Lessons</h3>
-						<ul>
-							{#each info.lessons as lesson}
-								<li>{lesson}</li>
-							{/each}
-						</ul>
-					</section>
-					<section>
-						<h3>Learn More</h3>
-						<ul>
-							<li>
-								<a
-									class="external"
-									href={info.brignull.url}
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{info.brignull.kind}<Svg
-										svg={ic_arrow_outward}
-									/>
-								</a>
-							</li>
-						</ul>
-					</section>
+	<div class="sheet">
+		<BottomSheet
+			colourBackground="----colour-background-primary"
+			width="min(100%, 600px)"
+			roundness={28}
+			bind:state={$bottomSheetState}
+		>
+			<div class="content">
+				<div class="close">
+					<Button
+						{...ButtonVariants.Fab.Md}
+						{...ButtonVariants.Transparent}
+						{...ButtonVariants.Shadow.None}
+						roundness={56}
+						on:click={() => {
+							$bottomSheetState = BottomSheetStates.IDLE;
+						}}
+					>
+						<Svg svg={ic_close} />
+					</Button>
 				</div>
-			</BottomSheet>
-		</div>
+				<div class="heading">
+					<div class="chip">
+						<Svg
+							width="1em"
+							height="1em"
+							svg={ic_info}
+						/>
+						Info
+					</div>
+					<h2>{info.name}</h2>
+				</div>
+				<section>
+					<h3>Objective</h3>
+					<p>{info.objective}</p>
+				</section>
+				<section>
+					<h3>Description</h3>
+					<p>{info.description}</p>
+				</section>
+				<section>
+					<h3>Lessons</h3>
+					<ul>
+						{#each info.lessons as lesson}
+							<li>{lesson}</li>
+						{/each}
+					</ul>
+				</section>
+				<section>
+					<h3>Learn More</h3>
+					<ul>
+						<li>
+							<a
+								class="external"
+								href={info.brignull.url}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{info.brignull.kind}<Svg
+									svg={ic_arrow_outward}
+								/>
+							</a>
+						</li>
+					</ul>
+				</section>
+			</div>
+		</BottomSheet>
 	</div>
 </div>
+<slot />
 
 <style lang="postcss">
 	.building-nav {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		display: grid;
-		grid-template-rows: 1fr;
-		grid-template-columns: auto 1fr auto;
-		grid-template-areas: 'exit heading info';
-		align-items: center;
-		gap: 14px;
-
-		padding: 14px;
-		box-sizing: border-box;
-
-		z-index: 10;
-
-		& > .exit {
-			grid-area: exit;
-
-			transform: scaleX(-1);
-		}
-
-		& > .heading {
-			grid-area: heading;
-			display: flex;
-			justify-content: flex-start;
+		& > .content {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			display: grid;
+			grid-template-rows: 1fr;
+			grid-template-columns: auto 1fr auto;
+			grid-template-areas: 'exit heading info';
 			align-items: center;
+			gap: 14px;
 
-			& > h1 {
-				margin: 0;
+			padding: 14px;
+			box-sizing: border-box;
 
-				font-family: var(----font-family-sans);
-				font-size: 1rem;
-				font-weight: 900;
-				text-transform: uppercase;
-				color: var(----color-text-primary);
+			z-index: 10;
+
+			pointer-events: none;
+
+			& > * {
+				pointer-events: auto;
+			}
+
+			& > .exit {
+				grid-area: exit;
+
+				transform: scaleX(-1);
+			}
+
+			& > .heading {
+				grid-area: heading;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+
+				width: max-content;
+
+				& > h1 {
+					margin: 0;
+
+					font-family: var(----font-family-sans);
+					font-size: 1rem;
+					font-weight: 900;
+					text-transform: uppercase;
+					color: var(----color-text-primary);
+				}
+			}
+
+			& > .info {
+				grid-area: info;
 			}
 		}
 
-		& > .info {
-			grid-area: info;
+		& > .objective {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
 
-			& > .objective {
-				position: fixed;
+			pointer-events: none;
+
+			z-index: 9;
+
+			& > .background {
+				position: absolute;
 				top: 0;
 				left: 0;
 				width: 100%;
 				height: 100%;
 
-				pointer-events: none;
+				background: radial-gradient(
+					circle at center,
+					var(----colour-background-primary) 0%,
+					var(----colour-background-transparent) 50%
+				);
 
-				& > .background {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
+				opacity: 1;
+				transition: opacity 0.2s 1.3s var(----ease-slow-fast);
 
-					background: radial-gradient(
-						circle at center,
-						var(----colour-background-primary) 0%,
-						var(----colour-background-transparent) 50%
-					);
-
-					opacity: 1;
-					transition: opacity 0.2s 1.3s var(----ease-slow-fast);
-
-					&:not(.active) {
-						opacity: 0;
-					}
+				&:not(.active) {
+					opacity: 0;
 				}
+			}
 
-				& > .ripple {
-					position: absolute;
-					top: 0;
-					left: 0;
-					height: 100%;
-					width: 100%;
+			& > .ripple {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
 
-					z-index: 1;
+				z-index: 1;
 
-					cursor: crosshair;
-					user-select: none;
-					-webkit-tap-highlight-color: none;
-					-webkit-touch-callout: none;
+				cursor: crosshair;
+				user-select: none;
+				-webkit-tap-highlight-color: none;
+				-webkit-touch-callout: none;
 
-					pointer-events: auto;
+				pointer-events: auto;
 
-					&:not(.active) {
-						pointer-events: none;
-					}
-				}
-
-				& > .outer {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: center;
-					gap: 7px;
-
+				&:not(.active) {
 					pointer-events: none;
-					user-select: none;
+				}
+			}
 
-					transform: translate(0, 0);
-					opacity: 1;
-					visibility: inherit;
-					transition:
-						transform 0.5s 1s var(----ease-slow-fast),
-						opacity 0.2s 1.3s var(----ease-slow-fast),
-						visibility 0s 1.48s;
+			& > .outer {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
 
-					&.out {
-						animation:
-							move-out 1s 1s var(----ease-slow-slow) forwards,
-							float-scale-out 1s 1s var(----ease-slow-fast),
-							fade-out 0.2s 1.9s var(----ease-slow-slow) forwards;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 7px;
 
-						@keyframes move-out {
-							100% {
-								translate: calc(50% - 72px) calc(-50% + 42px);
-							}
+				pointer-events: none;
+				user-select: none;
+
+				transform: translate(0, 0);
+				opacity: 1;
+				visibility: inherit;
+				transition:
+					transform 0.5s 1s var(----ease-slow-fast),
+					opacity 0.2s 1.3s var(----ease-slow-fast),
+					visibility 0s 1.48s;
+
+				&.out {
+					animation:
+						move-out 1s 1s var(----ease-slow-slow) forwards,
+						float-scale-out 1s 1s var(----ease-slow-fast),
+						fade-out 0.2s 1.9s var(----ease-slow-slow) forwards;
+
+					@keyframes move-out {
+						100% {
+							translate: calc(50% - 72px) calc(-50% + 42px);
+						}
+					}
+
+					@keyframes float-scale-out {
+						0% {
+							scale: 1;
 						}
 
-						@keyframes float-scale-out {
-							0% {
-								scale: 1;
-							}
-
-							50% {
-								scale: 2;
-							}
-
-							100% {
-								scale: 1.5;
-							}
+						50% {
+							scale: 2;
 						}
 
-						@keyframes fade-out {
-							0% {
-								opacity: 1;
-								/* filter: blur(0); */
-							}
+						100% {
+							scale: 1.5;
+						}
+					}
 
-							100% {
-								opacity: 0;
-								/* filter: blur(10px); */
-							}
+					@keyframes fade-out {
+						0% {
+							opacity: 1;
+							/* filter: blur(0); */
 						}
 
-						/* transform: translate(
+						100% {
+							opacity: 0;
+							/* filter: blur(10px); */
+						}
+					}
+
+					/* transform: translate(
 								calc(50% - 72px),
 								calc(-50% + 42px)
 							)
 							scale(1);
 						visibility: hidden;
 						opacity: 0; */
-					}
+				}
 
-					& .in {
-						--i: 0;
+				& .in {
+					--i: 0;
 
-						clip-path: unset;
+					clip-path: unset;
 
-						animation: reveal-in 1s calc(var(--i) * 100ms) 1
-							var(----ease-slow-slow) backwards;
+					animation: reveal-in 1s calc(var(--i) * 100ms) 1
+						var(----ease-slow-slow) backwards;
 
-						@keyframes reveal-in {
-							0% {
-								clip-path: inset(0 0 100% 0);
-								transform: translateY(100%);
-							}
+					@keyframes reveal-in {
+						0% {
+							clip-path: inset(0 0 100% 0);
+							transform: translateY(100%);
+						}
 
-							99% {
-								clip-path: inset(0 0 0 0);
-								transform: translateY(0);
-							}
+						99% {
+							clip-path: inset(0 0 0 0);
+							transform: translateY(0);
+						}
 
-							100% {
-								clip-path: unset;
-							}
+						100% {
+							clip-path: unset;
 						}
 					}
+				}
 
-					& .out {
-						--i: 0;
-						--l: 1;
+				& .out {
+					--i: 0;
+					--l: 1;
 
-						clip-path: unset;
+					clip-path: unset;
 
-						animation: reveal-out 1s
-							calc(((var(--l) - 1) - var(--i)) * 100ms) 1
-							var(----ease-slow-slow) forwards;
+					animation: reveal-out 1s
+						calc(((var(--l) - 1) - var(--i)) * 100ms) 1
+						var(----ease-slow-slow) forwards;
 
-						@keyframes reveal-out {
-							0% {
-								clip-path: unset;
-							}
+					@keyframes reveal-out {
+						0% {
+							clip-path: unset;
+						}
 
-							1% {
-								clip-path: inset(0 0 0 0);
-								transform: translateY(0);
-							}
+						1% {
+							clip-path: inset(0 0 0 0);
+							transform: translateY(0);
+						}
 
-							100% {
-								clip-path: inset(100% 0 0 0);
-								transform: translateY(-100%);
-							}
+						100% {
+							clip-path: inset(100% 0 0 0);
+							transform: translateY(-100%);
 						}
 					}
+				}
 
-					& > .content {
-						position: relative;
+				& > .content {
+					position: relative;
 
-						display: flex;
-						flex-direction: column;
-						align-items: center;
-						gap: 14px;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					gap: 14px;
 
-						pointer-events: none;
+					pointer-events: none;
 
-						& > h2 {
-							margin: 0;
+					& > h2 {
+						margin: 0;
 
-							position: absolute;
-							top: -56px;
-							left: 50%;
-							transform: translate(-50%, 0);
+						position: absolute;
+						top: -56px;
+						left: 50%;
+						transform: translate(-50%, 0);
 
-							font-family: var(----font-family-sans);
-							font-size: 1rem;
-							font-weight: 900;
-							letter-spacing: -0em;
-							text-transform: uppercase;
-							color: var(----colour-text-primary);
-							text-align: center;
+						font-family: var(----font-family-sans);
+						font-size: 1rem;
+						font-weight: 900;
+						letter-spacing: -0em;
+						text-transform: uppercase;
+						color: var(----colour-text-primary);
+						text-align: center;
 
-							padding: 14px 21px;
+						padding: 14px 21px;
 
-							border-radius: 28px;
-							border: 1px solid var(----colour-text-secondary);
+						border-radius: 28px;
+						border: 1px solid var(----colour-text-secondary);
 
-							backdrop-filter: blur(14px);
+						backdrop-filter: blur(14px);
 
-							z-index: 1;
+						z-index: 1;
 
-							transition:
-								top 1s var(----ease-slow-slow),
-								transform 1s var(----ease-slow-slow);
+						transition:
+							top 1s var(----ease-slow-slow),
+							transform 1s var(----ease-slow-slow);
 
-							&.in {
-								animation: blur-in 1s calc(var(--i) * 100ms) 1
-									var(----ease-slow-slow) backwards;
+						&.in {
+							animation: blur-in 1s calc(var(--i) * 100ms) 1
+								var(----ease-slow-slow) backwards;
 
-								@keyframes blur-in {
-									0% {
-										filter: blur(10px);
-									}
+							@keyframes blur-in {
+								0% {
+									filter: blur(10px);
+								}
 
-									99% {
-										filter: blur(0);
-									}
+								99% {
+									filter: blur(0);
+								}
 
-									100% {
-										filter: unset;
-									}
+								100% {
+									filter: unset;
 								}
 							}
-
-							&.out {
-								animation: none;
-
-								top: 50%;
-								left: 50%;
-								transform: translate(-50%, -50%);
-							}
 						}
 
-						& > .text {
-							margin: 0;
+						&.out {
+							animation: none;
 
-							font-family: var(----font-family-sans);
-							font-size: 4rem;
-							font-weight: 100;
-							/* text-transform: uppercase; */
-							letter-spacing: -0.03em;
-							color: var(----colour-text-primary);
-							text-align: center;
-							line-height: 1;
-
-							& > span {
-								display: inline-block;
-							}
-						}
-
-						& > .prompt {
-							display: flex;
-							/* gap: 14px; */
-							align-items: center;
-
-							position: absolute;
-							bottom: -56px;
+							top: 50%;
 							left: 50%;
-							transform: translateX(-50%);
+							transform: translate(-50%, -50%);
+						}
+					}
 
-							margin: 0;
+					& > .text {
+						margin: 0;
 
-							font-family: var(----font-family-sans);
-							font-size: 1rem;
-							color: var(----colour-text-primary);
-							text-align: center;
+						font-family: var(----font-family-sans);
+						font-size: 4rem;
+						font-weight: 100;
+						/* text-transform: uppercase; */
+						letter-spacing: -0.03em;
+						color: var(----colour-text-primary);
+						text-align: center;
+						line-height: 1;
 
-							padding-top: 22px;
+						& > span {
+							display: inline-block;
+						}
+					}
 
-							& > span {
-								--i: 0;
+					& > .prompt {
+						display: flex;
+						/* gap: 14px; */
+						align-items: center;
 
-								display: inline-block;
+						position: absolute;
+						bottom: -56px;
+						left: 50%;
+						transform: translateX(-50%);
 
-								animation: pulse 2s calc(var(--i) * 100ms)
-									infinite var(----ease-slow-slow) both;
+						margin: 0;
 
-								@keyframes pulse {
-									0% {
-										opacity: 0.5;
-									}
+						font-family: var(----font-family-sans);
+						font-size: 1rem;
+						color: var(----colour-text-primary);
+						text-align: center;
 
-									50% {
-										opacity: 1;
-									}
+						padding-top: 22px;
 
-									100% {
-										opacity: 0.5;
-									}
+						& > span {
+							--i: 0;
+
+							display: inline-block;
+
+							animation: pulse 2s calc(var(--i) * 100ms) infinite
+								var(----ease-slow-slow) both;
+
+							@keyframes pulse {
+								0% {
+									opacity: 0.5;
+								}
+
+								50% {
+									opacity: 1;
+								}
+
+								100% {
+									opacity: 0.5;
 								}
 							}
 						}
 					}
 				}
 			}
+		}
 
-			& > .sheet {
-				display: contents;
+		& > .sheet {
+			display: contents;
 
-				& .content {
-					position: relative;
-					padding: 28px;
-					box-sizing: border-box;
+			& .content {
+				position: relative;
+				padding: 28px;
+				box-sizing: border-box;
 
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+
+				& > .close {
+					position: absolute;
+					top: 0;
+					right: 0;
+				}
+
+				& > .heading {
 					display: flex;
 					flex-direction: column;
-					gap: 14px;
+					gap: 28px;
 
-					& > .close {
-						position: absolute;
-						top: 0;
-						right: 0;
+					& > h2 {
+						margin: 0;
+
+						color: var(----colour-text-primary);
+
+						padding-bottom: 14px;
+						border-bottom: 1px solid var(----colour-text-tertiary);
 					}
 
-					& > .heading {
+					& > .chip {
+						width: max-content;
 						display: flex;
-						flex-direction: column;
-						gap: 28px;
+						align-items: center;
+						gap: 7px;
 
-						& > h2 {
-							margin: 0;
+						padding: 7px 14px;
+						margin-left: -14px;
+						margin-top: -14px;
+						box-sizing: border-box;
 
-							color: var(----colour-text-primary);
+						border-radius: 28px;
+						background-color: var(----colour-background-secondary);
+						border: 1px solid var(----colour-text-tertiary);
+					}
+				}
 
-							padding-bottom: 14px;
-							border-bottom: 1px solid
-								var(----colour-text-tertiary);
-						}
+				& > section {
+					& > h3 {
+						color: var(----colour-text-primary);
+						-webkit-text-stroke: unset;
+						text-stroke: unset;
 
-						& > .chip {
+						font-family: var(----font-family-sans);
+						font-size: 1rem;
+						font-weight: 900;
+						text-transform: uppercase;
+
+						padding-bottom: 14px;
+						border-bottom: 1px solid var(----colour-text-tertiary);
+					}
+
+					& a:any-link {
+						color: var(----colour-text-primary);
+
+						&.external {
 							width: max-content;
 							display: flex;
 							align-items: center;
-							gap: 7px;
-
-							padding: 7px 14px;
-							margin-left: -14px;
-							margin-top: -14px;
-							box-sizing: border-box;
-
-							border-radius: 28px;
-							background-color: var(
-								----colour-background-secondary
-							);
-							border: 1px solid var(----colour-text-tertiary);
-						}
-					}
-
-					& > section {
-						& > h3 {
-							color: var(----colour-text-primary);
-							-webkit-text-stroke: unset;
-							text-stroke: unset;
-
-							font-family: var(----font-family-sans);
-							font-size: 1rem;
-							font-weight: 900;
-							text-transform: uppercase;
-
-							padding-bottom: 14px;
-							border-bottom: 1px solid
-								var(----colour-text-tertiary);
-						}
-
-						& a:any-link {
-							color: var(----colour-text-primary);
-
-							&.external {
-								width: max-content;
-								display: flex;
-								align-items: center;
-							}
 						}
 					}
 				}

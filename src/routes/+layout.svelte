@@ -18,8 +18,10 @@
 	import DefaultPostProcessingProvider from './lib/environment/DefaultPostProcessingProvider.svelte';
 	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
 	import { useLenisInitialisation } from '../lib/lenis/useLenis';
+	import { useClientHistoryInitialisation } from '../lib/history/clientHistory';
 
 	useLenisInitialisation();
+	useClientHistoryInitialisation();
 </script>
 
 <svelte:head>

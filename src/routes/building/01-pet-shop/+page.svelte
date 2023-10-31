@@ -1,19 +1,15 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
 	import { fadeIn } from '@sxxov/sv/ut/transition/transitions';
 	import { ic_arrow_back, ic_done } from 'maic/two_tone';
+	import { clientHistory } from '../../../lib/history/clientHistory';
 	import { completable } from '../../lib/health/completion';
 	import BuildingFailure from '../lib/ending/BuildingFailure.svelte';
 	import BuildingSuccess from '../lib/ending/BuildingSuccess.svelte';
-	import { useBuildingInfo } from '../lib/info/useBuildingInfo';
 	import { info } from './info';
 	import { Pet } from './lib/Pet';
-	import BuildingNav from '../lib/nav/BuildingNav.svelte';
 	import PetShopScene from './lib/PetShopScene.svelte';
-
-	useBuildingInfo(info);
 
 	let selected: Pet | 0 = 0;
 	let chosen: Pet | 0 = 0;
@@ -26,7 +22,6 @@
 	};
 </script>
 
-<BuildingNav />
 <div class="pet-shop">
 	{#if selected && !chosen}
 		<div
@@ -92,12 +87,7 @@
 			on:complete={() => {
 				completable[info.id]?.set(true);
 
-				if (
-					document.referrer &&
-					document.referrer.startsWith(window.location.origin)
-				)
-					history.back();
-				else void goto('/');
+				clientHistory.back();
 			}}
 			on:retry={() => {
 				reset();
@@ -115,12 +105,7 @@
 	{:else}
 		<BuildingFailure
 			on:exit={() => {
-				if (
-					document.referrer &&
-					document.referrer.startsWith(window.location.origin)
-				)
-					history.back();
-				else void goto('/');
+				clientHistory.back();
 			}}
 			on:retry={() => {
 				reset();
@@ -167,6 +152,9 @@
 			justify-content: center;
 
 			z-index: 1;
+
+			padding: 28px;
+			box-sizing: border-box;
 
 			background: radial-gradient(
 				ellipse at center,

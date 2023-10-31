@@ -6,6 +6,7 @@
 	import { ic_arrow_back } from 'maic/two_tone';
 	import { clamp } from 'three/src/math/MathUtils.js';
 	import Meta from '../lib/meta/Meta.svelte';
+	import { clientHistory } from '../lib/history/clientHistory';
 
 	const emojiSet = [
 		'😵‍💫',
@@ -46,7 +47,7 @@
 		<Spacer height={56} />
 		<Button
 			on:click={() => {
-				history.back();
+				clientHistory.back();
 			}}
 			><svelte:fragment slot="left">
 				<Svg svg={ic_arrow_back} />
