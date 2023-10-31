@@ -231,7 +231,12 @@
 	$: pointerScreenSpaceSize = getScreenSpaceSizeAtWorldZ(camera, pointerZ);
 	$: pointerWorldPoint = getScreenSpacePointOnPlane(
 		$inner,
-		$pointer,
+		$pointer.x === 0 && $pointer.y === 0
+			? {
+					x: $inner.width / 2,
+					y: $inner.height / 2,
+			  }
+			: $pointer,
 		pointerScreenSpaceSize,
 	);
 	let pointerMesh: THREE.Object3D | undefined;
@@ -265,7 +270,10 @@
 		z + 0.1 + camera.position.z,
 	);
 	useFrame(() => {
-		if (pointerMesh) pointerMesh.rotation.z += 0.01;
+		if (pointerMesh) {
+			pointerMesh.rotation.z += 0.01;
+			pointerMesh.rotation.y += 0.005;
+		}
 	});
 
 	useFrame(() => {
