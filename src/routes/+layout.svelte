@@ -15,11 +15,11 @@
 	import { client } from '@sxxov/ut/viewport';
 	import * as THREE from 'three';
 	import AmbientCanvas from '../lib/3d/canvas/AmbientCanvas.svelte';
-	import { createLenis } from '../lib/lenis/useLenis';
 	import DefaultPostProcessingProvider from './lib/environment/DefaultPostProcessingProvider.svelte';
 	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
+	import { useLenisInitialisation } from '../lib/lenis/useLenis';
 
-	createLenis();
+	useLenisInitialisation();
 </script>
 
 <svelte:head>

@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { afterNavigate } from '$app/navigation';
 import Lenis from '@studio-freight/lenis';
 import { Store } from '@sxxov/ut/store';
@@ -6,7 +7,7 @@ import { onMount } from 'svelte';
 export const lenis = new Store<Lenis | undefined>(undefined);
 let rafHandle: ReturnType<typeof requestAnimationFrame> | undefined;
 
-const onCreate = () => {
+const createLenis = () => {
 	let instance = lenis.get();
 
 	if (instance) instance.destroy();
@@ -27,9 +28,9 @@ const onCreate = () => {
 	lenis.set(instance);
 };
 
-export const createLenis = () => {
-	afterNavigate(onCreate);
-	onMount(onCreate);
+export const useLenisInitialisation = () => {
+	afterNavigate(createLenis);
+	onMount(createLenis);
 };
 
 export const useLenis = () => lenis;
