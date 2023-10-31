@@ -87,7 +87,7 @@
 							</tr>
 							<tr>
 								<td>Subject:</td>
-								<td>Preparation: Company Philosophy Deck.</td>
+								<td>Preparation: Company Profile.</td>
 							</tr>
 						</table>
 						<span class="greetings">Dear De Corp.® EXCO,</span>
