@@ -14,7 +14,6 @@ export const clientHistory = {
 		return null;
 	},
 	back() {
-		console.log(this.length, stack);
 		if (this.length > 0) {
 			stack.pop();
 

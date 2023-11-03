@@ -2,7 +2,7 @@
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
 	import { fadeIn } from '@sxxov/sv/ut/transition/transitions';
-	import { ic_arrow_back, ic_done } from 'maic/two_tone';
+	import { ic_arrow_back, ic_done, ic_volume_up } from 'maic/two_tone';
 	import { clientHistory } from '../../../lib/history/clientHistory';
 	import { completable } from '../../lib/health/completion';
 	import BuildingFailure from '../lib/ending/BuildingFailure.svelte';
@@ -10,8 +10,10 @@
 	import { info } from './info';
 	import { Pet } from './lib/Pet';
 	import PetShopScene from './lib/PetShopScene.svelte';
+	import Dialogue from '../../../lib/dialogue/Dialogue.svelte';
 
 	let selected: Pet | 0 = 0;
+	let listen: Pet | 0 = 0;
 	let chosen: Pet | 0 = 0;
 	let ok: boolean | undefined;
 
@@ -66,6 +68,23 @@
 						colourBackgroundHover="----colour-background-secondary"
 						roundness={28}
 						on:click={() => {
+							listen = selected;
+						}}
+					>
+						<Svg
+							slot="left"
+							width="1em"
+							svg={ic_volume_up}
+						/>
+						Listen
+					</Button>
+
+					<Button
+						{...ButtonVariants.Transparent}
+						{...ButtonVariants.Shadow.None}
+						colourBackgroundHover="----colour-background-secondary"
+						roundness={28}
+						on:click={() => {
 							selected = 0;
 						}}
 					>
@@ -80,13 +99,26 @@
 			</div>
 		</div>
 	{/if}
+
+	<Dialogue
+		active={listen !== 0}
+		text={listen === Pet.CAT
+			? '[Animal noises]'
+			: listen === Pet.ROCK
+			? '...'
+			: listen === Pet.DUCK
+			? '[Sorta animal noises]'
+			: ''}
+		on:finish={() => {
+			listen = 0;
+		}}
+	/>
 </div>
 {#if ok !== undefined}
 	{#if ok}
+		{(completable[info.id]?.set(true), '')}
 		<BuildingSuccess
 			on:complete={() => {
-				completable[info.id]?.set(true);
-
 				clientHistory.back();
 			}}
 			on:retry={() => {
