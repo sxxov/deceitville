@@ -6,29 +6,32 @@
 </script>
 
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Button, ButtonVariants, Ripple } from '@sxxov/sv/button';
 	import { BottomSheet, BottomSheetStates } from '@sxxov/sv/layout';
 	import { Svg } from '@sxxov/sv/svg';
+	import { Store } from '@sxxov/ut/store';
 	import {
 		ic_arrow_outward,
 		ic_close,
 		ic_info,
 		ic_logout,
 	} from 'maic/two_tone';
-	import { useBuildingInfo } from '../info/useBuildingInfo';
 	import { setContext } from 'svelte';
-	import type { BuildingNavContext } from './BuildingNavContext';
-	import { Store } from '@sxxov/ut/store';
 	import { clientHistory } from '../../../../lib/history/clientHistory';
+	import { useBuildingInfo } from '../info/useBuildingInfo';
+	import type { BuildingNavContext } from './BuildingNavContext';
 
 	const info = useBuildingInfo()!;
 
 	const bottomSheetState = new Store<BottomSheetStates>(
 		BottomSheetStates.IDLE,
 	);
+	const exit = () => {
+		clientHistory.back();
+	};
 	setContext<BuildingNavContext>(buildingNavContextKey, {
 		bottomSheetState,
+		exit,
 	});
 
 	let objectiveActive = true;
@@ -41,9 +44,7 @@
 				{...ButtonVariants.Fab.Md}
 				{...ButtonVariants.Transparent}
 				{...ButtonVariants.Shadow.Sm}
-				on:click={() => {
-					clientHistory.back();
-				}}
+				on:click={exit}
 			>
 				<Svg svg={ic_logout} />
 			</Button>
