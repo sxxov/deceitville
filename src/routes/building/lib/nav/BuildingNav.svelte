@@ -179,10 +179,10 @@
 					<h3>Objective</h3>
 					<p>{info.objective}</p>
 				</section>
-				<section>
+				<!-- <section>
 					<h3>Description</h3>
 					<p>{info.description}</p>
-				</section>
+				</section> -->
 				<section>
 					<h3>Lessons</h3>
 					<ul>
