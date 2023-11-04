@@ -1,4 +1,4 @@
-import { ic_bedroom_baby } from 'maic/two_tone';
+import { ic_local_pharmacy } from 'maic/two_tone';
 import * as gltfs from '../../../assets/village/parts/gltfs.db';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
@@ -17,6 +17,6 @@ export const info = {
 		kind: 'Obstruction',
 		url: 'https://www.deceptive.design/types/obstruction',
 	},
-	icon: ic_bedroom_baby,
+	icon: ic_local_pharmacy,
 	facade: gltfs.building_2,
 } as const satisfies BuildingInfo;
