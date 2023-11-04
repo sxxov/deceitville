@@ -11,43 +11,50 @@
 
 	export let name = '???';
 	export let ref = new THREE.Group();
+	export let still = false;
 
-	const bobPosition = new L([0, 0, 0])
+	const bopPosition = new L([0, 0, 0])
 		.add([0, 0, 0], { time: 0 }, bezierQuintInOut)
 		.add([0, 0.1, 0], { time: 1000 }, bezierQuintInOut)
 		.add([0, 0, 0], { time: 2000 }, bezierQuintInOut);
-	const bobRotationZ = new L()
+	const bopRotationZ = new L()
 		.add(Math.PI / 40, { time: 0 }, bezierQuintInOut)
 		.add(-Math.PI / 40, { time: 600 }, bezierQuintInOut)
 		.add(Math.PI / 40, { time: 1200 }, bezierQuintInOut);
-	const bobRotationY = new L()
+	const bopRotationY = new L()
 		.add(Math.PI / 20, { time: 0 }, bezierQuintInOut)
 		.add(-Math.PI / 20, { time: 2000 }, bezierQuintInOut)
 		.add(Math.PI / 20, { time: 4000 }, bezierQuintInOut);
-	const bobRotationX = new L()
+	const bopRotationX = new L()
 		.add(Math.PI / 20, { time: 0 }, bezierQuintInOut)
 		.add(-Math.PI / 20, { time: 4000 }, bezierQuintInOut)
 		.add(Math.PI / 20, { time: 8000 }, bezierQuintInOut);
 
-	if (browser) {
-		void bobPosition.play(1, AnimatableIterationCount.INFINITE);
-		void bobRotationZ.play(1, AnimatableIterationCount.INFINITE);
-		void bobRotationY.play(1, AnimatableIterationCount.INFINITE);
-		void bobRotationX.play(1, AnimatableIterationCount.INFINITE);
-	}
+	$: if (browser)
+		if (still) {
+			bopPosition.stop();
+			bopRotationZ.stop();
+			bopRotationY.stop();
+			bopRotationX.stop();
+		} else {
+			void bopPosition.play(1, AnimatableIterationCount.INFINITE);
+			void bopRotationZ.play(1, AnimatableIterationCount.INFINITE);
+			void bopRotationY.play(1, AnimatableIterationCount.INFINITE);
+			void bopRotationX.play(1, AnimatableIterationCount.INFINITE);
+		}
 
 	onDestroy(() => {
-		bobPosition.destroy();
-		bobRotationZ.destroy();
-		bobRotationY.destroy();
-		bobRotationX.destroy();
+		bopPosition.destroy();
+		bopRotationZ.destroy();
+		bopRotationY.destroy();
+		bopRotationX.destroy();
 	});
 </script>
 
 <T
 	is={ref}
-	position={$bobPosition}
-	rotation={[$bobRotationX, $bobRotationY, $bobRotationZ]}
+	position={still ? [0, 0, 0] : $bopPosition}
+	rotation={still ? [0, 0, 0] : [$bopRotationX, $bopRotationY, $bopRotationZ]}
 >
 	<GLTF
 		url={glb_skull}
@@ -55,8 +62,8 @@
 	/>
 	<Text
 		text={name}
-		characters={name}
-		sdfGlyphSize={8}
+		characters={'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?'}
+		sdfGlyphSize={16}
 		material={new THREE.MeshPhysicalMaterial({
 			color: 0xffffff,
 			emissive: 0xffffff,
