@@ -3,7 +3,7 @@ import type { BuildingInfo } from './BuildingInfo';
 
 export const infos = Object.fromEntries(
 	Object.entries(
-		import.meta.glob<true, string, BuildingInfo>('../../**/info.ts', {
+		import.meta.glob<true, string, BuildingInfo>('../../**/+info.ts', {
 			eager: true,
 			import: 'info',
 		}),
@@ -11,7 +11,7 @@ export const infos = Object.fromEntries(
 		resolveRouteUrl(
 			k
 				.replace(/^\.\.\/\.\.\//, 'routes/building/')
-				.slice(0, -'info.ts'.length - 1),
+				.slice(0, -'+info.ts'.length - 1),
 		),
 		v,
 	]),

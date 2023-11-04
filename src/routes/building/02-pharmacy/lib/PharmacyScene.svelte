@@ -25,7 +25,7 @@
 	import BuildingSuccess from '../../lib/ending/BuildingSuccess.svelte';
 	import BuildingFailure from '../../lib/ending/BuildingFailure.svelte';
 	import { useBuildingNav } from '../../lib/nav/useBuildingNav';
-	import { info } from '../info';
+	import { info } from '../+info';
 	import { completable } from '../../../lib/health/completion';
 
 	useAmbientInteractivity();

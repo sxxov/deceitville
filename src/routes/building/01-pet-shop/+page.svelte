@@ -7,7 +7,7 @@
 	import { completable } from '../../lib/health/completion';
 	import BuildingFailure from '../lib/ending/BuildingFailure.svelte';
 	import BuildingSuccess from '../lib/ending/BuildingSuccess.svelte';
-	import { info } from './info';
+	import { info } from './+info';
 	import { Pet } from './lib/Pet';
 	import PetShopScene from './lib/PetShopScene.svelte';
 	import Dialogue from '../../../lib/dialogue/Dialogue.svelte';
