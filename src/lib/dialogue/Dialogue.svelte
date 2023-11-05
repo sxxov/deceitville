@@ -9,7 +9,6 @@
 	import { Store } from '@sxxov/ut/store';
 	import {
 		ic_circle,
-		ic_done,
 		ic_record_voice_over,
 		ic_skip_next,
 	} from 'maic/two_tone';
@@ -273,7 +272,7 @@
 				</div>
 			</div>
 		</div>
-		{#if choices}
+		{#if choices && choicesActive}
 			<div
 				class="choices"
 				class:active={choicesActive}
@@ -281,33 +280,35 @@
 			>
 				<div class="content">
 					{#each choices as choice}
-						<Button
-							{...ButtonVariants.Secondary}
-							{...ButtonVariants.Shadow.Sm}
-							width="100%"
-							height="max(100%, 56px)"
-							colourBackground="----colour-background-primary"
-							colourBackgroundHover="----colour-background-secondary"
-							roundness={28}
-							on:click={() => {
-								dispatch('choice', choice);
-							}}
-						>
-							<Svg
-								slot="left"
-								width="1em"
-								height="1em"
-								svg={choice.icon ?? ic_circle}
-							/>
-							<div class="content">
-								<div class="name">{choice.name}</div>
-								{#if choice.description}
-									<div class="description">
-										{choice.description}
-									</div>
-								{/if}
-							</div>
-						</Button>
+						<div class="button">
+							<Button
+								{...ButtonVariants.Secondary}
+								{...ButtonVariants.Shadow.Sm}
+								width="100%"
+								height="100%"
+								colourBackground="----colour-background-primary"
+								colourBackgroundHover="----colour-background-secondary"
+								roundness={28}
+								on:click={() => {
+									dispatch('choice', choice);
+								}}
+							>
+								<Svg
+									slot="left"
+									width="1em"
+									height="1em"
+									svg={choice.icon ?? ic_circle}
+								/>
+								<div class="content">
+									<div class="name">{choice.name}</div>
+									{#if choice.description}
+										<div class="description">
+											{choice.description}
+										</div>
+									{/if}
+								</div>
+							</Button>
+						</div>
 					{/each}
 				</div>
 			</div>
@@ -373,7 +374,7 @@
 			flex-grow: 0;
 
 			&.active {
-				animation: open-in 0.2s var(----ease-fast-slow);
+				animation: open-in 0.1s var(----ease-fast-slow);
 
 				@keyframes open-in {
 					from {
@@ -551,7 +552,7 @@
 
 			flex-grow: 1;
 			z-index: 2;
-			pointer-events: auto;
+			pointer-events: none;
 
 			display: flex;
 			flex-direction: column;
@@ -582,18 +583,25 @@
 				padding-top: 0;
 				box-sizing: border-box;
 
-				& .content {
-					display: flex;
-					flex-direction: column;
-					/* gap: 14px; */
+				& > .button {
+					width: 100%;
+					height: 100%;
 
-					& > .name {
-						color: var(----colour-text-primary);
-						font-size: 1em;
-						/* font-weight: 500; */
-					}
-					& > .description {
-						color: var(----colour-text-secondary);
+					pointer-events: auto;
+
+					& .content {
+						display: flex;
+						flex-direction: column;
+						/* gap: 14px; */
+
+						& > .name {
+							color: var(----colour-text-primary);
+							font-size: 1em;
+							/* font-weight: 500; */
+						}
+						& > .description {
+							color: var(----colour-text-secondary);
+						}
 					}
 				}
 			}
