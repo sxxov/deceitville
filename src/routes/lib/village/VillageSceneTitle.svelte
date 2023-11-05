@@ -34,7 +34,7 @@
 		v,
 	} from '../../../assets/village/text/gltfs.db';
 	// import { MeshTransmissionMaterial } from '@pmndrs/vanilla';
-	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
+	import { EXRLoader } from 'three-stdlib';
 	import exr_hdri from '../../../assets/common/3d/hdri/dancing_hall_256.exr?url';
 	import { createPart } from '../../../lib/3d/gltf/part';
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';

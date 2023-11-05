@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as THREE from 'three';
-	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
+	import { EXRLoader } from 'three-stdlib';
 	import exr_hdri from '../../../assets/village/hdri/dikhololo_night_2k.exr?url';
 	import { useLoader, useThrelte } from '@threlte/core';
 	import { onDestroy, onMount } from 'svelte';

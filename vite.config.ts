@@ -20,6 +20,7 @@ export default {
 		noExternal: [
 			'postprocessing',
 			'three',
+			'three-stdlib',
 			'three/examples/jsm/**/*',
 			'@pmndrs/vanilla',
 		],

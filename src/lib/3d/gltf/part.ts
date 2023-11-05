@@ -1,8 +1,4 @@
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import {
-	GLTFLoader,
-	type GLTF,
-} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader, type GLTF, DRACOLoader } from 'three-stdlib';
 
 export interface Part extends GLTF {
 	object: THREE.Object3D | undefined;

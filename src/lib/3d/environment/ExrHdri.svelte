@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as THREE from 'three';
-	import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
+	import { EXRLoader } from 'three-stdlib';
 	import { useLoader, useThrelte } from '@threlte/core';
 	import { onDestroy } from 'svelte';
 	import { useSuspense } from '@threlte/extras';
