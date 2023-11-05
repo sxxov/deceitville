@@ -7,15 +7,16 @@ export const info = {
 	id: resolveRouteUrl(__dirname),
 	name: 'Metaphysical Supply Store',
 	description:
-		"The town's, allegedly, most famous place to buy improvements to your mind, body, & soul. However, you've never seen anyone go in or out of it. Figure out where all the fanfare is coming from.",
-	objective: 'Figure out where all the fanfare is coming from.',
+		"The town's place to buy improvements to your mind, body, & soul. However, it all seems a little too good to be true. Figure out what actually goes on.",
+	objective: 'Buy a jewel without paying extra.',
 	lessons: [
-		'Learn how websites can use fake reviews & made up stats to fool you into thinking something is popular or credible.',
-		'Know the influence of trusting social proof, that comes from a source you cannot prove.',
+		'Learn how websites can hide or delay information to draw you into making a transaction.',
+		'Know the influence of lying by omission.',
+		'Learn to sniff out hidden costs or misrepresentations & stay vigilant up till the finalisation of every purchase.',
 	],
 	brignull: {
-		kind: 'Fake Social Proof',
-		url: 'https://www.deceptive.design/types/fake-social-proof',
+		kind: 'Sneaking',
+		url: 'https://www.deceptive.design/types/sneaking',
 	},
 	icon: ic_self_improvement,
 	facade: gltfs.building_3,
