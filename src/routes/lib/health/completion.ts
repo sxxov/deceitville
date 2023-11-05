@@ -44,14 +44,13 @@ const completableEntries = Object.entries(completableRef).map(
 	([k, v]) => [k, new Store(v)] as const,
 );
 export const completable = Object.fromEntries(completableEntries);
+const getCompletion = () =>
+	completableEntries.reduce((p, [, v]) => p + (v.get() ? 1 : 0), 0) /
+	completableEntries.length;
+c.set(getCompletion());
 for (const [k, v] of completableEntries)
 	v.subscribeLazy((v) => {
-		c.set(
-			[...completableEntries].reduce(
-				(p, [, v]) => p + (v.get() ? 1 : 0),
-				0,
-			) / completableEntries.length,
-		);
+		c.set(getCompletion());
 		completableRef[k] = v;
 		write(completableRef);
 	});
