@@ -13,9 +13,9 @@
 	import { clamp } from 'three/src/math/MathUtils.js';
 	import InvalidateOnScroll from '../../../lib/3d/lmth/InvalidateOnScroll.svelte';
 	import VillageSceneCamera from './VillageSceneCamera.svelte';
-	import VillageSceneFog from './VillageSceneFog.svelte';
 	import VillageSceneMeshes from './VillageSceneMeshes.svelte';
 	import VillageSceneTitle from './VillageSceneTitle.svelte';
+	import Fog from '../../../lib/3d/environment/Fog.svelte';
 
 	type $$Props = Props<THREE.Group>;
 	type $$Events = Events<THREE.Group>;
@@ -65,7 +65,7 @@
 		<VillageSceneCamera progress={cameraProgress} />
 	{/if}
 	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
-		<VillageSceneFog />
+		<Fog />
 	{/if}
 
 	{#if titleProgress >= titleProgressStart && titleProgress < titleProgressEnd}

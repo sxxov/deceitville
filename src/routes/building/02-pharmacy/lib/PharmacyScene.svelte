@@ -10,8 +10,8 @@
 	import glb_stethoscope from '../../../../assets/building/pharmacy/stethoscope.glb?url';
 	import { GLTF } from '@threlte/extras';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import PharmacySceneFog from './PharmacySceneFog.svelte';
 	import { createEventDispatcher } from 'svelte';
+	import Fog from '../../../../lib/3d/environment/Fog.svelte';
 
 	useAmbientInteractivity();
 
@@ -42,7 +42,7 @@
 	ref={new THREE.PerspectiveCamera(50)}
 	position={[0, 0, 10]}
 />
-<PharmacySceneFog
+<Fog
 	near={0}
 	far={20}
 />
