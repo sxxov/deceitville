@@ -18,10 +18,10 @@
 	const component = forwardEventHandlers();
 </script>
 
-<T.PerspectiveCamera
+<T
 	is={ref}
 	{...$$restProps}
 	bind:this={$component}
 >
 	<slot {ref} />
-</T.PerspectiveCamera>
+</T>
