@@ -3,15 +3,29 @@
 	import glb_skull from '../../../assets/tactile/skull/skull.glb?url';
 	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
 	import * as THREE from 'three';
-	import { T } from '@threlte/core';
+	import {
+		T,
+		type Props,
+		forwardEventHandlers,
+		type Events,
+	} from '@threlte/core';
 	import { browser } from '$app/environment';
 	import { onDestroy } from 'svelte';
 	import { GLTF, Text } from '@threlte/extras';
 	import ttf_bigelow_rules from '../../../assets/tactile/skull/BigelowRules-Regular.ttf?url';
 
+	interface $$Props extends Props<THREE.Group> {
+		name?: typeof name;
+		ref?: typeof ref;
+		still?: typeof still;
+	}
+	type $$Events = Events<THREE.Group>;
+
 	export let name = '???';
 	export let ref = new THREE.Group();
 	export let still = false;
+
+	const component = forwardEventHandlers();
 
 	const bopPosition = new L([0, 0, 0])
 		.add([0, 0, 0], { time: 0 }, bezierQuintInOut)
@@ -53,27 +67,34 @@
 
 <T
 	is={ref}
-	position={still ? [0, 0, 0] : $bopPosition}
-	rotation={still ? [0, 0, 0] : [$bopRotationX, $bopRotationY, $bopRotationZ]}
+	bind:this={$component}
+	{...$$restProps}
 >
-	<GLTF
-		url={glb_skull}
-		scale={[1, 1, 1]}
-	/>
-	<Text
-		text={name}
-		characters={'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?'}
-		sdfGlyphSize={16}
-		material={new THREE.MeshPhysicalMaterial({
-			color: 0xffffff,
-			emissive: 0xffffff,
-			emissiveIntensity: 100,
-		})}
-		font={ttf_bigelow_rules}
-		fontSize={1}
-		anchorX="50%"
-		anchorY="50%"
-		position={[0, 1.7, 0]}
-	/>
-	<slot />
+	<T.Group
+		position={still ? [0, 0, 0] : $bopPosition}
+		rotation={still
+			? [0, 0, 0]
+			: [$bopRotationX, $bopRotationY, $bopRotationZ]}
+	>
+		<GLTF
+			url={glb_skull}
+			scale={[1, 1, 1]}
+		/>
+		<Text
+			text={name}
+			characters={'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?'}
+			sdfGlyphSize={64}
+			material={new THREE.MeshPhysicalMaterial({
+				color: 0xffffff,
+				emissive: 0xffffff,
+				emissiveIntensity: 100,
+			})}
+			font={ttf_bigelow_rules}
+			fontSize={1}
+			anchorX="50%"
+			anchorY="50%"
+			position={[0, 1.7, 0]}
+		/>
+		<slot />
+	</T.Group>
 </T>
