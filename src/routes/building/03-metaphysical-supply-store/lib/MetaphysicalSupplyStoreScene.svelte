@@ -13,10 +13,12 @@
 	import BobbleSkullTactile from '../../../../lib/3d/tactile/BobbleSkullTactile.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
 	import TableTactile from '../../../../lib/3d/tactile/TableTactile.svelte';
+	import { useThrelte } from '@threlte/core';
 
 	const dispatch = createEventDispatcher();
 
 	useAmbientInteractivity();
+	useThrelte();
 
 	// usePostProcessing()?.effectMap.set({});
 
