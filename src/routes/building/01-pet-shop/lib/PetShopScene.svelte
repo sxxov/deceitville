@@ -7,7 +7,7 @@
 	import { T, useFrame, useThrelte } from '@threlte/core';
 	import { Box, Flex } from '@threlte/flex';
 	import * as THREE from 'three';
-	import { gltfs } from '../../../../assets/building/pet-shop/index';
+	import { gltfs } from '../../../../assets/building/pet-shop/parts/index';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
 	import { useAmbientRendererSize } from '../../../../lib/3d/canvas/useAmbientRendererSize';
 	import { usePostProcessing } from '../../../../lib/3d/environment/usePostProcessing';
