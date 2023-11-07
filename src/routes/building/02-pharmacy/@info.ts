@@ -1,3 +1,5 @@
+/* cspell:includeregexp string */
+
 import { ic_local_pharmacy } from 'maic/two_tone';
 import * as gltfs from '../../../assets/village/parts/gltfs.db';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';

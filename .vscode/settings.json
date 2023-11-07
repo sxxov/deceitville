@@ -1,15 +1,15 @@
 {
 	"[svelte]": {
 		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "svelte.svelte-vscode",
+		"editor.defaultFormatter": "svelte.svelte-vscode"
 	},
 	"[postcss]": {
 		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "stylelint.vscode-stylelint",
+		"editor.defaultFormatter": "stylelint.vscode-stylelint"
 	},
 	"[json]": {
 		"editor.formatOnSave": true,
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"svelte.enable-ts-plugin": true,
 	"svelte.plugin.css.globals": "src/theme/**/*.pcss,src/theme/**/*.css",
@@ -19,8 +19,21 @@
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": true,
-		"source.fixAll.stylelint": true,
+		"source.fixAll.stylelint": true
 	},
 	"typescript.preferences.importModuleSpecifierEnding": "minimal",
 	"task.allowAutomaticTasks": "on",
+	"cSpell.language": "en-GB",
+	"cSpell.patterns": [
+		{
+			"name": "import",
+			"pattern": "import\\s+.*\\s+from\\s+['\"].*['\"]"
+		},
+		{
+			"name": "nothing",
+			"pattern": "_^"
+		}
+	],
+	"cSpell.ignoreRegExpList": ["import"],
+	"cSpell.includeRegExpList": ["nothing"]
 }
