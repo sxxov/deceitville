@@ -15,8 +15,8 @@ export const info = {
 		'Learn to sniff out hidden costs or misrepresentations & stay vigilant up till the finalisation of every purchase.',
 	],
 	brignull: {
-		kind: 'Sneaking',
-		url: 'https://www.deceptive.design/types/sneaking',
+		kind: 'Hidden Costs',
+		url: 'https://www.deceptive.design/types/hidden-costs',
 	},
 	icon: ic_self_improvement,
 	facade: gltfs.building_3,
