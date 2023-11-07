@@ -3,20 +3,19 @@
 	import { Composition as C, Tween as Tw } from '@sxxov/ut/animation';
 	import { bezierQuintInOut, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { lerp } from '@sxxov/ut/math';
-	import { traversePropertyElements } from '@sxxov/ut/traverse';
 	import { T, useFrame, useThrelte } from '@threlte/core';
 	import { Box, Flex } from '@threlte/flex';
+	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { gltfs } from '../../../../assets/building/pet-shop/parts/index';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
+	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
 	import { useAmbientRendererSize } from '../../../../lib/3d/canvas/useAmbientRendererSize';
-	import { usePostProcessing } from '../../../../lib/3d/environment/usePostProcessing';
+	import { useOutline } from '../../../../lib/3d/environment/useOutline';
 	import { getScreenSpaceSizeAtWorldZ } from '../../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
 	import Part from '../../../../lib/3d/part/Part.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
 	import { Pet } from './Pet';
-	import { createEventDispatcher } from 'svelte';
-	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
 
 	useAmbientInteractivity();
 
@@ -26,8 +25,7 @@
 	export let chosen: Pet | 0 = 0;
 	$: dispatch('select', selected);
 
-	const { effectMap } = usePostProcessing() ?? {};
-	$: ({ outline } = $effectMap ?? {});
+	const outline = useOutline();
 
 	const rendererSize = useAmbientRendererSize();
 	$: ({ width: vw, height: vh } = $rendererSize ?? { width: 0, height: 0 });
@@ -104,7 +102,7 @@
 	] satisfies PositionArray as PositionArray;
 
 	let outlineless = false;
-	$: if (outlineless || chosen) outline?.selection.clear();
+	$: if (outlineless || chosen) outline.clear();
 	const updateCameraTweens = () => {
 		cameraPositionX?.pause();
 		cameraPositionY?.pause();
@@ -131,7 +129,7 @@
 			bezierQuintOut,
 		);
 
-		outline?.selection.clear();
+		outline.clear();
 
 		void Promise.all([
 			cameraPositionX.play(),
@@ -208,22 +206,6 @@
 		rockRotation += 0.01;
 	});
 
-	const onPointerIn = (ref: THREE.Group) => {
-		if (!outline || outlineless) return;
-
-		traversePropertyElements(ref, 'children', (child) => {
-			if (child instanceof THREE.Mesh) outline!.selection.add(child);
-		});
-	};
-
-	const onPointerOut = (ref: THREE.Group) => {
-		if (!outline) return;
-
-		traversePropertyElements(ref, 'children', (child) => {
-			if (outline!.selection.has(child)) outline!.selection.delete(child);
-		});
-	};
-
 	const chosenStart = 0;
 	const chosenEnd = 2.4;
 	let buttonDisabled = false;
@@ -270,19 +252,12 @@
 				height="auto"
 			>
 				<ButtonTactile
+					{outlineless}
 					disabled={buttonDisabled}
 					on:click={() => {
 						select(pet);
 					}}
-					let:ref
-					let:hovering
-					let:pressing
 				>
-					<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-					{(hovering || pressing
-						? onPointerIn(ref)
-						: onPointerOut(ref),
-					'')}
 					<T.Group
 						position.y={lerp(
 							$catBaseIntroTween,
@@ -356,19 +331,12 @@
 				height="auto"
 			>
 				<ButtonTactile
+					{outlineless}
 					disabled={buttonDisabled}
 					on:click={() => {
 						select(pet);
 					}}
-					let:ref
-					let:hovering
-					let:pressing
 				>
-					<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-					{(hovering || pressing
-						? onPointerIn(ref)
-						: onPointerOut(ref),
-					'')}
 					<T.Group
 						position.y={lerp(
 							$rockBaseIntroTween,
@@ -442,19 +410,12 @@
 				height="auto"
 			>
 				<ButtonTactile
+					{outlineless}
 					disabled={buttonDisabled}
 					on:click={() => {
 						select(pet);
 					}}
-					let:ref
-					let:hovering
-					let:pressing
 				>
-					<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-					{(hovering || pressing
-						? onPointerIn(ref)
-						: onPointerOut(ref),
-					'')}
 					<T.Group
 						position.y={lerp(
 							$duckBaseIntroTween,

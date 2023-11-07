@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { traversePropertyElements } from '@sxxov/ut/traverse';
+	import { useThrelte } from '@threlte/core';
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
@@ -7,13 +7,11 @@
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
 	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
 	import Fog from '../../../../lib/3d/environment/Fog.svelte';
-	import { usePostProcessing } from '../../../../lib/3d/environment/usePostProcessing';
 	import Part from '../../../../lib/3d/part/Part.svelte';
 	import Parts from '../../../../lib/3d/part/Parts.svelte';
 	import BobbleSkullTactile from '../../../../lib/3d/tactile/BobbleSkullTactile.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
 	import TableTactile from '../../../../lib/3d/tactile/TableTactile.svelte';
-	import { useThrelte } from '@threlte/core';
 
 	const dispatch = createEventDispatcher();
 
@@ -21,26 +19,6 @@
 	useThrelte();
 
 	// usePostProcessing()?.effectMap.set({});
-
-	const { effectMap } = usePostProcessing() ?? {};
-	$: ({ outline } = $effectMap ?? {});
-
-	const onPointerIn = (ref: THREE.Group) => {
-		if (!outline) return;
-
-		traversePropertyElements(ref, 'children', (child) => {
-			if (child instanceof THREE.Mesh && !('font' in child))
-				outline!.selection.add(child);
-		});
-	};
-
-	const onPointerOut = (ref: THREE.Group) => {
-		if (!outline) return;
-
-		traversePropertyElements(ref, 'children', (child) => {
-			if (outline!.selection.has(child)) outline!.selection.delete(child);
-		});
-	};
 
 	const camera = new THREE.PerspectiveCamera(50);
 	camera.position.set(0, -3, 7);
@@ -77,20 +55,13 @@
 			on:click={() => {
 				dispatch('rock', { i: partIndex });
 			}}
-			let:ref
-			let:hovering
-			let:pressing
 		>
 			<Part
 				{gltf}
 				{position}
 				quaternion={rotation}
 				{scale}
-			>
-				<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref),
-				'')}
-			</Part>
+			/>
 		</ButtonTactile>
 	</svelte:fragment>
 </Parts>
@@ -112,20 +83,13 @@
 			on:click={() => {
 				dispatch('rock', { i: partIndex });
 			}}
-			let:ref
-			let:hovering
-			let:pressing
 		>
 			<Part
 				{gltf}
 				{position}
 				quaternion={rotation}
 				{scale}
-			>
-				<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-				{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref),
-				'')}
-			</Part>
+			/>
 		</ButtonTactile>
 	</svelte:fragment>
 </Parts>
@@ -133,12 +97,7 @@
 	on:click={() => {
 		dispatch('keeper');
 	}}
-	let:ref
-	let:hovering
-	let:pressing
 >
-	<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-	{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref), '')}
 	<BobbleSkullTactile
 		name="Ms. Jewel"
 		position={[0, 1, -2]}

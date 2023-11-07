@@ -9,10 +9,12 @@
 	import { gltfs } from '../../../assets/tactile/button/index';
 	import Part from '../part/Part.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { useOutline } from '../environment/useOutline';
 
 	const dispatch = createEventDispatcher();
 
 	export let ref = new THREE.Group();
+	export let outlineless = false;
 	export let disabled = false;
 
 	const { onPointerEnter, onPointerLeave } = useCursor();
@@ -36,6 +38,16 @@
 	$: if (disabled) {
 		$hovering = false;
 		$pressing = false;
+	}
+
+	let add: ReturnType<typeof useOutline>['add'] | undefined;
+	let remove: ReturnType<typeof useOutline>['remove'] | undefined;
+	$: if (outlineless) remove?.(ref);
+	else {
+		if (!(add && remove)) ({ add, remove } = useOutline());
+
+		if ($hovering || $pressing) add(ref);
+		else remove(ref);
 	}
 
 	// BUG: pointer* events seem to fire multiple times

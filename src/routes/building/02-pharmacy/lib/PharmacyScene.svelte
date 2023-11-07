@@ -1,41 +1,19 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
+	import { GLTF } from '@threlte/extras';
+	import { createEventDispatcher } from 'svelte';
+	import * as THREE from 'three';
+	import { degToRad } from 'three/src/math/MathUtils.js';
+	import glb_stethoscope from '../../../../assets/building/pharmacy/stethoscope.glb?url';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
+	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
+	import Fog from '../../../../lib/3d/environment/Fog.svelte';
 	import BobbleSkullTactile from '../../../../lib/3d/tactile/BobbleSkullTactile.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
-	import * as THREE from 'three';
-	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
-	import { usePostProcessing } from '../../../../lib/3d/environment/usePostProcessing';
-	import { traversePropertyElements } from '@sxxov/ut/traverse';
-	import glb_stethoscope from '../../../../assets/building/pharmacy/stethoscope.glb?url';
-	import { GLTF } from '@threlte/extras';
-	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { createEventDispatcher } from 'svelte';
-	import Fog from '../../../../lib/3d/environment/Fog.svelte';
 
 	useAmbientInteractivity();
 
 	const dispatch = createEventDispatcher();
-
-	const { effectMap } = usePostProcessing() ?? {};
-	$: ({ outline } = $effectMap ?? {});
-
-	const onPointerIn = (ref: THREE.Group) => {
-		if (!outline) return;
-
-		traversePropertyElements(ref, 'children', (child) => {
-			if (child instanceof THREE.Mesh && !('font' in child))
-				outline!.selection.add(child);
-		});
-	};
-
-	const onPointerOut = (ref: THREE.Group) => {
-		if (!outline) return;
-
-		traversePropertyElements(ref, 'children', (child) => {
-			if (outline!.selection.has(child)) outline!.selection.delete(child);
-		});
-	};
 </script>
 
 <EphemeralCamera
@@ -94,12 +72,7 @@
 	on:click={() => {
 		dispatch('pharmacist');
 	}}
-	let:ref
-	let:hovering
-	let:pressing
 >
-	<!-- eslint-disable-next-line @typescript-eslint/no-unsafe-argument -->
-	{(hovering || pressing ? onPointerIn(ref) : onPointerOut(ref), '')}
 	<BobbleSkullTactile name="Mr. Pharmacist">
 		<GLTF
 			url={glb_stethoscope}
