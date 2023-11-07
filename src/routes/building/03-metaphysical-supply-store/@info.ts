@@ -11,6 +11,11 @@ export const info = {
 	description:
 		"The town's place to buy improvements to your mind, body, & soul. However, it all seems a little too good to be true. Figure out what actually goes on.",
 	objective: 'Buy a jewel without paying extra.',
+	inspirations: [
+		'Food delivery apps that hide additional fees until the last moment.',
+		'Online stores that hide shipping costs until the last moment.',
+		"Promotions that you only find out don't work at checkout.",
+	],
 	lessons: [
 		'Learn how websites can hide or delay information to draw you into making a transaction.',
 		'Know the influence of lying by omission.',

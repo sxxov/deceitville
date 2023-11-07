@@ -6,6 +6,7 @@ export interface BuildingInfo {
 	name: string;
 	description: string;
 	objective: string;
+	inspirations: readonly string[];
 	lessons: readonly string[];
 	brignull: {
 		kind: string;

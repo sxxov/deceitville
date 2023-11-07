@@ -192,6 +192,14 @@
 					</ul>
 				</section>
 				<section>
+					<h3>Inspirations</h3>
+					<ul>
+						{#each info.inspirations as inspiration}
+							<li>{inspiration}</li>
+						{/each}
+					</ul>
+				</section>
+				<section>
 					<h3>Learn More</h3>
 					<ul>
 						<li>

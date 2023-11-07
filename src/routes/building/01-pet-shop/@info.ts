@@ -11,6 +11,9 @@ export const info = {
 	description:
 		"The local pet shop, where all kids' dream come true. You will need to pick between 3 unknown animals, based on their vague & incomplete descriptions.",
 	objective: "Pick the pet that won't kill you.",
+	inspirations: [
+		"Comparison tables that are asymmetrical, where the points for each product/service aren't the same for each column",
+	],
 	lessons: [
 		'Learn how websites can obstruct your comparison process.',
 		'Know the difficulty of making a decision based on incomplete information.',

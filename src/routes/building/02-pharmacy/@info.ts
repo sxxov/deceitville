@@ -11,6 +11,10 @@ export const info = {
 	description:
 		"Residents' one-stop-shop for all things medical. You will need to get your prescription filled up, without losing any rights to your body.",
 	objective: 'Refill your prescription, without losing your bodily autonomy.',
+	inspirations: [
+		"Product listings that don't show the full picture or hide important information.",
+		'Plans that hide information in the fine print.',
+	],
 	lessons: [
 		'Learn how websites can restrict information that hinders decision making.',
 		'Know the hidden influence of the obstruction towards your right for information.',
