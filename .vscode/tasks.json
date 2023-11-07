@@ -18,14 +18,6 @@
 			"detail": "Serves built files",
 		},
 		{
-			"type": "npm",
-			"script": "notion",
-			"group": "build",
-			"problemMatcher": [],
-			"label": "npm: notion",
-			"detail": "Synchronises article data from notion",
-		},
-		{
 			"type": "shell",
 			"command": "npm run build && npm run preview",
 			"group": "build",

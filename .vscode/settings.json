@@ -11,6 +11,8 @@
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 	},
+	"svelte.enable-ts-plugin": true,
+	"svelte.plugin.css.globals": "src/theme/**/*.pcss,src/theme/**/*.css",
 	"svelte.plugin.svelte.format.enable": true,
 	"svelte.plugin.svelte.defaultScriptLanguage": "ts",
 	"editor.colorDecorators": true,

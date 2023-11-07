@@ -46,8 +46,6 @@
 		"checkJs": true,
 		"plugins": [
 			{ "name": "vite-plugin-iso-import" },
-			{ "name": "ts-transformer-keys/transformer" },
-			{ "name": "ts-nameof" }
 		]
 	},
 	"ts-node": {
