@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { gltfs, instances } from '../../../assets/village/parts/index';
+	import {
+		gltfs,
+		instances,
+	} from '../../../assets/routes/lib/village/buildings/parts';
 	import { createPart, type Part } from '../../../lib/3d/gltf/part';
 	import HideOnOffscreen from '../../../lib/3d/optimisation/HideOnOffscreen.svelte';
 

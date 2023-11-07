@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { AnimatableIterationCount, Layer as L } from '@sxxov/ut/animation';
-	import glb_skull from '../../../assets/tactile/skull/skull.glb?url';
+	import glb_skull from '../../../assets/lib/3d/tactile/skull/skull.glb?url';
 	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
 	import * as THREE from 'three';
 	import {
@@ -12,7 +12,7 @@
 	import { browser } from '$app/environment';
 	import { onDestroy } from 'svelte';
 	import { GLTF, Text } from '@threlte/extras';
-	import ttf_bigelow_rules from '../../../assets/tactile/skull/BigelowRules-Regular.ttf?url';
+	import ttf_bigelow_rules from '../../../assets/lib/3d/tactile/skull/BigelowRules-Regular.ttf?url';
 
 	interface $$Props extends Props<THREE.Group> {
 		name?: typeof name;

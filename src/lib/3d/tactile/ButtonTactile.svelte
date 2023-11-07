@@ -6,7 +6,7 @@
 	import { useCursor } from '@threlte/extras';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { gltfs } from '../../../assets/tactile/button/index';
+	import { gltfs } from '../../../assets/lib/3d/tactile/button/parts';
 	import Part from '../part/Part.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { useOutline } from '../environment/useOutline';

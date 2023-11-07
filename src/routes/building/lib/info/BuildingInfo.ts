@@ -1,5 +1,5 @@
 import type { SvgString } from '@sxxov/ut/types';
-import type { gltfs } from '../../../../assets/village/parts';
+import type { gltfs } from '../../../../assets/routes/lib/village/buildings/parts';
 
 export interface BuildingInfo {
 	id: string;

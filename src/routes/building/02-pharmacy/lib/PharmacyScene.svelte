@@ -4,7 +4,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import glb_stethoscope from '../../../../assets/building/pharmacy/stethoscope.glb?url';
+	import glb_stethoscope from '../../../../assets/routes/building/02-pharmacy/lib/stethoscope/stethoscope.glb?url';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
 	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
 	import Fog from '../../../../lib/3d/environment/Fog.svelte';

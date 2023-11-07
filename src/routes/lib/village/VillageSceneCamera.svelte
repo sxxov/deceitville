@@ -2,7 +2,7 @@
 	import { T, useFrame } from '@threlte/core';
 	import * as THREE from 'three';
 	import { clamp } from 'three/src/math/MathUtils.js';
-	import camera_path from '../../../assets/village/camera_path.json';
+	import camera_path from '../../../assets/routes/lib/village/camera_path.json';
 	import { useEphemeralCamera } from '../../../lib/3d/camera/useEphemeralCamera';
 
 	export let progress = 0;

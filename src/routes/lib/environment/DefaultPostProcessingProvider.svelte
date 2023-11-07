@@ -16,7 +16,7 @@
 		VignetteEffect,
 	} from 'postprocessing';
 	import * as THREE from 'three';
-	import img_lut from '../../../assets/common/3d/lut/django-25.cube?url';
+	import img_lut from '../../../assets/routes/lib/environment/lut/django-25.cube?url';
 	import type { PostProcessingEffectMap } from '../../../lib/3d/environment/PostProcessingEffectMap';
 	import PostProcessingProvider from '../../../lib/3d/environment/PostProcessingProvider.svelte';
 	import { inner } from '@sxxov/ut/viewport';

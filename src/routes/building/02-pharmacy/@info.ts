@@ -1,7 +1,7 @@
 /* cspell:includeregexp string */
 
 import { ic_local_pharmacy } from 'maic/two_tone';
-import * as gltfs from '../../../assets/village/parts/gltfs.db';
+import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
 

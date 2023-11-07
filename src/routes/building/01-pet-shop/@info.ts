@@ -1,6 +1,6 @@
 /* cspell:includeregexp string */
 
-import * as gltfs from '../../../assets/village/parts/gltfs.db';
+import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { ic_pets } from 'maic/two_tone';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';

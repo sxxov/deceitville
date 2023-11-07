@@ -3,7 +3,7 @@
 	import { inner, type Point } from '@sxxov/ut/viewport';
 	import { T, useFrame } from '@threlte/core';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { gltfs } from '../../../assets/village/parts/index';
+	import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
 	import { createPart } from '../../../lib/3d/gltf/part';
 	import HealthSceneCamera from './HealthSceneCamera.svelte';

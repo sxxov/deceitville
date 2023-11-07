@@ -19,7 +19,7 @@
 		pointer_2,
 		pumpkin,
 		tree_2,
-	} from '../../../assets/village/parts/gltfs.db';
+	} from '../../../assets/routes/lib/village/buildings/parts/gltfs.db';
 	import {
 		c,
 		d,
@@ -32,10 +32,10 @@
 		l_x1,
 		t,
 		v,
-	} from '../../../assets/village/text/gltfs.db';
+	} from '../../../assets/routes/lib/village/text/parts/gltfs.db';
 	// import { MeshTransmissionMaterial } from '@pmndrs/vanilla';
 	import { EXRLoader } from 'three-stdlib';
-	import exr_hdri from '../../../assets/common/3d/hdri/dancing_hall_256.exr?url';
+	import exr_hdri from '../../../assets/routes/lib/environment/hdri/dancing_hall_256.exr?url';
 	import { createPart } from '../../../lib/3d/gltf/part';
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';

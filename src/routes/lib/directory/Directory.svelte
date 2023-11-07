@@ -4,8 +4,8 @@
 	import { ic_flag } from 'maic/two_tone';
 	import { onMount } from 'svelte';
 	import type * as THREE from 'three';
-	import svg_loop_centre from '../../../assets/directory/loops/centre.svg?raw';
-	import svg_loop_corner from '../../../assets/directory/loops/corner.svg?raw';
+	import svg_loop_centre from '../../../assets/routes/lib/directory/loops/centre.svg?raw';
+	import svg_loop_corner from '../../../assets/routes/lib/directory/loops/corner.svg?raw';
 	import { createPart } from '../../../lib/3d/gltf/part';
 	import { infos } from '../../building/lib/info/infos';
 	import type { DirectoryRoute } from './DirectoryRoute';

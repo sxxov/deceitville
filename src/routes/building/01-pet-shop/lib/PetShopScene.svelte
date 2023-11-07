@@ -7,7 +7,7 @@
 	import { Box, Flex } from '@threlte/flex';
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
-	import { gltfs } from '../../../../assets/building/pet-shop/parts/index';
+	import { gltfs } from '../../../../assets/routes/building/01-pet-shop/lib/pets/parts';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
 	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
 	import { useAmbientRendererSize } from '../../../../lib/3d/canvas/useAmbientRendererSize';
