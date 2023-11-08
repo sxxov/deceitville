@@ -18,13 +18,14 @@
 	import { onDestroy } from 'svelte';
 	import * as THREE from 'three';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
-	import { pointer } from '../../../lib/follow/pointer';
-	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
 	import ScrollPosition from '../layout/ScrollPosition.svelte';
+	import DirectorySceneCamera from './DirectorySceneCamera.svelte';
 
 	type $$Props = Props<THREE.Group> & {
 		ref?: typeof ref;
 		object: typeof object;
+		point: typeof point;
+		scale?: typeof scale;
 	};
 	type $$Events = Events<THREE.Group>;
 
@@ -32,6 +33,8 @@
 
 	export let ref = new THREE.Group();
 	export let object: THREE.Object3D | undefined;
+	export let point: Point;
+	export let scale = 1;
 
 	let exiting = false;
 	let fogInit = scene.fog;
@@ -76,8 +79,8 @@
 	$: if (object) o = object;
 	$: if (!exiting) void hoverComposition.play(object ? 1 : -1);
 
-	let point: Point;
-	$: if (!exiting) point = $pointer;
+	let p: Point;
+	$: if (!exiting) p = point;
 
 	let rotation = 0;
 	useFrame(() => {
@@ -98,7 +101,7 @@
 	bind:this={$component}
 >
 	<FollowLocus
-		{point}
+		point={p}
 		let:world
 		let:z
 	>
@@ -116,9 +119,9 @@
 					0,
 				]}
 				scale={[
-					0.01 * $hoverScaleTween,
-					0.01 * $hoverScaleTween,
-					0.01 * $hoverScaleTween,
+					0.01 * scale * $hoverScaleTween,
+					0.01 * scale * $hoverScaleTween,
+					0.01 * scale * $hoverScaleTween,
 				]}
 				receiveShadow
 				castShadow

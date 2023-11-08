@@ -1,13 +1,21 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { Svg } from '@sxxov/sv/svg';
+	import { Tween } from '@sxxov/ut/animation';
+	import { bezierQuintIn, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
+	import { clamp01, lerp, map01 } from '@sxxov/ut/math';
+	import { inner, type Point } from '@sxxov/ut/viewport';
 	import { ic_flag } from 'maic/two_tone';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import type * as THREE from 'three';
 	import svg_loop_centre from '../../../assets/routes/lib/directory/loops/centre.svg?raw';
 	import svg_loop_corner from '../../../assets/routes/lib/directory/loops/corner.svg?raw';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import { createPart } from '../../../lib/3d/gltf/part';
+	import { pointer } from '../../../lib/follow/pointer';
 	import { infos } from '../../building/lib/info/infos';
+	import ScrollPosition from '../layout/ScrollPosition.svelte';
 	import type { DirectoryRoute } from './DirectoryRoute';
 	import DirectoryScene from './DirectoryScene.svelte';
 
@@ -46,14 +54,153 @@
 		if (!exiting) route = undefined;
 	}
 	let directoryScene: DirectoryScene | undefined;
+
+	const size = useAmbientRendererSize() ?? inner;
+
+	let offsetTop = 0;
+	let offsetLeft = 0;
+	let scrollY = 0;
+	$: scrollTop = scrollY - offsetTop;
+	let routesDiv: HTMLDivElement | undefined;
+	let infoDiv: HTMLDivElement | undefined;
+	let routeContainers: HTMLElement[] = [];
+	let routeHeadings: HTMLHeadingElement[] = [];
+	const routeHardPadding = 336;
+	const routeSoftPadding = 112;
+	let target: Point = { x: 0, y: 0 };
+	let colliding = false;
+	let scale = 1;
+	const updateTargetCollidingScale = () => {
+		if (
+			!infoDiv ||
+			!routesDiv ||
+			routeContainers.length <= 0 ||
+			routeHeadings.length <= 0
+		) {
+			target = $pointer;
+			return;
+		}
+
+		for (let i = 0; i < routes.length + 1; ++i) {
+			const container = routeContainers[i]!;
+			const heading = routeHeadings[i]!;
+
+			const top = container.offsetTop - scrollTop;
+			const bottom = top + container.offsetHeight;
+			const left =
+				offsetLeft + routesDiv.offsetLeft + container.offsetLeft;
+			const right =
+				left +
+				heading.offsetWidth +
+				/* arrow length */ 70 +
+				routeHardPadding;
+
+			if (
+				$pointer.y >= top &&
+				$pointer.y < bottom &&
+				$pointer.x >= left &&
+				$pointer.x < right + routeSoftPadding
+			) {
+				const softPaddingPercent = bezierQuintOut.at(
+					clamp01(map01($pointer.x, right, right + routeSoftPadding)),
+				);
+				scale = lerp(1 - softPaddingPercent, 1, 2);
+				colliding = $pointer.x < right;
+
+				console.log(scale);
+
+				target = {
+					x:
+						right +
+						lerp(softPaddingPercent, 0, routeSoftPadding) -
+						(colliding
+							? right -
+							  infoDiv.clientWidth / 2 +
+							  /* magic number??? */ 35
+							: 0),
+					y: $pointer.y,
+				};
+
+				return;
+			}
+		}
+
+		colliding = false;
+		target = $pointer;
+	};
+	$: {
+		$size;
+		$pointer;
+		scrollY;
+
+		updateTargetCollidingScale();
+	}
+
+	let pointerSpeedTweenX = new Tween(1, 1, 0);
+	let pointerSpeedTweenY = new Tween(1, 1, 0);
+	$: pointerSpeedX = $pointerSpeedTweenX;
+	$: pointerSpeedY = $pointerSpeedTweenY;
+	const pointerInsideInfo = () => {
+		pointerSpeedX = 0.1;
+		pointerSpeedY = 0.1;
+		pointerSpeedTweenX = new Tween(pointerSpeedX, 1, 1000, bezierQuintIn);
+		pointerSpeedTweenY = new Tween(pointerSpeedY, 1, 1000, bezierQuintIn);
+		void pointerSpeedTweenX.play();
+		void pointerSpeedTweenY.play();
+	};
+	const pointerOutsideRoaming = () => {
+		pointerSpeedX = 0.1;
+		pointerSpeedY = 0.1;
+		pointerSpeedTweenX = new Tween(pointerSpeedX, 1, 600, bezierQuintIn);
+		pointerSpeedTweenY = new Tween(pointerSpeedY, 1, 600, bezierQuintIn);
+		void pointerSpeedTweenX.play();
+		void pointerSpeedTweenY.play();
+	};
+	$: if (browser) {
+		if (colliding) pointerInsideInfo();
+		else pointerOutsideRoaming();
+	}
+
+	let point = $pointer;
+	let rafHandle: ReturnType<typeof requestAnimationFrame> | undefined;
+	const pointerRaf = () => {
+		point.x = lerp(pointerSpeedX, point.x, target.x);
+		point.y = lerp(pointerSpeedY, point.y, target.y);
+
+		rafHandle = requestAnimationFrame(pointerRaf);
+	};
+	$: if (browser) rafHandle = requestAnimationFrame(pointerRaf);
+	$: {
+		scrollY;
+
+		point = point;
+	}
+
+	onDestroy(() => {
+		if (rafHandle) cancelAnimationFrame(rafHandle);
+	});
 </script>
 
+<svelte:window bind:scrollY />
+<ScrollPosition
+	bind:top={offsetTop}
+	bind:left={offsetLeft}
+/>
 <DirectoryScene
+	{point}
+	{scale}
 	object={routeObject}
 	bind:this={directoryScene}
 />
 <div class="directory">
-	<div class="info">
+	<div
+		class="info"
+		class:elevated={colliding &&
+			!exiting &&
+			routeObject &&
+			scrollTop > -$size.height * 0.2}
+		bind:this={infoDiv}
+	>
 		<div class="content">
 			<div class="heading">
 				<h2>Directory</h2>
@@ -158,11 +305,15 @@
 			</div>
 		</div>
 	</div>
-	<div class="routes">
+	<div
+		class="routes"
+		bind:this={routesDiv}
+	>
 		<div class="padding start"></div>
 		<div class="content">
 			<a
 				href={route?.url ?? '#'}
+				bind:this={routeContainers[0]}
 				on:click={async (e) => {
 					if (e.ctrlKey || e.metaKey) return;
 					e.preventDefault();
@@ -209,13 +360,14 @@
 						</div>
 					</div>
 
-					<h6>???</h6>
+					<h6 bind:this={routeHeadings[0]}>???</h6>
 				</div>
 			</a>
 
 			{#each routes as { info: { name, icon }, url }, i}
 				<a
 					href={url}
+					bind:this={routeContainers[i + 1]}
 					on:click={async (e) => {
 						if (e.ctrlKey || e.metaKey) return;
 						e.preventDefault();
@@ -252,7 +404,7 @@
 							</div>
 						</div>
 
-						<h6>{name}</h6>
+						<h6 bind:this={routeHeadings[i + 1]}>{name}</h6>
 					</div>
 				</a>
 			{/each}
@@ -282,6 +434,10 @@
 				left: 0;
 				width: 100%;
 				height: 200px;
+			}
+
+			&.elevated {
+				z-index: 1;
 			}
 
 			& > .content {
@@ -564,6 +720,8 @@
 			left: 33.33%;
 			width: 66.67%;
 
+			/* z-index: 1; */
+
 			@media (max-width: 1000px) {
 				top: 200px;
 				left: 0;
@@ -575,13 +733,15 @@
 				top: 0;
 				width: 100%;
 
-				background: #000;
+				/* background: #000; */
 				border-top: 1px solid var(----colour-text-primary);
 
 				& > a {
+					filter: none;
 					text-decoration: none;
 
 					&:hover {
+						filter: none;
 						text-shadow: none;
 					}
 
@@ -595,6 +755,8 @@
 						align-items: center;
 						justify-content: flex-start;
 						border-bottom: 1px solid var(----colour-text-primary);
+
+						z-index: -1;
 
 						&::before {
 							content: '';
