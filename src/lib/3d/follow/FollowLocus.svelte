@@ -10,6 +10,7 @@
 	import * as THREE from 'three';
 	import { getScreenSpacePointOnPlane } from '../lmth/getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from '../lmth/getScreenSpaceSizeAtWorldZ';
+	import { useAmbientRendererSize } from '../canvas/useAmbientRendererSize';
 
 	type $$Props = Props<THREE.Group> & {
 		z?: typeof z;
@@ -26,8 +27,10 @@
 
 	const component = forwardEventHandlers();
 
+	const size = useAmbientRendererSize() ?? inner;
+
 	$: pointerWorldPoint = getScreenSpacePointOnPlane(
-		$inner,
+		$size,
 		point,
 		getScreenSpaceSizeAtWorldZ($camera as THREE.PerspectiveCamera, z),
 	);
