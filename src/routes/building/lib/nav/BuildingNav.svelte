@@ -6,37 +6,168 @@
 </script>
 
 <script lang="ts">
+	import 'use-unsafe-threlte';
+
+	import { browser } from '$app/environment';
 	import { Button, ButtonVariants, Ripple } from '@sxxov/sv/button';
 	import { BottomSheet, BottomSheetStates } from '@sxxov/sv/layout';
 	import { Svg } from '@sxxov/sv/svg';
+	import { Tween } from '@sxxov/ut/animation';
+	import { bezierQuintOut } from '@sxxov/ut/bezier/beziers';
+	import { UnreachableError } from '@sxxov/ut/errors';
+	import { lerp, map } from '@sxxov/ut/math';
 	import { Store } from '@sxxov/ut/store';
+	import type { Point } from '@sxxov/ut/viewport';
+	import { T, useThrelte } from '@threlte/core';
 	import {
 		ic_arrow_outward,
 		ic_close,
 		ic_info,
 		ic_logout,
 	} from 'maic/two_tone';
-	import { setContext } from 'svelte';
+	import { onDestroy, onMount, setContext } from 'svelte';
+	import { degToRad } from 'three/src/math/MathUtils.js';
+	import { useAmbientRendererSize } from '../../../../lib/3d/canvas/useAmbientRendererSize';
+	import { pointer } from '../../../../lib/follow/pointer';
 	import { clientHistory } from '../../../../lib/history/clientHistory';
 	import { useBuildingInfo } from '../info/useBuildingInfo';
 	import type { BuildingNavContext } from './BuildingNavContext';
 
 	const info = useBuildingInfo()!;
+	const size = useAmbientRendererSize()!;
+	$: sizeHypot = Math.hypot($size.width, $size.height);
+	const { renderer = undefined } = browser ? useThrelte() : {};
 
 	const bottomSheetState = new Store<BottomSheetStates>(
 		BottomSheetStates.IDLE,
 	);
+	const cameraPeekEnabled = new Store(false);
+	const applyCameraPeekResistance = (ms = 1000) => {
+		cameraPeekSpeed = 0.1;
+		cameraPeekSpeedTween.pause();
+		cameraPeekSpeedTween = new Tween(
+			cameraPeekSpeed,
+			1,
+			ms,
+			bezierQuintOut,
+		);
+		void cameraPeekSpeedTween.play();
+	};
+	let cameraPeekSpeedTween = new Tween(1, 1, 0);
+	$: cameraPeekSpeed = $cameraPeekSpeedTween;
+	const cameraPeekTarget: Point = { x: 0, y: 0 };
+	const cameraPeekCurrPointerPoint: Point = { x: 0, y: 0 };
+	$: cameraPeekTarget.x = $cameraPeekEnabled
+		? -1 *
+		  map(
+				$pointer.y - cameraPeekCurrPointerPoint.y,
+				-sizeHypot,
+				sizeHypot,
+				degToRad(-20),
+				degToRad(20),
+		  )
+		: 0;
+	$: cameraPeekTarget.y = $cameraPeekEnabled
+		? -1 *
+		  map(
+				$pointer.x - cameraPeekCurrPointerPoint.x,
+				-sizeHypot,
+				sizeHypot,
+				degToRad(-20),
+				degToRad(20),
+		  )
+		: 0;
+	$: cameraPeek = { x: 0, y: 0 };
+	let cameraPeekRotation = new Store<[x: number, y: number, z: number]>([
+		0, 0, 0,
+	]);
+	$: $cameraPeekRotation = [cameraPeek.x, cameraPeek.y, 0];
+	let cameraPeekRafHandle:
+		| ReturnType<typeof requestAnimationFrame>
+		| undefined;
+	const cameraPeekRaf = () => {
+		cameraPeek.x = lerp(cameraPeekSpeed, cameraPeek.x, cameraPeekTarget.x);
+		cameraPeek.y = lerp(cameraPeekSpeed, cameraPeek.y, cameraPeekTarget.y);
+
+		if ($cameraPeekEnabled || (cameraPeek.x !== 0 && cameraPeek.y !== 0))
+			cameraPeekRafHandle = requestAnimationFrame(cameraPeekRaf);
+	};
+	$: if (browser && $cameraPeekEnabled) {
+		if (cameraPeekRafHandle) cancelAnimationFrame(cameraPeekRafHandle);
+		cameraPeekRafHandle = requestAnimationFrame(cameraPeekRaf);
+	}
+	if (browser)
+		onDestroy(() => {
+			cancelAnimationFrame(cameraPeekRafHandle!);
+		});
+
+	onMount(() => {
+		if (!renderer) throw new UnreachableError();
+
+		const onPointerDown = () => {
+			cameraPeekCurrPointerPoint.x = $pointer.x;
+			cameraPeekCurrPointerPoint.y = $pointer.y;
+			applyCameraPeekResistance(100);
+			$cameraPeekEnabled = true;
+		};
+
+		const onPointerUp = () => {
+			applyCameraPeekResistance();
+			$cameraPeekEnabled = false;
+		};
+
+		const onPointerLeave = () => {
+			applyCameraPeekResistance();
+			$cameraPeekEnabled = false;
+		};
+
+		renderer.domElement.addEventListener('pointerdown', onPointerDown);
+		renderer.domElement.addEventListener('pointerup', onPointerUp);
+		window.addEventListener('pointerup', onPointerUp);
+		renderer.domElement.addEventListener('pointerleave', onPointerLeave);
+		window.addEventListener('pointerleave', onPointerLeave);
+		renderer.domElement.addEventListener('pointercancel', onPointerLeave);
+		window.addEventListener('pointercancel', onPointerLeave);
+
+		return () => {
+			renderer.domElement.removeEventListener(
+				'pointerdown',
+				onPointerDown,
+			);
+			renderer.domElement.removeEventListener('pointerup', onPointerUp);
+			window.removeEventListener('pointerup', onPointerUp);
+			renderer.domElement.removeEventListener(
+				'pointerleave',
+				onPointerLeave,
+			);
+			window.removeEventListener('pointerleave', onPointerLeave);
+			renderer.domElement.removeEventListener(
+				'pointercancel',
+				onPointerLeave,
+			);
+			window.removeEventListener('pointercancel', onPointerLeave);
+		};
+	});
 	const exit = () => {
+		applyCameraPeekResistance();
+		$cameraPeekEnabled = false;
 		clientHistory.back();
 	};
 	setContext<BuildingNavContext>(buildingNavContextKey, {
 		bottomSheetState,
+		cameraPeekEnabled,
+		cameraPeekRotation,
 		exit,
 	});
 
 	let objectiveActive = true;
 </script>
 
+{#if browser}
+	<T.Group rotation={$cameraPeekRotation}>
+		<slot name="peek" />
+	</T.Group>
+{/if}
 <div class="building-nav">
 	<div class="content">
 		<div class="exit">
