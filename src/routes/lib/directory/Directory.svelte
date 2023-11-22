@@ -107,8 +107,6 @@
 				scale = lerp(1 - softPaddingPercent, 1, 2);
 				colliding = $pointer.x < right;
 
-				console.log(scale);
-
 				target = {
 					x:
 						right +
@@ -371,6 +369,7 @@
 					on:click={async (e) => {
 						if (e.ctrlKey || e.metaKey) return;
 						e.preventDefault();
+						exiting = true;
 						await directoryScene?.exit();
 						await goto(url);
 					}}
