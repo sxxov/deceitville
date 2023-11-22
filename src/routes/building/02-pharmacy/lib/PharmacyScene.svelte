@@ -18,6 +18,7 @@
 
 <EphemeralCamera
 	ref={new THREE.PerspectiveCamera(50)}
+	makeDefault
 	position={[0, 0, 10]}
 />
 <Fog

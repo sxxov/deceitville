@@ -229,6 +229,7 @@
 
 <EphemeralCamera
 	ref={new THREE.PerspectiveCamera(50)}
+	makeDefault
 	position={cameraPositionCurr}
 />
 <Flex
