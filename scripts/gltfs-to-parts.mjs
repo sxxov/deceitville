@@ -31,7 +31,7 @@ const getCanonicalName = (
 			: indexedName.slice(0, indexedName.lastIndexOf('.'))
 	)
 		.toLowerCase()
-		.replace(/_/g, '-')
+		.replace(/\W/g, '-')
 		.replace(/--+/g, '-')
 		.replace(/(0+)(\d+)$/, '$2')
 		.replace(/([^-\d])(\d+)$/, '$1-$2');
@@ -99,7 +99,7 @@ for (const targetFilename of targetFilenames) {
 
 				const binFilename = gltfJson.buffers[0].uri;
 				const binBuffer = await fs.readFile(
-					path.join(targetDir, binFilename),
+					path.join(targetDir, decodeURIComponent(binFilename)),
 				);
 
 				let binDupe = canonicalNameToBinFile.get(canonicalName);
