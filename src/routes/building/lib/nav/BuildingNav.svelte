@@ -153,11 +153,16 @@
 		$cameraPeekEnabled = false;
 		clientHistory.back();
 	};
+	let key = {};
+	const reslot = () => {
+		key = {};
+	};
 	setContext<BuildingNavContext>(buildingNavContextKey, {
 		bottomSheetState,
 		cameraPeekEnabled,
 		cameraPeekRotation,
 		exit,
+		reslot,
 	});
 
 	let objectiveActive = true;
@@ -351,7 +356,9 @@
 		</BottomSheet>
 	</div>
 </div>
-<slot />
+{#key key}
+	<slot />
+{/key}
 
 <style lang="postcss">
 	.building-nav {

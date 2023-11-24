@@ -6,4 +6,5 @@ export interface BuildingNavContext {
 	cameraPeekEnabled: Store<boolean>;
 	cameraPeekRotation: Store<[x: number, y: number, z: number]>;
 	exit: () => void;
+	reslot: () => void;
 }
