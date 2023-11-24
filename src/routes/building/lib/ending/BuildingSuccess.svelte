@@ -17,6 +17,21 @@
 	<slot>Yay!</slot>
 	<svelte:fragment slot="buttons">
 		<Button
+			{...ButtonVariants.Transparent}
+			{...ButtonVariants.Shadow.None}
+			width="100%"
+			roundness={28}
+			on:click={() => {
+				dispatch('retry');
+			}}
+		>
+			<Svg
+				slot="left"
+				svg={ic_restart_alt}
+			/>
+			Replay
+		</Button>
+		<Button
 			{...ButtonVariants.Primary}
 			{...ButtonVariants.Shadow.Md}
 			width="100%"
@@ -34,21 +49,6 @@
 				slot="right"
 				svg={ic_arrow_back}
 			/>
-		</Button>
-		<Button
-			{...ButtonVariants.Transparent}
-			{...ButtonVariants.Shadow.None}
-			width="100%"
-			roundness={28}
-			on:click={() => {
-				dispatch('retry');
-			}}
-		>
-			<Svg
-				slot="left"
-				svg={ic_restart_alt}
-			/>
-			Replay
 		</Button>
 	</svelte:fragment>
 </BuildingStatus>
