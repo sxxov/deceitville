@@ -1,6 +1,12 @@
-import { getContext, onDestroy, setContext } from 'svelte';
-import type { AmbientCursorContext } from './AmbientCursorContext';
+import { getContext, onMount } from 'svelte';
 import { ambientCursorContextKey } from './AmbientCanvas.svelte';
+import type { AmbientCursorContext } from './AmbientCursorContext';
+
+const cursorStack: [
+	cursor: ReturnType<AmbientCursorContext['cursor']['get']>,
+	cursorHover: ReturnType<AmbientCursorContext['cursorHover']['get']>,
+	cursorActive: ReturnType<AmbientCursorContext['cursorActive']['get']>,
+][] = [];
 
 export const useAmbientCursor = (
 	cursor?: ReturnType<AmbientCursorContext['cursor']['get']>,
@@ -8,26 +14,30 @@ export const useAmbientCursor = (
 	cursorActive?: ReturnType<AmbientCursorContext['cursorActive']['get']>,
 ): AmbientCursorContext | undefined => {
 	const ctx = getContext<AmbientCursorContext>(ambientCursorContextKey);
-	const {
-		cursor: initialCursor,
-		cursorHover: initialCursorHover,
-		cursorHoverCount,
-		cursorActive: initialCursorActive,
-	} = ctx;
+	const initialCursor = ctx.cursor.get();
+	const initialCursorHover = ctx.cursorHover.get();
+	const initialCursorActive = ctx.cursorActive.get();
 
-	if (cursor) ctx.cursor.set(cursor);
-	if (cursorHover) ctx.cursorHover.set(cursorHover);
-	if (cursorActive) ctx.cursorActive.set(cursorActive);
+	const i = cursorStack.push([
+		initialCursor,
+		initialCursorHover,
+		initialCursorActive,
+	]);
 
-	onDestroy(() => {
-		cursorHoverCount.set(0);
+	onMount(() => {
+		if (cursor) ctx.cursor.set(cursor);
+		if (cursorHover) ctx.cursorHover.set(cursorHover);
+		if (cursorActive) ctx.cursorActive.set(cursorActive);
 
-		setContext(ambientCursorContextKey, {
-			cursor: initialCursor,
-			cursorHover: initialCursorHover,
-			cursorHoverCount,
-			cursorActive: initialCursorActive,
-		});
+		return () => {
+			if (i > cursorStack.length) return;
+			cursorStack.splice(i - 1, Infinity);
+
+			ctx.cursorHoverCount.set(0);
+			ctx.cursor.set(initialCursor);
+			ctx.cursorHover.set(initialCursorHover);
+			ctx.cursorActive.set(initialCursorActive);
+		};
 	});
 
 	return ctx;
