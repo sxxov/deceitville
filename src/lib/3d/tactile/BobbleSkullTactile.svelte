@@ -11,8 +11,8 @@
 	} from '@threlte/core';
 	import { browser } from '$app/environment';
 	import { onDestroy } from 'svelte';
-	import { GLTF, Text } from '@threlte/extras';
-	import ttf_bigelow_rules from '../../../assets/lib/3d/tactile/skull/BigelowRules-Regular.ttf?url';
+	import { GLTF } from '@threlte/extras';
+	import TextTactile from './TextTactile.svelte';
 
 	interface $$Props extends Props<THREE.Group> {
 		name?: typeof name;
@@ -80,19 +80,8 @@
 			url={glb_skull}
 			scale={[1, 1, 1]}
 		/>
-		<Text
+		<TextTactile
 			text={name}
-			characters={'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?'}
-			sdfGlyphSize={64}
-			material={new THREE.MeshPhysicalMaterial({
-				color: 0xffffff,
-				emissive: 0xffffff,
-				emissiveIntensity: 100,
-			})}
-			font={ttf_bigelow_rules}
-			fontSize={1}
-			anchorX="50%"
-			anchorY="50%"
 			position={[0, 1.7, 0]}
 		/>
 		<slot />
