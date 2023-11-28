@@ -369,10 +369,6 @@
 									color: var(--colour-text);
 
 									text-shadow: none;
-
-									&:hover {
-										letter-spacing: -0.03em;
-									}
 								}
 							}
 						}
