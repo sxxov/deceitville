@@ -62,6 +62,7 @@
 				on:complete={exit}
 				on:retry={retry}
 			>
+				{(completable[info.id]?.set(true), '')}
 				You successfully paid ${price} for {prices.length} clock{prices.length ===
 				1
 					? ''
