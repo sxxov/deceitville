@@ -13,21 +13,16 @@
 
 	const { exit } = useBuildingNav()!;
 
-	let stopped = false;
-
 	let picked = false;
 	let prices: number[] = [];
 	$: price = prices.reduce((a, b) => a + b, 0);
 
 	let clockHouseSceneState = ClockHouseSceneState.IDLE;
 	const retry = () => {
-		stopped = false;
 		picked = false;
 		prices = [];
 		clockHouseSceneState = ClockHouseSceneState.RESET;
 	};
-
-	$: console.log(clockHouseSceneState);
 </script>
 
 <ClockHouseScene
