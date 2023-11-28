@@ -63,10 +63,10 @@
 				on:retry={retry}
 			>
 				{(completable[info.id]?.set(true), '')}
-				You successfully paid ${price} for {prices.length} clock{prices.length ===
-				1
+				You discover the discard pile that's just always been there & paid
+				${price} for {prices.length} clock{prices.length === 1
 					? ''
-					: 's'} from the discard pile.
+					: 's'}.
 				<br />
 				{#if price === 0}
 					The store owner personally bans you from coming back.
