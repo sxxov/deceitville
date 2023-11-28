@@ -31,7 +31,7 @@ const getCanonicalName = (
 			: indexedName.slice(0, indexedName.lastIndexOf('.'))
 	)
 		.toLowerCase()
-		.replace(/\W/g, '-')
+		.replace(/[\W_]/g, '-')
 		.replace(/--+/g, '-')
 		.replace(/(0+)(\d+)$/, '$2')
 		.replace(/([^-\d])(\d+)$/, '$1-$2');
