@@ -5,7 +5,6 @@
 	import Continuation from './lib/continuation/Continuation.svelte';
 	import Directory from './lib/directory/Directory.svelte';
 	import Health from './lib/health/Health.svelte';
-	import PseudoHeightContextProvider from './lib/layout/PseudoHeightContextProvider.svelte';
 	import Letter from './lib/letter/Letter.svelte';
 	import Story from './lib/story/Story.svelte';
 	import Waze from './lib/waze/Waze.svelte';
@@ -77,14 +76,12 @@
 		{/if}
 	</div>
 
-	<PseudoHeightContextProvider>
-		<Story />
-		<Directory />
-		<Health />
-		<Caution />
-		<Letter />
-		<Continuation />
-	</PseudoHeightContextProvider>
+	<Story />
+	<Directory />
+	<Health />
+	<Caution />
+	<Letter />
+	<Continuation />
 </div>
 
 <style lang="postcss">
