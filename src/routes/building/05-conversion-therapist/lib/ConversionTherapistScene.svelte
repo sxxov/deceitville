@@ -89,7 +89,7 @@
 		enableDamping
 		on:change={(e) => {
 			const { rotation } = e.target.object;
-			console.log(rotation.x, rotation.y, rotation.z);
+
 			if (
 				Math.abs(Number(rotation.x)) >= degToRad(1) ||
 				Math.abs(Number(rotation.y)) >= degToRad(1) ||
