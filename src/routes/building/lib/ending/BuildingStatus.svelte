@@ -111,6 +111,9 @@
 					border: 1px solid var(----colour-accent-primary);
 					margin: 0;
 
+					pointer-events: none;
+					user-select: none;
+
 					animation: splash-in 1s cubic-bezier(0.77, 0, 0.02, 1.21)
 						both;
 
