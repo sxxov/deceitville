@@ -13,7 +13,7 @@
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
-{#if scrollY > top}
+{#if scrollY >= top}
 	<ContinuationSceneCamera />
 {/if}
 <div class="continuation">

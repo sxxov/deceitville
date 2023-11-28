@@ -29,7 +29,7 @@
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
-{#if scrollY > top}
+{#if scrollY >= top}
 	<HealthSceneCamera />
 {/if}
 {#await createPart(gltfs.building_10) then { object }}

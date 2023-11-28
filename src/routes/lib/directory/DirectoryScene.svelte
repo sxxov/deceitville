@@ -92,7 +92,7 @@
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
-{#if scrollY > top}
+{#if scrollY >= top}
 	<DirectorySceneCamera />
 {/if}
 <T
