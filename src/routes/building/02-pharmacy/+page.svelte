@@ -51,7 +51,7 @@
 		[DialogueStates.COMPLIMENT_SKIN]:
 			"Finally someone who notices my skin care routine. I've been using the same moisturiser for eons & it's really paying off.",
 		[DialogueStates.COMPLIMENT_W_RIZZ_ENDING]:
-			"Hehe :33, yeah sure, I'll go out with you.\n\nJust let me finish up here & I'll meet you out back in 5 minutes.",
+			"Oh, so sudden!\n\nI guess...\n\nI'll just finish up here & meet you out back in 5 minutes.",
 
 		[DialogueStates.PRESCRIPTION]:
 			'Ah yes your prescription.\n\nLet me get that for you...',
@@ -189,12 +189,12 @@
 		],
 	};
 	const EndingFailures = [
+		DialogueStates.COMPLIMENT_W_RIZZ_ENDING,
 		DialogueStates.GREETING_ILLEGAL_DRUGS_ENDING,
 		DialogueStates.GREETING_NO_THANKS_ENDING,
 		DialogueStates.PRESCRIPTION_CONTRACT_AGREE_ENDING,
 	];
 	const EndingSuccesses = [
-		DialogueStates.COMPLIMENT_W_RIZZ_ENDING,
 		DialogueStates.PRESCRIPTION_CONTRACT_DECLINE_ENDING,
 	];
 	const EndingTexts: Partial<Record<DialogueStates, string>> = {
@@ -203,7 +203,7 @@
 			'You failed to get your prescription.',
 
 		[DialogueStates.COMPLIMENT_W_RIZZ_ENDING]:
-			"You guys ended up going on a dinner date. Cool guy, maybe you'll see him again sometime.",
+			"He's a minor, the police are waiting outside.",
 
 		[DialogueStates.PRESCRIPTION_CONTRACT_AGREE_ENDING]:
 			"You now owe three kidneys to the pharmacy.\nNot sure how you're gonna pay that one off.",
