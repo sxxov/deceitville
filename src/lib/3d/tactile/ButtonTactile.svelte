@@ -3,13 +3,13 @@
 	import { bezierQuintInOut, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { Store } from '@sxxov/ut/store';
 	import { T } from '@threlte/core';
-	import { useCursor } from '@threlte/extras';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
 	import { gltfs } from '../../../assets/lib/3d/tactile/button/parts';
 	import Part from '../part/Part.svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { useOutline } from '../environment/useOutline';
+	import { useAmbientCursor } from '../canvas/useAmbientCursor';
 
 	const dispatch = createEventDispatcher();
 
@@ -17,7 +17,7 @@
 	export let outlineless = false;
 	export let disabled = false;
 
-	const { onPointerEnter, onPointerLeave } = useCursor();
+	const { cursorHoverCount } = useAmbientCursor()!;
 
 	const hovering = new Store(false);
 	const tweenHoverIn = new Tween(0, 1, 50, bezierQuintOut);
@@ -78,13 +78,13 @@
 	on:pointerenter={() => {
 		if (disabled) return;
 
-		onPointerEnter();
+		++$cursorHoverCount;
 		$hovering = true;
 	}}
 	on:pointerleave={() => {
 		if (disabled) return;
 
-		onPointerLeave();
+		--$cursorHoverCount;
 		$hovering = false;
 	}}
 	on:pointerdown={() => {
