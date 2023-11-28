@@ -36,7 +36,7 @@
 
 	let time = 60 * 60 * 1000;
 	$: if (time <= 0) state = ClockHouseSceneState.STOPPED;
-	let positions: [x: number, y: number, z: number][] = [
+	const positions: [x: number, y: number, z: number][] = [
 		[-2.77, -2.56, -1.9],
 		[1.78, -9.01, 2.66],
 		[-2.77, -20.5, -1.9],
@@ -93,7 +93,6 @@
 		.add(0.97, { offset: 1000 }, bezierStepPost)
 		.add(0.98, { offset: 1000 }, bezierStepPost)
 		.add(0.99, { offset: 500 }, bezierStepPost);
-	if (browser) void discountTween.play();
 
 	const downGroup = new THREE.Group();
 
@@ -111,24 +110,31 @@
 			bezierQuintInOut,
 		)
 		.add([NaN, NaN, 5], { time: 3000 }, bezierQuintInOut);
+
+	$: if (state === ClockHouseSceneState.IDLE) {
+		if (browser) void discountTween.play();
+	}
+
 	$: if (state === ClockHouseSceneState.DOWN) {
 		void downRotTween.play();
 		void downPosTween.play();
 	}
 
 	$: if (state === ClockHouseSceneState.PAUSED) {
-		void downRotTween.pause();
-		void downPosTween.pause();
+		downRotTween.pause();
+		downPosTween.pause();
 		for (const layer of positionLayers) layer.pause();
 		for (const layer of rotationLayers) layer.pause();
+		discountTween.pause();
 	}
 
 	$: if (state === ClockHouseSceneState.RESET) {
-		void downRotTween.stop();
-		void downRotTween.stop();
-		void downPosTween.stop();
+		downRotTween.stop();
+		downRotTween.stop();
+		downPosTween.stop();
 		for (const layer of positionLayers) layer.stop();
 		for (const layer of rotationLayers) layer.stop();
+		discountTween.stop();
 		time = 60 * 60 * 1000;
 		times = getTimes();
 		state = ClockHouseSceneState.IDLE;
@@ -139,6 +145,7 @@
 		void downPosTween.pause();
 		for (const layer of positionLayers) layer.pause();
 		for (const layer of rotationLayers) layer.pause();
+		discountTween.pause();
 	}
 </script>
 
