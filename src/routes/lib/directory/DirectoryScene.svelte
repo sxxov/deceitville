@@ -73,7 +73,7 @@
 	$: fog.far = (1 - $exitFogTween) * 4;
 
 	let scrollY = 0;
-	let top = 0;
+	let top = NaN;
 
 	let o: typeof object;
 	$: if (object) o = object;
@@ -92,7 +92,7 @@
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
-{#if scrollY >= top}
+{#if !Number.isNaN(top) && scrollY >= top}
 	<DirectorySceneCamera />
 {/if}
 <T

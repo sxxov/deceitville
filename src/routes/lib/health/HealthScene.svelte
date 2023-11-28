@@ -15,21 +15,21 @@
 
 	const point = new Store<Point>({ x: 0, y: 0 });
 	let scrollY = 0;
-	let top = 0;
+	let top = NaN;
 
 	let rotation = 0;
 	useFrame(() => {
 		rotation += 0.01;
 		point.set({
 			x: $inner.width / 2,
-			y: top + vh / 2 - scrollY,
+			y: (top || 0) + vh / 2 - scrollY,
 		});
 	});
 </script>
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
-{#if scrollY >= top}
+{#if !Number.isNaN(top) && scrollY >= top}
 	<HealthSceneCamera />
 {/if}
 {#await createPart(gltfs.building_10) then { object }}

@@ -8,12 +8,12 @@
 	import ContinuationSceneCamera from './ContinuationSceneCamera.svelte';
 
 	let scrollY = 0;
-	let top = 0;
+	let top = NaN;
 </script>
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
-{#if scrollY >= top}
+{#if !Number.isNaN(top) && scrollY > top}
 	<ContinuationSceneCamera />
 {/if}
 <div class="continuation">
