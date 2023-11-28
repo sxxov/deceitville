@@ -16,6 +16,7 @@
 	import Part from '../../../../lib/3d/part/Part.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
 	import { Pet } from './Pet';
+	import BuildingNavPeek from '../../lib/nav/BuildingNavPeek.svelte';
 
 	useAmbientInteractivity();
 
@@ -75,19 +76,19 @@
 					? selected & Pet.CAT
 						? catItemWorldX
 						: selected & Pet.ROCK
-						? rockItemWorldX
-						: selected & Pet.DUCK
-						? duckItemWorldX
-						: 0
+						  ? rockItemWorldX
+						  : selected & Pet.DUCK
+						    ? duckItemWorldX
+						    : 0
 					: 0,
 				aspect <= 1
 					? selected & Pet.CAT
 						? catItemWorldY
 						: selected & Pet.ROCK
-						? rockItemWorldY
-						: selected & Pet.DUCK
-						? duckItemWorldY
-						: 0
+						  ? rockItemWorldY
+						  : selected & Pet.DUCK
+						    ? duckItemWorldY
+						    : 0
 					: 0,
 				5,
 		  ]
@@ -227,11 +228,13 @@
 	}
 </script>
 
-<EphemeralCamera
-	ref={new THREE.PerspectiveCamera(50)}
-	makeDefault
-	position={cameraPositionCurr}
-/>
+<BuildingNavPeek>
+	<EphemeralCamera
+		ref={new THREE.PerspectiveCamera(50)}
+		makeDefault
+		position={cameraPositionCurr}
+	/>
+</BuildingNavPeek>
 <Flex
 	width={contentWidth}
 	height={contentHeight}
