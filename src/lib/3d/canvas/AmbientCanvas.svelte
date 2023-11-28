@@ -4,15 +4,16 @@
 >
 	export const ambientRendererSizeContextKey = Symbol('ambientRendererSize');
 	export const ambientInteractivityContextKey = Symbol('ambientInteractive');
+	export const ambientCursorContextKey = Symbol('ambientCursor');
 </script>
 
 <script lang="ts">
 	import 'use-unsafe-threlte';
 
-	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { beforeNavigate } from '$app/navigation';
 	import { whenResize } from '@sxxov/sv/ut/action/actions';
+	import { css } from '@sxxov/ut/css';
 	import { Store } from '@sxxov/ut/store';
 	import type { Size } from '@sxxov/ut/viewport';
 	import { client, inner } from '@sxxov/ut/viewport';
@@ -24,6 +25,7 @@
 		type ComponentProps,
 	} from 'svelte';
 	import { useLenis } from '../../lenis/useLenis';
+	import type { AmbientCursorContext } from './AmbientCursorContext';
 	import type { AmbientInteractivity } from './AmbientInteractivity';
 	import type { AmbientRendererSizeContext } from './AmbientRendererSizeContext';
 
@@ -92,6 +94,24 @@
 		ambientInteractivityContextKey,
 		interactivityCtx,
 	);
+
+	const cursor: AmbientCursorContext['cursor'] = new Store(undefined);
+	const cursorActive: AmbientCursorContext['cursorActive'] = new Store(
+		undefined,
+	);
+	const cursorHover: AmbientCursorContext['cursorHover'] = new Store(
+		undefined,
+	);
+	const cursorHoverCount: AmbientCursorContext['cursorHoverCount'] =
+		new Store(0);
+	const cursorCtx: AmbientCursorContext = {
+		cursor,
+		cursorHover,
+		cursorHoverCount,
+		cursorActive,
+	};
+
+	setContext<AmbientCursorContext>(ambientCursorContextKey, cursorCtx);
 </script>
 
 <div class="ambient-canvas">
@@ -99,6 +119,11 @@
 		class="canvas"
 		class:active
 		class:interactive={$interactive}
+		style="
+			--cursor: {css(($cursorHoverCount > 0 ? '--cursor-hover' : $cursor) ?? 'auto')};
+			--cursor-hover: {css($cursorHover ?? 'pointer')};
+			--cursor-active: {css($cursorActive ?? '--cursor')};
+		"
 		use:whenResize={({ width: w, height: h }) => {
 			[width, height] = [w, h];
 		}}
@@ -155,6 +180,12 @@
 			& > :global(canvas) {
 				user-select: none;
 				-webkit-tap-highlight-color: transparent;
+
+				cursor: var(--cursor);
+
+				&:active {
+					cursor: var(--cursor-active);
+				}
 			}
 
 			&:not(.interactive) {
