@@ -8,7 +8,7 @@ import type { BuildingInfo } from '../lib/info/BuildingInfo';
 
 export const info = {
 	id: resolveRouteUrl(__dirname),
-	name: 'Metaphysical Supply Store',
+	name: 'Metaphysical Supplies',
 	description:
 		"The town's place to buy improvements to your mind, body, & soul. However, it all seems a little too good to be true. Figure out what actually goes on.",
 	objective: 'Buy a jewel without paying extra.',

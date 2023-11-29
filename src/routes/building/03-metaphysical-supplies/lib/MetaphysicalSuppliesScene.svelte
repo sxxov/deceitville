@@ -3,7 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import * as rocks from '../../../../assets/routes/building/03-metaphysical-supply-store/lib/rocks/parts';
+	import * as rocks from '../../../../assets/routes/building/03-metaphysical-supplies/lib/rocks/parts';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
 	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
 	import Fog from '../../../../lib/3d/environment/Fog.svelte';

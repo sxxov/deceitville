@@ -9,7 +9,7 @@
 	import Dialogue from '../../../lib/dialogue/Dialogue.svelte';
 	import type { DialogueChoice } from '../../../lib/dialogue/DialogueChoice';
 	import { useBuildingNav } from '../lib/nav/useBuildingNav';
-	import MetaphysicalSupplyStoreScene from './lib/MetaphysicalSupplyStoreScene.svelte';
+	import MetaphysicalSupplyStoreScene from './lib/MetaphysicalSuppliesScene.svelte';
 	import { completable } from '../../lib/health/completion';
 	import { info } from './@info';
 	import BuildingSuccess from '../lib/ending/BuildingSuccess.svelte';
