@@ -8,6 +8,7 @@ export const TextTactileVariants = {
 		Font: {
 			sdfGlyphSize: 64,
 			font: ttf_bigelow_rules,
+			lineHeight: 0.7,
 		},
 		Dynamic: {
 			characters:
