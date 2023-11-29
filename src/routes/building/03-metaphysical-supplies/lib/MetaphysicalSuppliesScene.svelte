@@ -12,7 +12,7 @@
 	import BobbleSkullTactile from '../../../../lib/3d/tactile/BobbleSkullTactile.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
 	import TableTactile from '../../../../lib/3d/tactile/TableTactile.svelte';
-	import BuildingNavPeek from '../../lib/nav/BuildingNavPeek.svelte';
+	import Peek from '../../lib/peek/Peek.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -26,12 +26,12 @@
 	camera.lookAt(0, 0, 0);
 </script>
 
-<BuildingNavPeek>
+<Peek>
 	<EphemeralCamera
 		ref={camera}
 		makeDefault
 	/>
-</BuildingNavPeek>
+</Peek>
 
 <!-- <T.PerspectiveCamera
 	makeDefault

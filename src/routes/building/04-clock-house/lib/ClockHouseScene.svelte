@@ -18,7 +18,7 @@
 	import Part from '../../../../lib/3d/part/Part.svelte';
 	import Parts from '../../../../lib/3d/part/Parts.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
-	import BuildingNavPeek from '../../lib/nav/BuildingNavPeek.svelte';
+	import Peek from '../../lib/peek/Peek.svelte';
 	import ClockTactile from './ClockTactile.svelte';
 	import { ClockHouseSceneState } from './ClockHouseSceneState';
 	import { ClockTactileState } from './ClockTactile';
@@ -154,7 +154,7 @@
 	position={$downPosTween}
 	rotation={$downRotTween}
 >
-	<BuildingNavPeek
+	<Peek
 		swizzle="xzy"
 		multiplier={[1, 1, -1]}
 	>
@@ -162,7 +162,7 @@
 			ref={camera}
 			makeDefault
 		/>
-	</BuildingNavPeek>
+	</Peek>
 </T>
 
 <T.Group

@@ -1,27 +1,20 @@
 <script lang="ts">
-	import Part from '../../../../lib/3d/part/Part.svelte';
+	import { AnimatableIterationCount, Layer } from '@sxxov/ut/animation';
+	import { bezierQuintInOut } from '@sxxov/ut/bezier/beziers';
+	import { T, useThrelte } from '@threlte/core';
+	import { HTML, OrbitControls } from '@threlte/extras';
+	import { createEventDispatcher } from 'svelte';
+	import * as THREE from 'three';
+	import { degToRad } from 'three/src/math/MathUtils.js';
+	import webm_hypno from '../../../../assets/routes/building/05-conversion-therapist/lib/tv/hypno.webm?url';
 	import * as tv from '../../../../assets/routes/building/05-conversion-therapist/lib/tv/parts';
 	import EphemeralCamera from '../../../../lib/3d/camera/EphemeralCamera.svelte';
-	import BuildingNavPeek from '../../lib/nav/BuildingNavPeek.svelte';
-	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
-	import { HTML, OrbitControls } from '@threlte/extras';
-	import TableTactile from '../../../../lib/3d/tactile/TableTactile.svelte';
-	import { T, useThrelte } from '@threlte/core';
-	import * as THREE from 'three';
-	import webm_hypno from '../../../../assets/routes/building/05-conversion-therapist/lib/tv/hypno.webm?url';
-	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
-	import { Text } from '@threlte/extras';
-	import TextTactile from '../../../../lib/3d/tactile/TextTactile.svelte';
 	import { useAmbientCursor } from '../../../../lib/3d/canvas/useAmbientCursor';
-	import { createEventDispatcher } from 'svelte';
+	import { useAmbientInteractivity } from '../../../../lib/3d/canvas/useAmbientInteractivity';
+	import Part from '../../../../lib/3d/part/Part.svelte';
+	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
+	import TableTactile from '../../../../lib/3d/tactile/TableTactile.svelte';
 	import { ConversionTherapistSceneState } from './ConversionTherapistSceneState';
-	import { AnimatableIterationCount, Layer } from '@sxxov/ut/animation';
-	import { degToRad } from 'three/src/math/MathUtils.js';
-	import {
-		bezierQuintIn,
-		bezierQuintInOut,
-		bezierQuintOut,
-	} from '@sxxov/ut/bezier/beziers';
 
 	useAmbientInteractivity();
 	useThrelte();

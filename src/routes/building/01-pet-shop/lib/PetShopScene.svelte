@@ -16,7 +16,7 @@
 	import Part from '../../../../lib/3d/part/Part.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
 	import { Pet } from './Pet';
-	import BuildingNavPeek from '../../lib/nav/BuildingNavPeek.svelte';
+	import Peek from '../../lib/peek/Peek.svelte';
 
 	useAmbientInteractivity();
 
@@ -228,13 +228,13 @@
 	}
 </script>
 
-<BuildingNavPeek>
+<Peek>
 	<EphemeralCamera
 		ref={new THREE.PerspectiveCamera(50)}
 		makeDefault
 		position={cameraPositionCurr}
 	/>
-</BuildingNavPeek>
+</Peek>
 <Flex
 	width={contentWidth}
 	height={contentHeight}

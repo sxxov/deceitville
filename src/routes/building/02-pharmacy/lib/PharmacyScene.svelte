@@ -10,20 +10,20 @@
 	import Fog from '../../../../lib/3d/environment/Fog.svelte';
 	import BobbleSkullTactile from '../../../../lib/3d/tactile/BobbleSkullTactile.svelte';
 	import ButtonTactile from '../../../../lib/3d/tactile/ButtonTactile.svelte';
-	import BuildingNavPeek from '../../lib/nav/BuildingNavPeek.svelte';
+	import Peek from '../../lib/peek/Peek.svelte';
 
 	useAmbientInteractivity();
 
 	const dispatch = createEventDispatcher();
 </script>
 
-<BuildingNavPeek>
+<Peek>
 	<EphemeralCamera
 		ref={new THREE.PerspectiveCamera(50)}
 		makeDefault
 		position={[0, 0, 10]}
 	/>
-</BuildingNavPeek>
+</Peek>
 <Fog
 	near={0}
 	far={20}
