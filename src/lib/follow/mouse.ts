@@ -14,7 +14,7 @@ const move = (x: number, y: number) => {
 	});
 };
 
-const onMouseMove = (e: MouseEvent | TouchEvent) => {
+const onMouseMove = (e: MouseEvent) => {
 	if (navigator.maxTouchPoints > 0) return;
 
 	const point = resolvePointerFromEvent(e);
