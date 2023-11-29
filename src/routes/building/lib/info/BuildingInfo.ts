@@ -6,12 +6,12 @@ export interface BuildingInfo {
 	name: string;
 	description: string;
 	objective: string;
-	inspirations: readonly string[];
-	lessons: readonly string[];
-	brignull: {
+	inspirations: string[];
+	lessons: string[];
+	brignulls: {
 		kind: string;
 		url: string;
-	};
+	}[];
 	icon: SvgString;
 	facade: (typeof gltfs)[keyof typeof gltfs];
 }

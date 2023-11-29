@@ -87,6 +87,7 @@
 		"troika-three-text": "^0.49.0",
 		"ts-nameof": "^5.0.0",
 		"ts-transformer-keys": "^0.4.4",
+		"type-fest": "^4.8.2",
 		"ws": "^8.14.2",
 		"zod": "^3.22.4"
 	}

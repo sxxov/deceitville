@@ -1,6 +1,7 @@
 /* cspell:includeregexp string */
 
 import { ic_self_improvement } from 'maic/two_tone';
+import type { ReadonlyDeep } from 'type-fest';
 import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
@@ -21,10 +22,12 @@ export const info = {
 		'Know the influence of lying by omission.',
 		'Learn to sniff out hidden costs or misrepresentations & stay vigilant up till the finalisation of every purchase.',
 	],
-	brignull: {
-		kind: 'Hidden Costs',
-		url: 'https://www.deceptive.design/types/hidden-costs',
-	},
+	brignulls: [
+		{
+			kind: 'Hidden Costs',
+			url: 'https://www.deceptive.design/types/hidden-costs',
+		},
+	],
 	icon: ic_self_improvement,
 	facade: gltfs.building_3,
-} as const satisfies BuildingInfo;
+} as const satisfies ReadonlyDeep<BuildingInfo>;

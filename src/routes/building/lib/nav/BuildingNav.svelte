@@ -338,18 +338,18 @@
 				<section>
 					<h3>Learn More</h3>
 					<ul>
-						<li>
-							<a
-								class="external"
-								href={info.brignull.url}
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								{info.brignull.kind}<Svg
-									svg={ic_arrow_outward}
-								/>
-							</a>
-						</li>
+						{#each info.brignulls as { url, kind }}
+							<li>
+								<a
+									class="external"
+									href={url}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{kind}<Svg svg={ic_arrow_outward} />
+								</a>
+							</li>
+						{/each}
 					</ul>
 				</section>
 			</div>

@@ -42,7 +42,7 @@
 				>
 					<Svg svg={ic_lightbulb} />
 					<!-- <Spacer width={0} /> -->
-					{info.brignull.kind}
+					{info.brignulls.map(({ kind }) => kind).join(', ')}
 					<!-- <Svg
 							width={16}
 							svg={ic_arrow_outward}

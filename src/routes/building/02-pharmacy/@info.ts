@@ -1,6 +1,7 @@
 /* cspell:includeregexp string */
 
 import { ic_local_pharmacy } from 'maic/two_tone';
+import type { ReadonlyDeep } from 'type-fest';
 import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
@@ -19,10 +20,12 @@ export const info = {
 		'Learn how websites can restrict information that hinders decision making.',
 		'Know the hidden influence of the obstruction towards your right for information.',
 	],
-	brignull: {
-		kind: 'Obstruction',
-		url: 'https://www.deceptive.design/types/obstruction',
-	},
+	brignulls: [
+		{
+			kind: 'Obstruction',
+			url: 'https://www.deceptive.design/types/obstruction',
+		},
+	],
 	icon: ic_local_pharmacy,
 	facade: gltfs.building_2,
-} as const satisfies BuildingInfo;
+} as const satisfies ReadonlyDeep<BuildingInfo>;

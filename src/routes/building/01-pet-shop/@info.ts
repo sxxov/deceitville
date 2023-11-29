@@ -1,7 +1,8 @@
 /* cspell:includeregexp string */
 
-import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { ic_pets } from 'maic/two_tone';
+import type { ReadonlyDeep } from 'type-fest';
+import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
 
@@ -18,10 +19,12 @@ export const info = {
 		'Learn how websites can obstruct your comparison process.',
 		'Know the difficulty of making a decision based on incomplete information.',
 	],
-	brignull: {
-		kind: 'Comparison Prevention',
-		url: 'https://www.deceptive.design/types/comparison-prevention',
-	},
+	brignulls: [
+		{
+			kind: 'Comparison Prevention',
+			url: 'https://www.deceptive.design/types/comparison-prevention',
+		},
+	],
 	icon: ic_pets,
 	facade: gltfs.building_1,
-} as const satisfies BuildingInfo;
+} as const satisfies ReadonlyDeep<BuildingInfo>;

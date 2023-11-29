@@ -1,6 +1,7 @@
 /* cspell:includeregexp string */
 
 import { ic_browse_gallery } from 'maic/two_tone';
+import type { ReadonlyDeep } from 'type-fest';
 import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
@@ -19,10 +20,12 @@ export const info = {
 		'Learn how websites can use time to pressure you into buying something.',
 		'Know the influence of urgency on your decision making.',
 	],
-	brignull: {
-		kind: 'Fake urgency',
-		url: 'https://www.deceptive.design/types/fake-urgency',
-	},
+	brignulls: [
+		{
+			kind: 'Fake urgency',
+			url: 'https://www.deceptive.design/types/fake-urgency',
+		},
+	],
 	icon: ic_browse_gallery,
 	facade: gltfs.building_4,
-} as const satisfies BuildingInfo;
+} as const satisfies ReadonlyDeep<BuildingInfo>;
