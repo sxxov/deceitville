@@ -125,7 +125,8 @@
 			--cursor-active: {css($cursorActive ?? '--cursor')};
 		"
 		use:whenResize={({ width: w, height: h }) => {
-			[width, height] = [w, h];
+			if (width !== w) width = w;
+			if (height !== h) height = h;
 		}}
 	>
 		{#if browser}
