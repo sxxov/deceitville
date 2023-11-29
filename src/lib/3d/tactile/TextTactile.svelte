@@ -18,16 +18,18 @@
 <Text
 	bind:this={$component}
 	{text}
-	characters={'\x00\x00\x00"#$&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~†°¢•´¨∞¬√«»–—“”‘’÷⁄‹›‡·‚„ˆ˜¯˘˙˚¸˝˛ˇß¶µ¥€≈æøØ≠ÆŒœ¡¿ÐŁłÞþ§ªº£%¹²³¾½¼©®™∂ð±‰ŠšÝýŽžÀÃÕÿŸıÒÚÛÙÂÊÁËÈÍÎÏÌÓÔÄÅÇÉÑÖÜáàâäãåçéèêëíìîïñóòôöõúùûü…ﬁﬂ ȷ¤­̦̒̕ĀĂĄĆĈĊČĎĐĒĔĖĘĚĜĞĠĢĤĦĨĪĬĮİĲĴĶĹĻĿĽŃŅŇŊŌŎŐŔŖŘŚŜŞŢŤŦŨŪŬŮŰŲŴẀẂẄŶỲŹŻǼǾāăąćĉċčďđēĕėęěĝğġģĥħĩīĭįĳĵķĸĺļŀľńņňŉŋōŏőŕŗřśŝşţťŧũūŭůűųŵẁẃẅŷỳźżǽǿ×¦−!'}
 	sdfGlyphSize={64}
+	font={ttf_bigelow_rules}
 	material={new THREE.MeshPhysicalMaterial({
 		color: 0xffffff,
 		emissive: 0xffffff,
 		emissiveIntensity: 100,
 	})}
-	font={ttf_bigelow_rules}
 	fontSize={1}
 	anchorX="50%"
 	anchorY="50%"
+	{...!$$restProps['characters'] && {
+		characters: [...new Set(text)].join(''),
+	}}
 	{...$$restProps}
 />

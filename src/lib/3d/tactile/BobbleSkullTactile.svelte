@@ -13,6 +13,7 @@
 	import { onDestroy } from 'svelte';
 	import { GLTF } from '@threlte/extras';
 	import TextTactile from './TextTactile.svelte';
+	import { TextTactileVariants } from './TextTactileVariants';
 
 	interface $$Props extends Props<THREE.Group> {
 		name?: typeof name;
@@ -81,6 +82,7 @@
 			scale={[1, 1, 1]}
 		/>
 		<TextTactile
+			{...TextTactileVariants.Display.Font}
 			text={name}
 			position={[0, 1.7, 0]}
 		/>
