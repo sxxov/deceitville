@@ -1,33 +1,55 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { R } from '@sxxov/sv/functional';
 	import { Svg } from '@sxxov/sv/svg';
 	import { Tween } from '@sxxov/ut/animation';
 	import { bezierQuintIn, bezierQuintOut } from '@sxxov/ut/bezier/beziers';
 	import { clamp01, lerp, map01 } from '@sxxov/ut/math';
+	import { Store, Supply } from '@sxxov/ut/store';
 	import { inner, type Point } from '@sxxov/ut/viewport';
-	import { ic_flag } from 'maic/two_tone';
+	import { ic_flag, ic_table_restaurant } from 'maic/two_tone';
 	import { onDestroy, onMount } from 'svelte';
 	import type * as THREE from 'three';
 	import svg_loop_centre from '../../../assets/routes/lib/directory/loops/centre.svg?raw';
 	import svg_loop_corner from '../../../assets/routes/lib/directory/loops/corner.svg?raw';
+	import * as buildings from '../../../assets/routes/lib/village/buildings/parts';
 	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import { createPart } from '../../../lib/3d/gltf/part';
 	import { pointer } from '../../../lib/follow/pointer';
 	import { infos } from '../../building/lib/info/infos';
+	import { completable, completion } from '../health/completion';
 	import ScrollPosition from '../layout/ScrollPosition.svelte';
 	import type { DirectoryRoute } from './DirectoryRoute';
 	import DirectoryScene from './DirectoryScene.svelte';
 
-	const routes: DirectoryRoute[] = [
-		...Object.entries(infos),
-		...Object.entries(infos),
-		...Object.entries(infos),
-		...Object.entries(infos),
-	].map(([k, info]) => ({
-		info,
-		url: k,
-	}));
+	const routes: DirectoryRoute[] = Object.entries(infos)
+		.map(([k, info]) => ({
+			info,
+			url: k,
+			completed: completable[info.id]!.supply,
+			comingSoon: false,
+		}))
+		.concat(
+			Array(5).fill({
+				info: {
+					id: '_',
+					name: 'Under Construction',
+					description:
+						'This place is still under construction. Check back later!',
+					icon: ic_table_restaurant,
+					brignulls: [],
+					facade: buildings.gltfs.lader,
+					inspirations: [],
+					lessons: [],
+					objective: '',
+				},
+				url: '#',
+				completed: new Supply(new Store(false)),
+				comingSoon: true,
+			} satisfies DirectoryRoute),
+		);
+	const routesAvailableNow = routes.filter(({ comingSoon }) => !comingSoon);
 	let routeObject: THREE.Object3D | undefined;
 	let routeObjects: THREE.Object3D[] = [];
 	onMount(async () => {
@@ -47,7 +69,7 @@
 		let i = Math.floor(Math.random() * routes.length);
 		route = routes[i];
 		randomIntervalHandle = setInterval(() => {
-			route = routes[++i % routes.length];
+			route = routesAvailableNow[++i % routesAvailableNow.length];
 		}, 300);
 	} else {
 		if (randomIntervalHandle) clearInterval(randomIntervalHandle);
@@ -315,6 +337,7 @@
 				on:click={async (e) => {
 					if (e.ctrlKey || e.metaKey) return;
 					e.preventDefault();
+					if (route?.url === '#') return;
 					exiting = true;
 					await directoryScene?.exit();
 					await goto(route?.url ?? '#');
@@ -322,6 +345,7 @@
 			>
 				<div
 					class="route"
+					class:completed={$completion >= 1}
 					on:touchstart={() => {
 						randomHovered = true;
 					}}
@@ -362,50 +386,58 @@
 				</div>
 			</a>
 
-			{#each routes as { info: { name, icon }, url }, i}
-				<a
-					href={url}
-					bind:this={routeContainers[i + 1]}
-					on:click={async (e) => {
-						if (e.ctrlKey || e.metaKey) return;
-						e.preventDefault();
-						exiting = true;
-						await directoryScene?.exit();
-						await goto(url);
-					}}
+			{#each routes as { info: { name, icon }, url, completed, comingSoon }, i}
+				<R
+					r={completed}
+					let:v={completed}
 				>
-					<div
-						class="route"
-						on:pointerenter={() => {
-							route = routes[i];
-						}}
-						on:pointerleave={() => {
-							route = undefined;
-						}}
-						on:pointercancel={() => {
-							route = undefined;
+					<a
+						href={url}
+						bind:this={routeContainers[i + 1]}
+						on:click={async (e) => {
+							if (e.ctrlKey || e.metaKey) return;
+							e.preventDefault();
+							if (route?.url === '#') return;
+							exiting = true;
+							await directoryScene?.exit();
+							await goto(url);
 						}}
 					>
-						<div class="icon">
-							<Svg
-								colour="currentColor"
-								height={28}
-								svg={icon}
-							/>
-						</div>
-						<div class="arrow">
-							<div class="content">
-								<div class="tail"></div>
-								<div class="head">
-									<div class="a"></div>
-									<div class="b"></div>
+						<div
+							class="route"
+							class:disabled={comingSoon}
+							class:completed
+							on:pointerenter={() => {
+								route = routes[i];
+							}}
+							on:pointerleave={() => {
+								route = undefined;
+							}}
+							on:pointercancel={() => {
+								route = undefined;
+							}}
+						>
+							<div class="icon">
+								<Svg
+									colour="currentColor"
+									height={28}
+									svg={icon}
+								/>
+							</div>
+							<div class="arrow">
+								<div class="content">
+									<div class="tail"></div>
+									<div class="head">
+										<div class="a"></div>
+										<div class="b"></div>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<h6 bind:this={routeHeadings[i + 1]}>{name}</h6>
-					</div>
-				</a>
+							<h6 bind:this={routeHeadings[i + 1]}>{name}</h6>
+						</div>
+					</a>
+				</R>
 			{/each}
 		</div>
 		<div class="padding end"></div>
@@ -771,7 +803,11 @@
 							transition: clip-path 0.3s var(----ease-slow-slow);
 						}
 
-						&:hover {
+						&.disabled {
+							cursor: not-allowed;
+						}
+
+						&:not(.disabled):hover {
 							&::before {
 								clip-path: inset(0 0 0 0);
 							}
@@ -791,7 +827,7 @@
 							}
 						}
 
-						&:active {
+						&:not(.disabled):active {
 							&::before {
 								background: var(----colour-background-primary);
 							}
@@ -808,6 +844,28 @@
 
 							& > .icon {
 								color: var(----colour-text-primary);
+							}
+						}
+
+						&:not(.completed):not(.disabled) {
+							& > h6 {
+								position: relative;
+
+								&::after {
+									--size: 7px;
+									content: '';
+									position: absolute;
+									top: calc(-1 * var(--size));
+									right: calc(-2 * var(--size));
+									width: var(--size);
+									height: var(--size);
+									background: var(----colour-text-primary);
+									z-index: -1;
+
+									border-radius: 9999px;
+									border: 2px solid
+										var(----colour-background-primary);
+								}
 							}
 						}
 
@@ -891,6 +949,16 @@
 							color: var(----colour-text-primary);
 
 							transition: color 0.2s 0.1s var(----ease-fast-slow);
+						}
+
+						&.disabled {
+							& > .icon {
+								color: var(----colour-text-secondary);
+							}
+
+							& > h6 {
+								color: var(----colour-text-secondary);
+							}
 						}
 					}
 				}
