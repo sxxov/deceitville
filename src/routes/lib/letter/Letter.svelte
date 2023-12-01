@@ -16,7 +16,7 @@
 	let bottom = 0;
 	const heightShred = 224;
 
-	$: shred = $inner.width > 400;
+	$: shred = $inner.width > 500;
 </script>
 
 <svelte:window bind:scrollY />
