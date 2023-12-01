@@ -71,6 +71,16 @@
 			pressUnsubscribe();
 		};
 	});
+
+	const incrementCursorHoverCount = () => {
+		++$cursorHoverCount;
+	};
+	const decrementCursorHoverCount = () => {
+		--$cursorHoverCount;
+	};
+
+	$: if ($hovering) incrementCursorHoverCount();
+	else decrementCursorHoverCount();
 </script>
 
 <T
@@ -78,13 +88,11 @@
 	on:pointerenter={() => {
 		if (disabled) return;
 
-		++$cursorHoverCount;
 		$hovering = true;
 	}}
 	on:pointerleave={() => {
 		if (disabled) return;
 
-		--$cursorHoverCount;
 		$hovering = false;
 	}}
 	on:pointerdown={() => {
