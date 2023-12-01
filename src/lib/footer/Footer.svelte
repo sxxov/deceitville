@@ -18,7 +18,17 @@
 		</div>
 	</div>
 	<div class="centre">
-		<p><a href=""><Svg svg={ic_arrow_outward} />Hire me</a></p>
+		<p>
+			<a href="mailto:hello@ljs.lol"
+				><Svg svg={ic_arrow_outward} />Hire me</a
+			>
+		</p>
+		<p>
+			<a
+				href="https://github.com/sxxov/deceitville"
+				target="_blank"><Svg svg={ic_arrow_outward} />Source code</a
+			>
+		</p>
 		<div class="icons" />
 	</div>
 	<p>©&nbsp; Lim Jia Sheng<br />{new Date().getFullYear()}</p>
@@ -83,7 +93,7 @@
 
 			display: flex;
 			flex-direction: column;
-			gap: 28px;
+			gap: 14px;
 
 			& > p {
 				margin: 0;
@@ -93,6 +103,8 @@
 					display: flex;
 					align-items: center;
 					gap: 14px;
+
+					width: max-content;
 				}
 			}
 
