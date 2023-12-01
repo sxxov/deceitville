@@ -7,6 +7,7 @@
 	import { ic_heart_broken, ic_favorite } from 'maic/two_tone';
 	import HealthScene from './HealthScene.svelte';
 	import { completable } from './completion';
+	import { Store } from '@sxxov/ut/store';
 
 	const infosEntries = Object.entries(infos);
 
@@ -30,6 +31,7 @@
 		<div class="hearts">
 			{#each heartsBlueprint as { icon, predicate }}
 				{#each completableEntries as [k, r]}
+					{@const hovering = new Store(false)}
 					<R
 						{r}
 						let:v
@@ -43,7 +45,25 @@
 									),
 								)}
 							{#if info}
-								<a href={url}>
+								<a
+									href={url}
+									on:pointerover={(e) => {
+										if (e.pointerType === 'mouse')
+											hovering.set(true);
+									}}
+									on:keyup={(e) => {
+										if (e.key === 'Tab') hovering.set(true);
+									}}
+									on:blur={() => {
+										hovering.set(false);
+									}}
+									on:click={(e) => {
+										if (!hovering.get()) {
+											e.preventDefault();
+											hovering.set(true);
+										}
+									}}
+								>
 									<div class="heart">
 										<Svg
 											width={16}
@@ -131,7 +151,9 @@
 						background: var(----colour-background-primary);
 						color: var(----colour-text-primary);
 
-						&:hover {
+						&:hover,
+						&:focus,
+						&:active {
 							color: var(----colour-background-primary);
 							background: var(----colour-text-primary);
 
@@ -172,6 +194,20 @@
 							transition:
 								opacity 0.1s var(----ease-fast-slow),
 								transform 0.2s var(----ease-fast-slow);
+
+							&::before {
+								content: '';
+								position: absolute;
+								top: 100%;
+								left: 50%;
+								width: 0;
+								height: 0;
+								border-left: 7px solid transparent;
+								border-right: 7px solid transparent;
+								border-top: 7px solid
+									var(----colour-text-primary);
+								transform: translate(-50%, 0);
+							}
 						}
 					}
 				}
