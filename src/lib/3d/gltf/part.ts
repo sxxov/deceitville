@@ -1,15 +1,9 @@
-import { GLTFLoader, type GLTF, DRACOLoader } from 'three-stdlib';
+import type { GLTF } from 'three-stdlib';
+import { gltfLoader } from './gltfLoader';
 
 export interface Part extends GLTF {
 	object: THREE.Object3D | undefined;
 }
-
-const gltfLoader = new GLTFLoader();
-const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath(
-	'https://www.gstatic.com/draco/versioned/decoders/1.5.6/',
-);
-gltfLoader.setDRACOLoader(dracoLoader);
 
 const partCache = new Map<Record<any, any>, Part>();
 export const createPart = async <T extends Record<any, any>>(
