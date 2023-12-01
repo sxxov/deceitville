@@ -1,61 +1,69 @@
 <script lang="ts">
-	import { LoaderLine } from '@sxxov/sv/loaders';
+	import { R } from '@sxxov/sv/functional';
 	import { Svg } from '@sxxov/sv/svg';
-	import { ic_favorite, ic_info } from 'maic/two_tone';
+	import { UnreachableError } from '@sxxov/ut/errors';
+	import { raise } from '@sxxov/ut/functional';
+	import { infos } from '../../building/lib/info/infos';
+	import { ic_heart_broken, ic_favorite } from 'maic/two_tone';
 	import HealthScene from './HealthScene.svelte';
-	import { health } from './completion';
+	import { completable } from './completion';
 
-	let hint = false;
+	const infosEntries = Object.entries(infos);
+
+	const heartsBlueprint = [
+		{
+			icon: ic_heart_broken,
+			predicate: (v: boolean) => v,
+		},
+		{
+			icon: ic_favorite,
+			predicate: (v: boolean) => !v,
+		},
+	];
+	const completableEntries = Object.entries(completable);
 </script>
 
 <HealthScene />
 <div class="health">
 	<div class="content">
-		<h2></h2>
-		<div
-			class="progress"
-			role="presentation"
-			on:click={() => (hint = !hint)}
-		>
-			<div class="info">
-				<div class="icon">
-					<Svg svg={ic_favorite} />
-				</div>
-				<p class="percent">{($health * 100).toFixed(0)}</p>
-			</div>
-			<div class="bar">
-				<LoaderLine
-					strokeColour="currentColor"
-					backgroundStrokeColour="----colour-text-tertiary"
-					completion={Math.max($health, 0.001)}
-				/>
-			</div>
-			<div
-				class="hint"
-				class:visible={hint}
-			>
-				<div class="content">
-					<Svg svg={ic_info} /><b>Hint:</b>
-					{#if $health >= 1}Use the directory.{:else if $health >= 0.75}Explore
-						the town.{:else if $health >= 0.5}Find clues.{:else if $health >= 0.25}Almost
-						there.{:else if $health >= 0}I am become death,
-						destroyer of towns.{:else}Explore the town.{/if}
-				</div>
-			</div>
+		<h2 class="top">Town Status</h2>
+		<div class="hearts">
+			{#each heartsBlueprint as { icon, predicate }}
+				{#each completableEntries as [k, r]}
+					<R
+						{r}
+						let:v
+					>
+						{#if predicate(v)}
+							{@const [url, info] =
+								infosEntries.find(([, v]) => v.id === k) ??
+								raise(
+									new UnreachableError(
+										'Could not find info from completable key',
+									),
+								)}
+							{#if info}
+								<a href={url}>
+									<div class="heart">
+										<Svg
+											width={16}
+											svg={icon}
+										/>
+										<div class="hint">
+											<Svg
+												width={16}
+												svg={info.icon}
+											/>{info.name}
+										</div>
+									</div>
+								</a>
+							{/if}
+						{/if}
+					</R>
+				{/each}
+			{/each}
 		</div>
-		<h2>
-			De Corp.®: Status {$health >= 1
-				? 'Healthy'
-				: $health >= 0.75
-				? 'Compromised'
-				: $health >= 0.5
-				? 'Degraded'
-				: $health >= 0.25
-				? 'Critical'
-				: $health > 0
-				? 'Terminal'
-				: 'Dead'}
-		</h2>
+		<h2 class="bottom">H</h2>
 	</div>
 
 	<div class="padding end"></div>
@@ -84,102 +92,87 @@
 			/* border-bottom: 1px solid var(----colour-text-primary); */
 
 			& > h2 {
-				color: var(----colour-text-primary);
-				letter-spacing: -0.04em;
+				/* font-size: 4em; */
+
+				&.top {
+					color: var(----colour-text-primary);
+				}
+
+				&.bottom {
+					visibility: hidden;
+					pointer-events: none;
+					user-select: none;
+				}
 			}
 
-			& > .progress {
-				width: 100%;
-				max-width: 600px;
-				padding-left: 20px;
-				box-sizing: border-box;
-				box-sizing: border-box;
-				/* padding-block: 28px; */
-				border-radius: var(----roundness);
-				border: 1px solid var(----colour-background-tertiary);
-
+			& > .hearts {
 				display: flex;
+				flex-wrap: wrap;
 				align-items: center;
 				justify-content: center;
-				gap: 28px;
+				gap: 14px;
+				padding: 0 28px;
 
-				cursor: help;
-				-webkit-tap-highlight-color: transparent;
+				& > a {
+					pointer-events: auto;
 
-				background: var(----colour-background-primary);
-				color: var(----colour-text-primary);
+					& > .heart {
+						position: relative;
 
-				transition:
-					background 0.2s var(----ease-fast-slow),
-					color 0.2s var(----ease-fast-slow);
-
-				&:hover {
-					background: var(----colour-text-primary);
-					color: var(----colour-background-primary);
-				}
-
-				&:active {
-					background: var(----colour-background-primary);
-					color: var(----colour-text-primary);
-
-					transition:
-						background 0s var(----ease-fast-slow),
-						color 0s var(----ease-fast-slow);
-				}
-
-				& > .info {
-					display: flex;
-					gap: 14px;
-					align-items: center;
-					/* position: absolute;
-					padding-inline: 20px;
-					background: var(----colour-background-primary); */
-
-					z-index: 1;
-				}
-
-				& > .bar {
-					flex-grow: 1;
-					width: 400px;
-				}
-
-				& > .hint {
-					position: relative;
-					width: 0;
-					height: 50px;
-					overflow: hidden;
-					overflow: clip;
-					opacity: 0;
-					pointer-events: none;
-
-					display: flex;
-					align-items: center;
-
-					transition:
-						width 0.2s var(----ease-fast-slow),
-						opacity 0.1s 0s var(----ease-fast-slow);
-
-					&.visible {
-						width: 100%;
-						opacity: 1;
-						pointer-events: auto;
-
-						transition:
-							width 0.2s var(----ease-fast-slow),
-							opacity 0s 0.01s var(----ease-fast-slow);
-
-						@media (max-width: 600px) {
-							width: 400%;
-						}
-					}
-
-					& > .content {
-						display: none;
-						position: absolute;
 						display: flex;
-						align-items: center;
 						gap: 14px;
-						width: 100%;
+						align-items: center;
+						justify-content: center;
+
+						border-radius: 999px;
+						border: 1px solid var(----colour-text-primary);
+						padding: 28px;
+						box-sizing: border-box;
+						background: var(----colour-background-primary);
+						color: var(----colour-text-primary);
+
+						&:hover {
+							color: var(----colour-background-primary);
+							background: var(----colour-text-primary);
+
+							& > .hint {
+								color: var(----colour-text-primary);
+							}
+						}
+
+						&:not(:hover) {
+							& > .hint {
+								opacity: 0;
+								transform: translate(0, 3.5px);
+							}
+						}
+
+						& > .hint {
+							position: absolute;
+
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							gap: 7px;
+
+							bottom: calc(100% + 14px);
+							text-align: center;
+
+							border-radius: 999px;
+							border: 1px solid var(----colour-text-primary);
+							padding: 14px;
+							box-sizing: border-box;
+							background: var(----colour-background-primary);
+
+							pointer-events: none;
+
+							opacity: 1;
+							transform: translate(0, 0);
+
+							transition:
+								opacity 0.1s var(----ease-fast-slow),
+								transform 0.2s var(----ease-fast-slow);
+						}
 					}
 				}
 			}
