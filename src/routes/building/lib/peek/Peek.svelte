@@ -20,7 +20,8 @@
 	export let swizzle: SwizzleString = 'xyz';
 	export let multiplier: Vector3Array = [1, 1, 1];
 	export let magnetic = false;
-	export let rangeDeg = 40;
+	/** Range of motion, in degrees */
+	export let range = 40;
 
 	const size = useAmbientRendererSize()!;
 	$: sizeHypot = Math.hypot($size.width, $size.height);
@@ -50,8 +51,8 @@
 					point.y - cameraPeekCurrPointerPoint.y,
 					-sizeHypot,
 					sizeHypot,
-					degToRad(-(rangeDeg / 2)),
-					degToRad(rangeDeg / 2),
+					degToRad(-(range / 2)),
+					degToRad(range / 2),
 			  )
 			: 0;
 	$: cameraPeekTarget.y =
@@ -61,8 +62,8 @@
 					point.x - cameraPeekCurrPointerPoint.x,
 					-sizeHypot,
 					sizeHypot,
-					degToRad(-(rangeDeg / 2)),
-					degToRad(rangeDeg / 2),
+					degToRad(-(range / 2)),
+					degToRad(range / 2),
 			  )
 			: 0;
 	$: cameraPeek = { x: 0, y: 0 };
@@ -114,6 +115,13 @@
 	const onMouseMove = (e: MouseEvent) => {
 		const pointer = resolvePointerFromEvent(e);
 		[point.x, point.y] = [pointer.x, pointer.y];
+
+		if (magnetic) {
+			[cameraPeekCurrPointerPoint.x, cameraPeekCurrPointerPoint.y] = [
+				$size.width / 2,
+				$size.height / 2,
+			];
+		}
 	};
 
 	let mouseListenersAdded = false;
