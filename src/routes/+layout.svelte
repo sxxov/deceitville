@@ -6,8 +6,8 @@
 
 <script lang="ts">
 	import src_pace from 'pace-js?url';
-	import img_favi from '../assets/common/favi/favicon.png?png&imagetools';
-	import ic_favi from '../assets/common/favi/favicon.svg?url';
+	import png_favi from '../assets/common/favi/favicon.png?png&imagetools';
+	import svg_favi from '../assets/common/favi/favicon.svg?url';
 	import src_webmanifest from '../assets/common/favi/site.webmanifest?url';
 	import '../app.pcss';
 	import { Toaster } from '@sxxov/sv/toast';
@@ -35,12 +35,12 @@
 	<link
 		rel="icon"
 		type="image/svg+xml"
-		href={ic_favi}
+		href={svg_favi}
 	/>
 	<link
 		rel="icon"
 		type="image/png"
-		href={img_favi}
+		href={png_favi}
 	/>
 	<link
 		rel="manifest"

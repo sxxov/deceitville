@@ -10,6 +10,7 @@
 	import Waze from './lib/waze/Waze.svelte';
 	import { WazeDirection } from './lib/waze/WazeDirection';
 	import type { WazeTimeline } from './lib/waze/WazeTimeline';
+	import Meta from '../lib/meta/Meta.svelte';
 
 	export const dropDown = (
 		element: Element,
@@ -59,6 +60,20 @@
 	] satisfies WazeTimeline as WazeTimeline;
 </script>
 
+<Meta
+	title="Deceitville"
+	description="A Wizardly UI World. Defeat De Corp.® & learn about coersions by the User Interfaces you use."
+	keywords={[
+		'design',
+		'ui',
+		'dark patterns',
+		'deceptive design',
+		'deceptive patterns',
+		'user interface',
+		'ui/ux',
+	]}
+	src=""
+/>
 <svelte:window bind:scrollY />
 <div class="route home">
 	<div class="frame">
