@@ -104,6 +104,7 @@
 	);
 	const cursorHoverCount: AmbientCursorContext['cursorHoverCount'] =
 		new Store(0);
+	$: if ($cursorHoverCount < 0) $cursorHoverCount = 0;
 	const cursorCtx: AmbientCursorContext = {
 		cursor,
 		cursorHover,
