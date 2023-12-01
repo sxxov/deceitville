@@ -15,7 +15,7 @@
 		weightSurface?: typeof weightSurface;
 		heightLeg?: typeof heightLeg;
 		weightLeg?: typeof weightLeg;
-		clothGap?: typeof gapCloth;
+		gapCloth?: typeof gapCloth;
 	}
 	type $$Events = Events<THREE.Group>;
 
