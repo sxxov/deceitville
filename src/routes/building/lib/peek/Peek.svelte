@@ -90,7 +90,11 @@
 			cancelAnimationFrame(cameraPeekRafHandle!);
 		});
 
+	let pointerEventFromTouch = false;
+
 	const onMouseDown = (e: MouseEvent) => {
+		if (pointerEventFromTouch) return;
+
 		const pointer = resolvePointerFromEvent(e);
 		[point.x, point.y] = [pointer.x, pointer.y];
 
@@ -106,6 +110,11 @@
 	};
 
 	const onMouseUp = () => {
+		if (pointerEventFromTouch) {
+			pointerEventFromTouch = false;
+			return;
+		}
+
 		if (!magnetic) {
 			applyCameraPeekResistance();
 			$cameraPeekEnabled = false;
@@ -113,6 +122,8 @@
 	};
 
 	const onMouseMove = (e: MouseEvent) => {
+		if (pointerEventFromTouch) return;
+
 		const pointer = resolvePointerFromEvent(e);
 		[point.x, point.y] = [pointer.x, pointer.y];
 
@@ -147,6 +158,8 @@
 	};
 
 	const onTouchDown = (e: TouchEvent) => {
+		pointerEventFromTouch = true;
+
 		const pointer = resolvePointerFromEvent(e);
 		[point.x, point.y] = [pointer.x, pointer.y];
 		[cameraPeekCurrPointerPoint.x, cameraPeekCurrPointerPoint.y] = [
