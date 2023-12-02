@@ -14,14 +14,13 @@
 	// import Footer from '../lib/footer/Footer.svelte';
 	import { client } from '@sxxov/ut/viewport';
 	import * as THREE from 'three';
+	import '../lib/3d/optimisation/enable-cache';
 	import AmbientCanvas from '../lib/3d/canvas/AmbientCanvas.svelte';
 	import DefaultPostProcessingProvider from './lib/environment/DefaultPostProcessingProvider.svelte';
 	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
 	import { useLenisInitialisation } from '../lib/lenis/useLenis';
 	import { useClientHistoryInitialisation } from '../lib/history/clientHistory';
 	import Splash from '../lib/splash/Splash.svelte';
-
-	THREE.Cache.enabled = true;
 
 	useLenisInitialisation();
 	useClientHistoryInitialisation();
