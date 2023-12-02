@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import svg_mask from '../../assets/lib/splash/mask.svg?raw';
-	import script_splash from './splash.js?raw';
+	import script_splash from './splash.mjs?raw';
 	import './splash.pcss';
 
 	onMount(() => {
