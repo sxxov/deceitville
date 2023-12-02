@@ -2,7 +2,7 @@
 	import { T, forwardEventHandlers, type Props } from '@threlte/core';
 	import { useSuspense } from '@threlte/extras';
 	import type { Object3D } from 'three';
-	import { createPart } from '../gltf/part';
+	import { createPart } from '../part/createPart';
 	import { raise } from '@sxxov/ut/functional';
 	import { UnreachableError } from '@sxxov/ut/errors';
 

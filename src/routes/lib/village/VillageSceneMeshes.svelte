@@ -4,7 +4,8 @@
 		gltfs,
 		instances,
 	} from '../../../assets/routes/lib/village/buildings/parts';
-	import { createPart, type Part } from '../../../lib/3d/gltf/part';
+	import { createPart } from '../../../lib/3d/part/createPart';
+	import type { PartfulGltf } from '../../../lib/3d/part/PartfulGltf';
 	import HideOnOffscreen from '../../../lib/3d/optimisation/HideOnOffscreen.svelte';
 
 	const entries = <T extends Record<any, any>>(
@@ -12,7 +13,7 @@
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	): [keyof T, T[keyof T]][] => Object.entries(object) as any;
 
-	let keyAndPart: [keyof typeof gltfs, Part][] = [];
+	let keyAndPart: [keyof typeof gltfs, PartfulGltf][] = [];
 
 	entries(gltfs)
 		.filter(([k]) => k.startsWith('building'))

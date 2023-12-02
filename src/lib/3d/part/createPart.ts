@@ -1,14 +1,10 @@
-import type { GLTF } from 'three-stdlib';
+import type { PartfulGltf } from './PartfulGltf';
 import { gltfLoader } from './gltfLoader';
 
-export interface Part extends GLTF {
-	object: THREE.Object3D | undefined;
-}
-
-const partCache = new Map<Record<any, any>, Part>();
+const partCache = new Map<Record<any, any>, PartfulGltf>();
 export const createPart = async <T extends Record<any, any>>(
 	gltf: T,
-): Promise<Part> => {
+): Promise<PartfulGltf> => {
 	let part = partCache.get(gltf);
 
 	if (!part) {

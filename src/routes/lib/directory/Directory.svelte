@@ -15,7 +15,7 @@
 	import svg_loop_corner from '../../../assets/routes/lib/directory/loops/corner.svg?raw';
 	import * as buildings from '../../../assets/routes/lib/village/buildings/parts';
 	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
-	import { createPart } from '../../../lib/3d/gltf/part';
+	import { createPart } from '../../../lib/3d/part/createPart';
 	import { pointer } from '../../../lib/follow/pointer';
 	import { infos } from '../../building/lib/info/infos';
 	import { completable, completion } from '../health/completion';

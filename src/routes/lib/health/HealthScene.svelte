@@ -5,7 +5,7 @@
 	import { degToRad } from 'three/src/math/MathUtils.js';
 	import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
 	import FollowLocus from '../../../lib/3d/follow/FollowLocus.svelte';
-	import { createPart } from '../../../lib/3d/gltf/part';
+	import { createPart } from '../../../lib/3d/part/createPart';
 	import HealthSceneCamera from './HealthSceneCamera.svelte';
 	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import ScrollPosition from '../layout/ScrollPosition.svelte';

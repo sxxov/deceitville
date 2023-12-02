@@ -36,7 +36,7 @@
 	// import { MeshTransmissionMaterial } from '@pmndrs/vanilla';
 	import { EXRLoader } from 'three-stdlib';
 	import exr_hdri from '../../../assets/routes/lib/environment/hdri/dancing_hall_256.exr?url';
-	import { createPart } from '../../../lib/3d/gltf/part';
+	import { createPart } from '../../../lib/3d/part/createPart';
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
 	import { pointer } from '../../../lib/follow/pointer';
