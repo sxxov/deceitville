@@ -17,8 +17,6 @@ export class PartPaceSource implements Pace.ProgressSource {
 						0,
 				  ) * 100;
 
-		console.log('progress', v);
-
 		return v;
 	}
 
