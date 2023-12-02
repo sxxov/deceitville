@@ -4,7 +4,7 @@
 	import { UnreachableError } from '@sxxov/ut/errors';
 	import { raise } from '@sxxov/ut/functional';
 	import { infos } from '../../building/lib/info/infos';
-	import { ic_heart_broken, ic_favorite } from 'maic/two_tone';
+	import { ic_heart_broken, ic_favorite } from 'maic/filled';
 	import HealthScene from './HealthScene.svelte';
 	import { completable } from './completion';
 	import { Store } from '@sxxov/ut/store';
@@ -66,7 +66,8 @@
 								>
 									<div class="heart">
 										<Svg
-											width={16}
+											width={24}
+											height={24}
 											svg={icon}
 										/>
 										<div class="hint">
@@ -146,7 +147,7 @@
 
 						border-radius: 999px;
 						border: 1px solid var(----colour-text-primary);
-						padding: 28px;
+						padding: 21px;
 						box-sizing: border-box;
 						background: var(----colour-background-primary);
 						color: var(----colour-text-primary);
