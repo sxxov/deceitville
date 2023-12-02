@@ -29,7 +29,10 @@
 <svelte:head>
 	<meta charset="utf-8" />
 
-	<script src={src_pace}></script>
+	<script
+		defer
+		src={src_pace}
+	></script>
 
 	<!-- Icon Tags -->
 	<link
