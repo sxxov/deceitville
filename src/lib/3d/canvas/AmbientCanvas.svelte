@@ -140,9 +140,12 @@
 				<div use:portal={portalDiv}>
 					<slot />
 				</div>
-				{(useFrame(() => {
-					active = true;
-				}),
+				{((() => {
+					const f = useFrame(() => {
+						active = true;
+						f.stop();
+					});
+				})(),
 				!interactivityCtx.interactivity &&
 					setInteractivity(interactivity()),
 				useInteractivity(),
