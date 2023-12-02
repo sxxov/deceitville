@@ -327,7 +327,7 @@ module.exports = {
 			rules: CommonOverrideRules,
 		},
 		{
-			files: ['**/*.js', '**/*.cjs'],
+			files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
 			extends: ['xo', 'prettier', 'plugin:prettier/recommended'],
 			rules: {
 				...TypescriptOffRules,
