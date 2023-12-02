@@ -19,6 +19,7 @@
 	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
 	import { useLenisInitialisation } from '../lib/lenis/useLenis';
 	import { useClientHistoryInitialisation } from '../lib/history/clientHistory';
+	import Splash from '../lib/splash/Splash.svelte';
 
 	THREE.Cache.enabled = true;
 
@@ -54,6 +55,7 @@
 	/>
 </svelte:head>
 
+<Splash />
 <main>
 	<Toaster />
 	<!-- <Nav /> -->
