@@ -47,4 +47,13 @@ export class PartPaceSource implements Pace.ProgressSource {
 	}
 }
 
-if (browser) (Pace.options.extraSources ??= []).push(PartPaceSource);
+if (browser)
+	void (async () => {
+		while (typeof Pace === 'undefined')
+			await new Promise((r) => {
+				setTimeout(r, 10);
+			});
+
+		(Pace.options.extraSources ??= []).push(PartPaceSource);
+		Pace.restart();
+	})();
