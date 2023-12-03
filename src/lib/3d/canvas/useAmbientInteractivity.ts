@@ -1,9 +1,9 @@
 import { getContext } from 'svelte';
 import { ambientInteractivityContextKey } from './AmbientCanvas.svelte';
-import type { AmbientInteractivity } from './AmbientInteractivity';
+import type { AmbientInteractivityContext } from './AmbientInteractivityContext';
 
 export const useAmbientInteractivity = (enabled = true) => {
-	const { interactivity } = getContext<AmbientInteractivity>(
+	const { interactivity } = getContext<AmbientInteractivityContext>(
 		ambientInteractivityContextKey,
 	);
 	interactivity.enabled.set(enabled);

@@ -26,7 +26,7 @@
 	} from 'svelte';
 	import { useLenis } from '../../lenis/useLenis';
 	import type { AmbientCursorContext } from './AmbientCursorContext';
-	import type { AmbientInteractivity } from './AmbientInteractivity';
+	import type { AmbientInteractivityContext } from './AmbientInteractivityContext';
 	import type { AmbientRendererSizeContext } from './AmbientRendererSizeContext';
 
 	type $$Props = ComponentProps<Canvas>;
@@ -81,7 +81,7 @@
 		interactivityCtx.interactivity = v;
 		v.enabled.set(false);
 	};
-	const interactivityCtx: AmbientInteractivity = {
+	const interactivityCtx: AmbientInteractivityContext = {
 		interactivity: undefined as any,
 	};
 	$: interactive = interactivityCtx.interactivity?.enabled;
@@ -90,7 +90,7 @@
 		interactive.set(false);
 	});
 
-	setContext<AmbientInteractivity>(
+	setContext<AmbientInteractivityContext>(
 		ambientInteractivityContextKey,
 		interactivityCtx,
 	);
