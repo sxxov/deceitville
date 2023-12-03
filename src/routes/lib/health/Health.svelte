@@ -34,9 +34,9 @@
 					{@const hovering = new Store(false)}
 					<R
 						{r}
-						let:v
+						let:v={completed}
 					>
-						{#if predicate(v)}
+						{#if predicate(completed)}
 							{@const [url, info] =
 								infosEntries.find(([, v]) => v.id === k) ??
 								raise(
@@ -64,7 +64,10 @@
 										}
 									}}
 								>
-									<div class="heart">
+									<div
+										class="heart"
+										class:broken={completed}
+									>
 										<Svg
 											width={24}
 											height={24}
@@ -135,9 +138,10 @@
 				padding: 0 28px;
 
 				& > a {
-					pointer-events: auto;
+					display: contents;
 
 					& > .heart {
+						pointer-events: auto;
 						position: relative;
 
 						display: flex;
@@ -149,12 +153,42 @@
 						border: 1px solid var(----colour-text-primary);
 						padding: 21px;
 						box-sizing: border-box;
-						background: var(----colour-background-primary);
 						color: var(----colour-text-primary);
+						background: #000;
+
+						&::after {
+							content: 'Healthy';
+							position: absolute;
+							top: calc(100% + 14px);
+							left: 50%;
+							transform: translate(-50%, 0);
+							padding: 7px 14px;
+							border-radius: 999px;
+							border: 1px solid var(----colour-text-primary);
+							background: #000;
+							color: var(----colour-text-primary);
+							/* font-size: 0.8em; */
+							pointer-events: none;
+
+							opacity: 1;
+
+							transition:
+								opacity 0.1s var(----ease-fast-slow),
+								transform 0.2s var(----ease-fast-slow);
+						}
+
+						&.broken {
+							background: #0008;
+
+							&::after {
+								content: 'Destroyed';
+							}
+						}
 
 						&:hover,
 						&:focus,
 						&:active {
+							z-index: 2;
 							color: var(----colour-background-primary);
 							background: var(----colour-text-primary);
 
@@ -167,6 +201,11 @@
 							& > .hint {
 								opacity: 0;
 								transform: translate(0, 3.5px);
+							}
+
+							&::after {
+								opacity: 0;
+								transform: translate(-50%, -3.5px);
 							}
 						}
 
@@ -185,7 +224,7 @@
 							border: 1px solid var(----colour-text-primary);
 							padding: 14px;
 							box-sizing: border-box;
-							background: var(----colour-background-primary);
+							background: #000;
 
 							pointer-events: none;
 
