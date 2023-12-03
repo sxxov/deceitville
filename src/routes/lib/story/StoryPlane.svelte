@@ -8,7 +8,6 @@
 		ic_warning,
 	} from 'maic/two_tone';
 	import { onDestroy, onMount } from 'svelte';
-	import ic_logo from '../../../assets/common/brand/logo.svg?raw';
 	import { Store } from '@sxxov/ut/store';
 
 	export let i: 0 | 1 | 2 | 3 = 3;
@@ -73,14 +72,12 @@
 		<div class="segment">
 			<div class="sparse-y wrap">
 				<div class="put-y">
-					<Spacer height={5} />
-					<p use:revealable>This is your pilot speaking.</p>
-				</div>
-				<div class="put-y">
 					<p use:revealable>
+						This is your pilot speaking.
+						<br />
+						<br />
 						It is currently <b>{timeFormatted}</b>.
 					</p>
-					<Spacer height={5} />
 				</div>
 			</div>
 		</div>
@@ -104,30 +101,25 @@
 					<h6 use:revealable>Landing</h6>
 				</div>
 				<h6 use:revealable>on</h6>
-				<h6 use:revealable>
+				<h6
+					class="invert"
+					use:revealable
+				>
 					(<i>DX</i>) <b>1337</b> <a href="#">Deceitville</a>
 				</h6>
-				<Spacer width={3.5} />
-				<!-- <div class="logo">
-					<Svg
-						width="100%"
-						height="100%"
-						svg={ic_logo}
-					/>
-				</div> -->
 			</div>
 		</div>
 	</div>
 {:else if i === 1}
 	<div class="story plane _1">
 		<div class="segment">
-			<div class="sparse-y h-fill wrap">
+			<div class="sparse-y h-full wrap">
 				<div class="sparse-x wrap">
 					<h6 use:revealable>It's</h6>
 					<h6 use:revealable>common</h6>
 					<span></span>
 				</div>
-				<div class="put-y">
+				<div class="beware put-y">
 					<h6
 						class="tag"
 						use:revealable
@@ -153,9 +145,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="segment h-fill">
+		<div class="segment h-full">
 			<div class="sparse-y wrap">
-				<h6 use:revealable>on the internet,</h6>
+				<h6 use:revealable>around here—<br />the internet,</h6>
 				<h6 use:revealable>for towns to be</h6>
 				<h6 use:revealable>
 					<a href="#">designed</a> to<br />harm
@@ -171,8 +163,13 @@
 	<div class="story plane _2">
 		<div class="segment">
 			<div class="sparse-x wrap align-start">
-				<h6 use:revealable>Learn about the</h6>
-				<div class="put-y">
+				<h6
+					class="grow"
+					use:revealable
+				>
+					Learn about the
+				</h6>
+				<div class="put-y grow">
 					<h6 use:revealable><s>culture</s></h6>
 					<h6 use:revealable>coersion</h6>
 				</div>
@@ -181,7 +178,7 @@
 		</div>
 		<div class="segment">
 			<div class="sparse-x wrap align-start">
-				<h6 use:revealable>of the town &</h6>
+				<h6 use:revealable>of this town &</h6>
 				<div class="put-y">
 					<div class="put-y">
 						<h6 use:revealable><s>avoid</s></h6>
@@ -214,11 +211,16 @@
 {:else if i === 3}
 	<div class="story plane _3">
 		<div class="segment sparse-y">
-			<div class="sparse-x wrap align-start">
-				<h6 use:revealable>We wish</h6>
-				<div class="put-y">
+			<div class="put-x wrap align-start">
+				<h6
+					class="w-half"
+					use:revealable
+				>
+					We wish
+				</h6>
+				<div class="put-y grow">
 					<div class="put-x">
-						<Spacer width="4rem" /><Spacer width={14} />
+						<Spacer width="4rem" /><Spacer width={28} />
 						<h6 use:revealable><b>you,</b></h6>
 						<Spacer width="4rem" /><Spacer width={14} />
 					</div>
@@ -234,8 +236,12 @@
 								svg={ic_person}
 							></Svg>
 						</div>
-						<Spacer width={14} />
-						<h6 use:revealable>traveller</h6>
+						<h6
+							class="grow"
+							use:revealable
+						>
+							traveller
+						</h6>
 						<div class="spacer">
 							<Spacer width="4rem" /><Spacer width={14} />
 						</div>
@@ -246,7 +252,12 @@
 		</div>
 		<div class="segment">
 			<div class="sparse-x align-end wrap">
-				<span />
+				<h6
+					class="grow"
+					use:revealable
+				>
+					very
+				</h6>
 				<div class="sparse-y wrap">
 					<div class="put-y">
 						<p use:revealable>pleasant<br />travels,</p>
@@ -278,7 +289,7 @@
 		--gap-x: 56px;
 		--gap-y: 112px;
 
-		padding: 28px;
+		/* padding: 28px; */
 		width: calc(100vw - var(----scrollbar-width));
 		height: 100vh;
 		height: 100lvh;
@@ -295,10 +306,10 @@
 			--gap-x: 56px;
 			--gap-y: 112px;
 
-			@media (max-width: 768px) {
+			@media (max-width: 836px) {
 				--cols: 1fr;
 				--rows: max-content max-content 1fr 1fr;
-				--gap-y: 56px;
+				--gap-y: 42px;
 			}
 		}
 
@@ -308,10 +319,14 @@
 			--gap-x: 56px;
 			--gap-y: 112px;
 
-			@media (max-width: 768px) {
+			@media (max-width: 836px) {
 				--cols: 1fr;
-				--rows: 1fr 1fr;
+				--rows: auto 1fr;
 				--gap-y: 56px;
+
+				& .beware {
+					display: none;
+				}
 			}
 		}
 
@@ -386,6 +401,8 @@
 		margin: 0;
 		letter-spacing: -0.06em;
 
+		padding: 14px;
+
 		&::selection {
 			background: var(----colour-text-tertiary);
 		}
@@ -398,6 +415,8 @@
 		line-height: 0.85;
 		margin: 0;
 		letter-spacing: -0.05em;
+
+		padding: 14px;
 
 		&::selection {
 			background: var(----colour-text-tertiary);
@@ -412,6 +431,16 @@
 		margin: 0;
 		letter-spacing: -0.06em;
 
+		padding: 14px;
+
+		background: linear-gradient(
+			180deg,
+			var(----colour-text-primary) 1px,
+			#0000 1px,
+			#0000 50%,
+			#0000 50%
+		);
+
 		&::selection {
 			background: var(----colour-text-tertiary);
 		}
@@ -421,10 +450,26 @@
 			font-weight: 900;
 			text-transform: uppercase;
 		}
+
+		&.invert {
+			color: var(----colour-background-primary);
+
+			background: linear-gradient(
+				180deg,
+				#000 1px,
+				var(----colour-text-primary) 2px
+			);
+
+			& a {
+				color: var(----colour-background-primary);
+				text-decoration-color: var(----colour-background-primary);
+			}
+		}
 	}
 
 	p {
 		margin: 0;
+		padding: 14px;
 	}
 
 	a,
@@ -452,13 +497,20 @@
 
 	s {
 		text-decoration: line-through;
-		text-decoration-color: var(----color-text-primary);
+		text-decoration-color: var(----colour-text-primary);
 		text-decoration-thickness: 0.1rem;
 
 		cursor: not-allowed;
 
-		&:hover {
-			text-decoration-thickness: 4rem;
+		&:not(:hover) {
+			display: inline-block;
+			/* text-decoration-thickness: 0; */
+			background: var(----colour-text-primary);
+			outline: 14px solid var(----colour-text-primary);
+			/* border-radius: 999px; */
+			/* padding: 0 14px; */
+			position: relative;
+			/* transform: translate(-14px, 0); */
 		}
 	}
 
@@ -475,23 +527,36 @@
 		width: max-content;
 	}
 
-	.h-fill {
+	.h-full {
 		height: 100%;
 	}
 
-	.w-fill {
+	.w-full {
 		width: 100%;
 	}
 
-	.collapse-x {
+	.h-half {
+		height: 50%;
+	}
+
+	.w-half {
+		width: 50%;
+	}
+
+	.w-zero {
 		width: 0;
 	}
 
-	.collapse-y {
+	.h-zero {
 		height: 0;
 	}
 
 	.icon {
+		padding: 14px;
+	}
+
+	.grow {
+		flex-grow: 1;
 	}
 
 	.wrap {
