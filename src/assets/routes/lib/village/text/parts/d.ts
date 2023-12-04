@@ -5,12 +5,6 @@ export default {
 		"generator": "Khronos glTF Blender I/O v3.6.27",
 		"version": "2.0"
 	},
-	"extensionsUsed": [
-		"KHR_draco_mesh_compression"
-	],
-	"extensionsRequired": [
-		"KHR_draco_mesh_compression"
-	],
 	"scene": 0,
 	"scenes": [
 		{
@@ -42,24 +36,14 @@ export default {
 						"NORMAL": 1,
 						"TEXCOORD_0": 2
 					},
-					"extensions": {
-						"KHR_draco_mesh_compression": {
-							"bufferView": 0,
-							"attributes": {
-								"POSITION": 0,
-								"NORMAL": 1,
-								"TEXCOORD_0": 2
-							}
-						}
-					},
-					"indices": 3,
-					"mode": 4
+					"indices": 3
 				}
 			]
 		}
 	],
 	"accessors": [
 		{
+			"bufferView": 0,
 			"componentType": 5126,
 			"count": 342,
 			"max": [
@@ -75,16 +59,19 @@ export default {
 			"type": "VEC3"
 		},
 		{
+			"bufferView": 1,
 			"componentType": 5126,
 			"count": 342,
 			"type": "VEC3"
 		},
 		{
+			"bufferView": 2,
 			"componentType": 5126,
 			"count": 342,
 			"type": "VEC2"
 		},
 		{
+			"bufferView": 3,
 			"componentType": 5123,
 			"count": 1026,
 			"type": "SCALAR"
@@ -93,13 +80,32 @@ export default {
 	"bufferViews": [
 		{
 			"buffer": 0,
-			"byteLength": 2238,
-			"byteOffset": 0
+			"byteLength": 4104,
+			"byteOffset": 0,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 4104,
+			"byteOffset": 4104,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2736,
+			"byteOffset": 8208,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2052,
+			"byteOffset": 10944,
+			"target": 34963
 		}
 	],
 	"buffers": [
 		{
-			"byteLength": 2240,
+			"byteLength": 12996,
 			"uri": d_bin
 		}
 	]
