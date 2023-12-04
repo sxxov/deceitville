@@ -15,6 +15,7 @@
 	import { client } from '@sxxov/ut/viewport';
 	import * as THREE from 'three';
 	import '../lib/3d/optimisation/enable-cache';
+	import '../lib/3d/optimisation/patch-cache-image-bitmap-loader';
 	import AmbientCanvas from '../lib/3d/canvas/AmbientCanvas.svelte';
 	import DefaultPostProcessingProvider from './lib/environment/DefaultPostProcessingProvider.svelte';
 	import DefaultExrHdriProvider from './lib/environment/DefaultExrHdriProvider.svelte';
