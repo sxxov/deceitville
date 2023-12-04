@@ -31,7 +31,6 @@ THREE.ImageBitmapLoader.prototype.load = function (
 	if (cached !== undefined) {
 		scope.manager.itemStart(url);
 
-		// If cached is not a promise (i.e., it's already an imageBitmap)
 		setTimeout(function () {
 			if (onLoad) onLoad(cached);
 
