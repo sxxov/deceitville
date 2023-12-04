@@ -60,6 +60,7 @@
 	import type { BuildingInfo } from '../../building/lib/info/BuildingInfo';
 	import ScrollPosition from '../layout/ScrollPosition.svelte';
 	import HealthSceneCamera from './HealthSceneCamera.svelte';
+	import { stubGltfJpgTexture } from '../../../lib/3d/optimisation/stubGltfJpgTexture';
 
 	const { camera } = useThrelte();
 	const size = useAmbientRendererSize()!;
@@ -138,7 +139,9 @@
 		tree_2_x1,
 		tree_4,
 		wheat,
-	].sort(() => Math.random() - 0.5);
+	]
+		.map(stubGltfJpgTexture)
+		.sort(() => Math.random() - 0.5);
 	let pumpkinPositions: [x: number, y: number, z: number][] = [];
 	const getPumpkinPosition = (): (typeof pumpkinPositions)[number] => [
 		pointerWorldPoint.x,
@@ -166,24 +169,31 @@
 	>
 		<Parts
 			gltfs={{
-				barrel,
-				box,
-				box_x1,
-				fence_1,
-				fence_2,
-				fence_3,
-				fence_4,
-				fence_5,
-				fence_main,
-				pumpkin,
-				pumpkin_x1,
-				pumpkin_x2,
-				pumpkin_x3,
-				pumpkin_x4,
+				box: stubGltfJpgTexture(box),
+				box_x1: stubGltfJpgTexture(box_x1),
+				fence_1: stubGltfJpgTexture(fence_1),
+				fence_2: stubGltfJpgTexture(fence_2),
+				fence_3: stubGltfJpgTexture(fence_3),
+				fence_4: stubGltfJpgTexture(fence_4),
+				fence_5: stubGltfJpgTexture(fence_5),
+				fence_main: stubGltfJpgTexture(fence_main),
+				pumpkin: stubGltfJpgTexture(pumpkin),
+				pumpkin_x1: stubGltfJpgTexture(pumpkin_x1),
+				pumpkin_x2: stubGltfJpgTexture(pumpkin_x2),
+				pumpkin_x3: stubGltfJpgTexture(pumpkin_x3),
+				pumpkin_x4: stubGltfJpgTexture(pumpkin_x4),
+				mushroom_1: stubGltfJpgTexture(mushroom_1),
+				mushroom_3: stubGltfJpgTexture(mushroom_3),
+				lader: stubGltfJpgTexture(lader),
 			}}
 			{instances}
 			position={[0, -20, -120]}
-		/>
+		>
+			<T.MeshPhysicalMaterial
+				color={0xaaaaaa}
+				roughness={0.5}
+			/>
+		</Parts>
 		<!-- <Debug /> -->
 		<!-- <RigidBody
 					on:collisionenter={() => void console.log('collision happened!')}

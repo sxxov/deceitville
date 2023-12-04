@@ -40,9 +40,7 @@
 	import { getScreenSpacePointOnPlane } from '../../../lib/3d/lmth/getScreenSpacePointOnPlane';
 	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
 	import { pointer } from '../../../lib/follow/pointer';
-
-	const JPG_EMPTY =
-		'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wAALCAABAAEBAREA/8QAJgABAAAAAAAAAAAAAAAAAAAAAxABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQAAPwBH/9k';
+	import { stubGltfJpgTexture } from '../../../lib/3d/optimisation/stubGltfJpgTexture';
 
 	export let progress = 0;
 
@@ -250,13 +248,7 @@
 		lader,
 		tree_2,
 		fence_1,
-	].map((v) => ({
-		...v,
-		images: v.images.map((v) => ({
-			...v,
-			uri: JPG_EMPTY,
-		})),
-	}));
+	].map(stubGltfJpgTexture);
 	let pointerPickI = 0;
 	const pointerPickGltf = async () => {
 		// if (pointerMesh) scene.remove(pointerMesh);
