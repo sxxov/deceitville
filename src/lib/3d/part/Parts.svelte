@@ -7,7 +7,6 @@
 	} from '@threlte/core';
 	import Part from './Part.svelte';
 	import * as THREE from 'three';
-	import SuspenseBlob from '../suspense/SuspenseBlob.svelte';
 
 	interface Instance {
 		position: [x: number, y: number, z: number];
@@ -56,28 +55,26 @@
 		{#each v as { position, rotation, scale }, ii}
 			{@const gltf = gltfs[k]}
 			{#if gltf}
-				<SuspenseBlob>
-					<slot
-						name="part"
-						partKey={k}
-						partIndex={i}
-						instanceIndex={ii}
+				<slot
+					name="part"
+					partKey={k}
+					partIndex={i}
+					instanceIndex={ii}
+					{gltf}
+					{position}
+					{rotation}
+					{scale}
+				>
+					<Part
 						{gltf}
 						{position}
-						{rotation}
+						quaternion={rotation}
 						{scale}
+						let:ref
 					>
-						<Part
-							{gltf}
-							{position}
-							quaternion={rotation}
-							{scale}
-							let:ref
-						>
-							<slot {ref} />
-						</Part>
-					</slot>
-				</SuspenseBlob>
+						<slot {ref} />
+					</Part>
+				</slot>
 			{/if}
 		{/each}
 	{/each}</T
