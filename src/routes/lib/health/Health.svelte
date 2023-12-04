@@ -8,6 +8,8 @@
 	import HealthScene from './HealthScene.svelte';
 	import { completable } from './completion';
 	import { Store } from '@sxxov/ut/store';
+	import type { BuildingInfo } from '../../building/lib/info/BuildingInfo';
+	import { onDestroy } from 'svelte';
 
 	const infosEntries = Object.entries(infos);
 
@@ -21,13 +23,34 @@
 			predicate: (v: boolean) => !v,
 		},
 	];
-	const completableEntries = Object.entries(completable);
+	const completableEntries = Object.entries(completable) as [
+		keyof typeof infos,
+		Store<boolean>,
+	][];
+
+	let completedCount = 0;
+	const completedUnsubscribes = completableEntries.map(([, completed]) =>
+		completed.subscribe(() => {
+			completedCount = completableEntries.reduce(
+				(cum, [, v]) => cum + (v.get() ? 1 : 0),
+				0,
+			);
+		}),
+	);
+
+	onDestroy(() => {
+		for (const unsubscribe of completedUnsubscribes) unsubscribe();
+	});
+
+	let info: BuildingInfo | undefined;
 </script>
 
-<HealthScene />
+<HealthScene {info} />
 <div class="health">
 	<div class="content">
-		<h2 class="top">Town Status</h2>
+		<h2 class="top">
+			{completedCount}/{completableEntries.length}
+		</h2>
 		<div class="hearts">
 			{#each heartsBlueprint as { icon, predicate }}
 				{#each completableEntries as [k, r]}
@@ -37,30 +60,41 @@
 						let:v={completed}
 					>
 						{#if predicate(completed)}
-							{@const [url, info] =
+							{@const [url, v] =
 								infosEntries.find(([, v]) => v.id === k) ??
 								raise(
 									new UnreachableError(
 										'Could not find info from completable key',
 									),
 								)}
-							{#if info}
+							{#if v}
 								<a
 									href={url}
 									on:pointerover={(e) => {
-										if (e.pointerType === 'mouse')
+										if (e.pointerType === 'mouse') {
 											hovering.set(true);
+											info = v;
+										}
+									}}
+									on:pointerleave={() => {
+										hovering.set(false);
+										info = undefined;
 									}}
 									on:keyup={(e) => {
-										if (e.key === 'Tab') hovering.set(true);
+										if (e.key === 'Tab') {
+											hovering.set(true);
+											info = v;
+										}
 									}}
 									on:blur={() => {
 										hovering.set(false);
+										info = undefined;
 									}}
 									on:click={(e) => {
 										if (!hovering.get()) {
 											e.preventDefault();
 											hovering.set(true);
+											info = v;
 										}
 									}}
 								>
@@ -76,8 +110,8 @@
 										<div class="hint">
 											<Svg
 												width={16}
-												svg={info.icon}
-											/>{info.name}
+												svg={v.icon}
+											/>{v.name}
 										</div>
 									</div>
 								</a>
@@ -87,7 +121,7 @@
 				{/each}
 			{/each}
 		</div>
-		<h2 class="bottom">H</h2>
+		<h2 class="bottom">{completedCount}/{completableEntries.length}</h2>
 	</div>
 
 	<div class="padding end"></div>
@@ -95,7 +129,7 @@
 
 <style lang="postcss">
 	.health {
-		position: relative;
+		position: sticky;
 		top: 0;
 		width: 100%;
 		pointer-events: none;
@@ -119,13 +153,12 @@
 				/* font-size: 4em; */
 
 				&.top {
-					color: var(----colour-text-primary);
-				}
-
-				&.bottom {
 					visibility: hidden;
 					pointer-events: none;
 					user-select: none;
+				}
+
+				&.bottom {
 				}
 			}
 
@@ -252,6 +285,11 @@
 					}
 				}
 			}
+		}
+
+		& > .padding {
+			height: 100vh;
+			height: 100lvh;
 		}
 	}
 </style>
