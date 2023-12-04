@@ -219,32 +219,13 @@
 						color: var(----colour-text-primary);
 						background: #000;
 
-						&::after {
-							content: 'Healthy';
-							position: absolute;
-							top: calc(100% + 14px);
-							left: 50%;
-							transform: translate(-50%, 0);
-							padding: 7px 14px;
-							border-radius: 999px;
-							border: 1px solid var(----colour-text-primary);
-							background: #000;
-							color: var(----colour-text-primary);
-							/* font-size: 0.8em; */
-							pointer-events: none;
-
-							opacity: 1;
-
-							transition:
-								opacity 0.1s var(----ease-fast-slow),
-								transform 0.2s var(----ease-fast-slow);
-						}
-
 						&.broken {
 							background: #0008;
 
-							&::after {
-								content: 'Destroyed';
+							& > .hint {
+								&::after {
+									content: 'Defeated';
+								}
 							}
 						}
 
@@ -264,11 +245,11 @@
 							& > .hint {
 								opacity: 0;
 								transform: translate(0, 3.5px);
-							}
 
-							&::after {
-								opacity: 0;
-								transform: translate(-50%, -3.5px);
+								&::after {
+									opacity: 0;
+									transform: translate(-50%, 3.5px);
+								}
 							}
 						}
 
@@ -280,7 +261,7 @@
 							align-items: center;
 							gap: 7px;
 
-							bottom: calc(100% + 14px);
+							top: calc(100% + 14px);
 							text-align: center;
 
 							border-radius: 999px;
@@ -301,15 +282,38 @@
 							&::before {
 								content: '';
 								position: absolute;
-								top: 100%;
+								top: -7px;
 								left: 50%;
 								width: 0;
 								height: 0;
 								border-left: 7px solid transparent;
 								border-right: 7px solid transparent;
-								border-top: 7px solid
+								border-bottom: 7px solid
 									var(----colour-text-primary);
 								transform: translate(-50%, 0);
+							}
+
+							&::after {
+								/* content: 'OK'; */
+								position: absolute;
+								top: calc(100% + 0px);
+								left: 50%;
+								transform: translate(-50%, 0);
+								padding: 7px 14px;
+								border-radius: 999px;
+								/* border: 1px solid var(----colour-text-primary); */
+								/* background: var(----colour-text-primary);
+								color: var(----colour-background-primary); */
+								/* font-size: 0.8em; */
+								pointer-events: none;
+
+								text-shadow: 0px 0px 20px rgba(0, 0, 0, 1);
+
+								opacity: 1;
+
+								transition:
+									opacity 0.1s 0.05s var(----ease-fast-slow),
+									transform 0.2s 0.1s var(----ease-fast-slow);
 							}
 						}
 					}
