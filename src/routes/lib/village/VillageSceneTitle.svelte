@@ -221,12 +221,12 @@
 	// environment
 	const exrLoader = useLoader(EXRLoader);
 	onMount(async () => {
+		renderer.toneMappingExposure = 0.01;
+
 		const hdri = await exrLoader.load(exr_hdri);
 		hdri.mapping = THREE.EquirectangularReflectionMapping;
 
 		scene.environment = hdri;
-		// scene.background = hdri;
-		renderer.toneMappingExposure = 0.01;
 	});
 
 	// pointer model
