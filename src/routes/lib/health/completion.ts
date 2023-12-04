@@ -8,13 +8,13 @@ export const health = completion.derive((v) => 1 - v);
 
 const completableLocalStorageKey = 'completable';
 
-const read = (
-	ref = Object.fromEntries(
+const read = <K extends keyof typeof infos>(
+	ref: Record<K, boolean> = Object.fromEntries(
 		Object.entries(infos).map(
 			([, v]) => [v.id, false] as [id: string, value: boolean],
 		),
-	),
-) => {
+	) as Record<keyof typeof infos, boolean>,
+): Record<K, boolean> => {
 	if (!browser) return ref;
 
 	const string = localStorage.getItem(completableLocalStorageKey);
@@ -22,7 +22,7 @@ const read = (
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const json = JSON.parse(string);
-			for (const [k] of Object.entries(ref)) {
+			for (const [k] of Object.entries(ref) as [K, boolean][]) {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				const data = json[k];
 
@@ -40,10 +40,13 @@ const write = (ref: Record<string, boolean>) => {
 };
 
 const completableRef = read();
-const completableEntries = Object.entries(completableRef).map(
-	([k, v]) => [k, new Store(v)] as const,
-);
-export const completable = Object.fromEntries(completableEntries);
+const completableEntries = (
+	Object.entries(completableRef) as [keyof typeof infos, boolean][]
+).map(([k, v]) => [k, new Store(v)] as const);
+export const completable = Object.fromEntries(completableEntries) as Record<
+	keyof typeof infos,
+	Store<boolean>
+>;
 const getCompletion = () =>
 	completableEntries.reduce((p, [, v]) => p + (v.get() ? 1 : 0), 0) /
 	completableEntries.length;
