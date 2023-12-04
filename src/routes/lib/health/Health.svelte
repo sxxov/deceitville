@@ -221,6 +221,7 @@
 
 						&.broken {
 							background: #0008;
+							color: var(----colour-text-secondary);
 
 							& > .hint {
 								&::after {
@@ -296,18 +297,17 @@
 							&::after {
 								/* content: 'OK'; */
 								position: absolute;
-								top: calc(100% + 0px);
+								top: calc(100% + 1px);
 								left: 50%;
 								transform: translate(-50%, 0);
 								padding: 7px 14px;
 								border-radius: 999px;
-								/* border: 1px solid var(----colour-text-primary); */
-								/* background: var(----colour-text-primary);
-								color: var(----colour-background-primary); */
+								border: 1px solid var(----colour-text-secondary);
+								background: #000;
+								color: var(----colour-text-primary);
 								/* font-size: 0.8em; */
+								/* font-weight: 900; */
 								pointer-events: none;
-
-								text-shadow: 0px 0px 20px rgba(0, 0, 0, 1);
 
 								opacity: 1;
 
