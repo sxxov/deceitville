@@ -1,12 +1,17 @@
 <script lang="ts">
-	import { T, forwardEventHandlers, type Props } from '@threlte/core';
-	import { useSuspense } from '@threlte/extras';
-	import type { Object3D } from 'three';
-	import { createPart } from '../part/createPart';
-	import { raise } from '@sxxov/ut/functional';
 	import { UnreachableError } from '@sxxov/ut/errors';
+	import { raise } from '@sxxov/ut/functional';
+	import {
+		T,
+		forwardEventHandlers,
+		type Events,
+		type Props,
+	} from '@threlte/core';
+	import { useSuspense } from '@threlte/extras';
+	import { createPart } from '../part/createPart';
 
-	type $$Props = Props<Object3D> & {
+	type $$Events = Events<THREE.Object3D>;
+	type $$Props = Props<THREE.Object3D> & {
 		gltf: typeof gltf;
 		clone?: typeof clone;
 		ref?: typeof ref;
@@ -14,8 +19,8 @@
 
 	export let gltf: Record<any, any>;
 	export let clone = true;
-	const setRef = (r: Object3D) => (ref = r);
-	export let ref: Object3D | undefined = undefined;
+	const setRef = (r: THREE.Object3D) => (ref = r);
+	export let ref: THREE.Object3D | undefined = undefined;
 
 	const suspend = useSuspense();
 	const component = forwardEventHandlers();
