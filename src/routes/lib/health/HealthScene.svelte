@@ -6,7 +6,7 @@
 	import { inner, type Point } from '@sxxov/ut/viewport';
 	import { T, useFrame, useThrelte } from '@threlte/core';
 	import { AutoColliders, RigidBody, World } from '@threlte/rapier';
-	import { clamp } from 'three/src/math/MathUtils.js';
+	import { clamp, degToRad } from 'three/src/math/MathUtils.js';
 	import {
 		gltfs,
 		instances,
@@ -66,7 +66,9 @@
 	const size = useAmbientRendererSize()!;
 	$: ({ height: vh } = $size);
 
-	export let info: BuildingInfo | undefined;
+	export let selected: BuildingInfo | undefined;
+	export let completeds: BuildingInfo[];
+	export let incompleteds: BuildingInfo[];
 
 	let floorPoint: Point = { x: 0, y: 0 };
 	$: floorPoint.x = $inner.width / 2;
@@ -148,7 +150,7 @@
 		pointerWorldPoint.y,
 		rootZ + flyZ - 40,
 	];
-	$: if (info) pumpkinPositions.push(getPumpkinPosition());
+	$: if (selected) pumpkinPositions.push(getPumpkinPosition());
 </script>
 
 <svelte:window bind:scrollY />
@@ -266,6 +268,52 @@
 								receiveShadow
 								castShadow
 								{position}
+							>
+								<!-- {#if completable[info.id]?.get()} -->
+								<T.MeshPhysicalMaterial
+									roughness={0}
+									thickness={0.5}
+								/>
+								<!-- {/if} -->
+							</T>
+						</AutoColliders>
+					</RigidBody>
+				{/if}
+			{/await}
+		{/each}
+
+		{#each incompleteds as { facade }, i}
+			<!-- <Part
+					gltf={building}
+					receiveShadow
+					castShadow
+					position={[0, 0.2, -3]}
+					rotation={[degToRad(10), degToRad(-20), degToRad(20)]}
+					scale={0.03}
+				/> -->
+			{#await createPart(facade) then { object }}
+				{#if object}
+					<RigidBody
+						gravityScale={10}
+						linearDamping={10}
+					>
+						<AutoColliders>
+							<T
+								is={object.clone(true)}
+								{...$$restProps}
+								receiveShadow
+								castShadow
+								position={[
+									i % 2 === 1 ? 50 : -50,
+									20,
+									-200 + i * 20,
+								]}
+								rotation={[
+									degToRad(0),
+									degToRad(0),
+									degToRad(0),
+								]}
+								scale={1}
 							>
 								<!-- {#if completable[info.id]?.get()} -->
 								<T.MeshPhysicalMaterial

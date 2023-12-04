@@ -28,13 +28,34 @@
 		Store<boolean>,
 	][];
 
-	let completedCount = 0;
+	let completeds: BuildingInfo[] = [];
+	let incompleteds: BuildingInfo[] = [];
 	const completedUnsubscribes = completableEntries.map(([, completed]) =>
 		completed.subscribe(() => {
-			completedCount = completableEntries.reduce(
-				(cum, [, v]) => cum + (v.get() ? 1 : 0),
-				0,
-			);
+			completeds = completableEntries
+				.filter(([, v]) => v.get())
+				.map(([k]) => {
+					const [, v] =
+						infosEntries.find(([, v]) => v.id === k) ??
+						raise(
+							new UnreachableError(
+								'Could not find info from completable key',
+							),
+						);
+					return v;
+				});
+			incompleteds = completableEntries
+				.filter(([, v]) => !v.get())
+				.map(([k]) => {
+					const [, v] =
+						infosEntries.find(([, v]) => v.id === k) ??
+						raise(
+							new UnreachableError(
+								'Could not find info from completable key',
+							),
+						);
+					return v;
+				});
 		}),
 	);
 
@@ -45,12 +66,16 @@
 	let info: BuildingInfo | undefined;
 </script>
 
-<HealthScene {info} />
+<HealthScene
+	selected={info}
+	{completeds}
+	{incompleteds}
+/>
 <div class="health">
 	<div class="content">
-		<h2 class="top">
+		<!-- <h2 class="top">
 			{completedCount}/{completableEntries.length}
-		</h2>
+		</h2> -->
 		<div class="hearts">
 			{#each heartsBlueprint as { icon, predicate }}
 				{#each completableEntries as [k, r]}
@@ -121,7 +146,7 @@
 				{/each}
 			{/each}
 		</div>
-		<h2 class="bottom">{completedCount}/{completableEntries.length}</h2>
+		<h2 class="bottom">{completeds.length}/{completableEntries.length}</h2>
 	</div>
 
 	<div class="padding end"></div>
@@ -147,10 +172,15 @@
 
 			pointer-events: auto;
 
+			padding: 28px;
+			box-sizing: border-box;
+
 			/* border-bottom: 1px solid var(----colour-text-primary); */
 
 			& > h2 {
 				/* font-size: 4em; */
+
+				margin: 0;
 
 				&.top {
 					visibility: hidden;
