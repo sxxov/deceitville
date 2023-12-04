@@ -6,6 +6,13 @@ const production = process.env['NODE_ENV'] === 'production';
 /** @type {import('@sveltejs/kit').Config} */
 export default {
 	preprocess: [vitePreprocess()],
+	onwarn(
+		/** @type {{ code: string }} */ warning,
+		/** @type {(v: typeof warning) => void} */ handler,
+	) {
+		if (warning.code === 'css-unused-selector') return;
+		handler(warning);
+	},
 	compilerOptions: {
 		dev: !production,
 	},
