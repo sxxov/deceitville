@@ -41,6 +41,9 @@
 	import { getScreenSpaceSizeAtWorldZ } from '../../../lib/3d/lmth/getScreenSpaceSizeAtWorldZ';
 	import { pointer } from '../../../lib/follow/pointer';
 
+	const JPG_EMPTY =
+		'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wAALCAABAAEBAREA/8QAJgABAAAAAAAAAAAAAAAAAAAAAxABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQAAPwBH/9k';
+
 	export let progress = 0;
 
 	const { renderer, invalidate } = useThrelte();
@@ -247,7 +250,13 @@
 		lader,
 		tree_2,
 		fence_1,
-	] as const;
+	].map((v) => ({
+		...v,
+		images: v.images.map((v) => ({
+			...v,
+			uri: JPG_EMPTY,
+		})),
+	}));
 	let pointerPickI = 0;
 	const pointerPickGltf = async () => {
 		// if (pointerMesh) scene.remove(pointerMesh);
