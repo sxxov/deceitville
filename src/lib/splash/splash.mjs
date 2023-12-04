@@ -3,8 +3,6 @@
 const splashDiv = document.querySelector('.global.splash');
 
 if (splashDiv instanceof HTMLDivElement) {
-	splashDiv.classList.add('created');
-
 	const splashSvgDiv = splashDiv.querySelector('.svg');
 	const splashSvg = splashSvgDiv.querySelector('svg');
 
@@ -32,20 +30,16 @@ if (splashDiv instanceof HTMLDivElement) {
 					clonesDiv.removeChild(clones[i - 1]);
 		};
 
-		const timeStart = performance.now();
-
 		splashDiv.addEventListener('splash:mounted', () => {
-			const timeEnd = performance.now();
-			const timeDiff = timeEnd - timeStart;
-
-			if (timeDiff < 500) splashDiv.classList.add('suppressed');
-			splashDiv.classList.remove('active');
+			splashDiv.classList.add('completed');
 
 			window.removeEventListener('resize', updateSvgs);
 		});
 
 		window.addEventListener('resize', updateSvgs);
 		updateSvgs();
+
+		splashDiv.classList.add('created');
 	}
 
 	const paceProgressDiv = await (async () => {
@@ -62,12 +56,14 @@ if (splashDiv instanceof HTMLDivElement) {
 			for (const rec of recs)
 				if (
 					rec.type === 'attributes' &&
-					rec.attributeName === 'data-progress'
+					rec.attributeName === 'data-progress-text'
 				) {
 					const progress =
 						/translate3d\((.+?%),.+\)/.exec(
 							paceProgressDiv.style.transform,
-						)?.[1] ?? `${paceProgressDiv.dataset.progress ?? '0'}%`;
+						)?.[1] ??
+						paceProgressDiv.dataset.progressText ??
+						'0%';
 
 					splashDiv.style.setProperty('--progress', `${progress}`);
 

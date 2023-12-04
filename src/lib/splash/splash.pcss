@@ -7,10 +7,6 @@
 	height: 100vh;
 	height: 100lvh;
 
-	/* background: #000; */
-
-	/* backdrop-filter: blur(10px); */
-
 	z-index: 6968;
 
 	display: flex;
@@ -19,19 +15,16 @@
 
 	pointer-events: none;
 
-	opacity: 1;
-	transition:
-		opacity 0.3s var(----ease-fast-slow);
+	opacity: 0;
+	transition: opacity 0.3s var(----ease-fast-slow);
 
-	&:not(.created) {
-		opacity: 0;
+	&.created {
+		opacity: 1;
 	}
 
 	& > .svg {
 		display: flex;
 		width: max-content;
-
-		/* padding: 14px; */
 
 		box-sizing: border-box;
 
@@ -50,33 +43,6 @@
 
 			fill: white;
 
-			/* transform: translate(0, 0);
-			visibility: visible;
-			transition:
-				transform 0.5s calc(var(--i, 0) * 0.2s)
-					var(----ease-slow-slow),
-				visibility 0s; */
-
-			opacity: 1;
-
-			animation: slide-in 0.5s calc(var(--i, 0) * 0.2s)
-				var(----ease-slow-slow) both;
-
-			@keyframes slide-in {
-				0% {
-					opacity: 0;
-					transform: translate(0, -100%);
-				}
-
-				1% {
-					opacity: 1;
-				}
-
-				100% {
-					transform: translate(0, 0);
-				}
-			}
-
 			& #splash-mask-fill {
 				transform: translate(
 					min(
@@ -94,30 +60,14 @@
 		}
 	}
 
-	&.suppressed > .svg svg {
-		animation: none !important;
-		opacity: 0;
-		transform: translate(0, -100%);
-		transition: transform 0.3s var(----ease-fast-slow), opacity 0s 0.3s;
-	}
-
-	&:not(.active) > .svg svg {
-		/* visibility: hidden;
-		transform: translate(0, -100%);
-
-		transition:
-			transform 0.5s calc(var(--i, 0) * 0.2s) var(----ease-slow-slow),
-			visibility 0s calc(0.5s + var(--i, 0) * 0.2s); */
-
-		
-		/* transform: translate(0, -100%); */
-
+	&.completed > .svg svg {
 		animation: slide-out 0.5s calc(var(--i, 0) * 0.2s)
 			var(----ease-slow-slow) forwards;
 
 		@keyframes slide-out {
 			0% {
 				transform: translate(0, 0);
+				
 			}
 
 			99% {
@@ -127,6 +77,17 @@
 			100% {
 				opacity: 0;
 				transform: translate(0, -100%);
+			}
+		}
+
+		& #splash-mask-fill {
+			animation: load-out 0.5s calc(var(--i, 0) * 0.1s)
+				var(----ease-slow-slow) forwards;
+
+			@keyframes load-out {
+				to {
+					transform: translate(0, 0);
+				}
 			}
 		}
 	}

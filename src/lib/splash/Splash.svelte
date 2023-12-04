@@ -17,7 +17,7 @@
 	<script type="module">
 		${script_splash}
 	<${''}/script>
-	<div class="splash global active" style="--progress: 0%">
+	<div class="splash global" style="--progress: 0%">
 		<div
 			class="svg"
 			style="
