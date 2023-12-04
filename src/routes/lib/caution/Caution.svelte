@@ -102,7 +102,7 @@
 			overflow-x: hidden;
 			overflow-x: clip;
 
-			border-block: 1px solid var(----colour-text-primary);
+			border-bottom: 1px solid var(----colour-text-primary);
 
 			& > .heading {
 				position: absolute;
