@@ -2,7 +2,7 @@ import type { SvgString } from '@sxxov/ut/types';
 import type { gltfs } from '../../../../assets/routes/lib/village/buildings/parts';
 
 export interface BuildingInfo {
-	id: string;
+	id: `/building/${string}`;
 	name: string;
 	description: string;
 	objective: string;
