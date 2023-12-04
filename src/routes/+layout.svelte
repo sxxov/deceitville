@@ -22,6 +22,7 @@
 	import { useLenisInitialisation } from '../lib/lenis/useLenis';
 	import { useClientHistoryInitialisation } from '../lib/history/clientHistory';
 	import Splash from '../lib/splash/Splash.svelte';
+	import { DRACO_DECODER_URL } from '../lib/3d/part/dracoLoader';
 
 	useLenisInitialisation();
 	useClientHistoryInitialisation();
@@ -34,6 +35,11 @@
 		defer
 		src={src_pace}
 	></script>
+
+	<link
+		rel="preconnect"
+		href={DRACO_DECODER_URL}
+	/>
 
 	<!-- Icon Tags -->
 	<link

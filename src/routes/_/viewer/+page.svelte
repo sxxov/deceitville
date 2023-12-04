@@ -1,18 +1,12 @@
 <script lang="ts">
-	import { GLTFLoader, type GLTF, DRACOLoader } from 'three-stdlib';
+	import type { GLTF } from 'three-stdlib';
 	import ViewerScene from './lib/ViewerScene.svelte';
 	import { UnreachableError } from '@sxxov/ut/errors';
 	import { toasts } from '@sxxov/sv/toast';
 	import { Levels } from '@sxxov/sv/common/enums';
+	import { gltfLoader } from '../../../lib/3d/part/gltfLoader';
 
 	let gltf: GLTF | undefined;
-
-	const gltfLoader = new GLTFLoader();
-	const dracoLoader = new DRACOLoader();
-	dracoLoader.setDecoderPath(
-		'https://www.gstatic.com/draco/versioned/decoders/1.5.6/',
-	);
-	gltfLoader.setDRACOLoader(dracoLoader);
 
 	let fileInput: HTMLInputElement | undefined;
 	const updateGltf = async (file: File) => {
