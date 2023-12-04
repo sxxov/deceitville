@@ -111,7 +111,7 @@
 	let introTweens: Tween[] | undefined;
 	let introComposition: Composition | undefined;
 	let introUnsubscribes: (() => void)[] | undefined;
-	onMount(async () => {
+	void (async () => {
 		refs = await Promise.all(
 			[d, e_x2, c, e_x1, i_x1, t, v, i, l_x1, l, e].map(async (gltf) => {
 				const { object } = await createPart(gltf);
@@ -176,7 +176,7 @@
 				ref.rotation.x = 0;
 			}
 		}
-	});
+	})();
 
 	// animate on progress change
 	$: {

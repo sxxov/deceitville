@@ -59,8 +59,6 @@
 >
 	<InvalidateOnScroll />
 
-	<VillageSceneMeshes />
-
 	{#if cameraProgress >= cameraProgressStart}
 		<VillageSceneCamera progress={cameraProgress} />
 	{/if}
@@ -71,6 +69,8 @@
 	{#if titleProgress >= titleProgressStart && titleProgress < titleProgressEnd}
 		<VillageSceneTitle progress={titleProgress} />
 	{/if}
+
+	<VillageSceneMeshes />
 
 	<slot {ref} />
 </T>
