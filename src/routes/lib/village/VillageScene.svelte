@@ -62,7 +62,7 @@
 	{#if cameraProgress >= cameraProgressStart}
 		<VillageSceneCamera progress={cameraProgress} />
 	{/if}
-	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd}
+	{#if cameraProgress >= cameraProgressStart && cameraProgress < cameraProgressEnd - 0.12}
 		<Fog />
 	{/if}
 
