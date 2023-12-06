@@ -126,7 +126,7 @@
 			>
 				<h3>Email Us</h3>
 				<div class="left">
-					<a href="mailto:hello@deceitville.com">
+					<a href="mailto:hello@ljs.lol">
 						<Button
 							{...ButtonVariants.Secondary}
 							{...ButtonVariants.Shadow.Sm}
@@ -138,7 +138,7 @@
 							<svelte:fragment slot="left">
 								<Svg svg={ic_attach_email} />
 							</svelte:fragment>
-							hello@deceitville.com
+							hello@ljs.lol
 							<svelte:fragment slot="right">
 								<Svg svg={ic_arrow_outward} />
 							</svelte:fragment>
