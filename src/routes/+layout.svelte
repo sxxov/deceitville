@@ -24,6 +24,10 @@
 	import Splash from '../lib/splash/Splash.svelte';
 	import { DRACO_DECODER_URL } from '../lib/3d/part/dracoLoader';
 	import PerformanceDisclaimer from './lib/disclaimer/PerformanceDisclaimer.svelte';
+	import { dev } from '$app/environment';
+	import { inject } from '@vercel/analytics';
+
+	inject({ mode: dev ? 'development' : 'production' });
 
 	useLenisInitialisation();
 	useClientHistoryInitialisation();
