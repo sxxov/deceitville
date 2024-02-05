@@ -11,7 +11,7 @@ export const info = {
 	name: 'Conversion Therapist',
 	description:
 		"Where many of the non-society-normative residents seem to end up. You're not sure who runs it, but it can't be good. Figure out a way to get everyone out of there.",
-	objective: 'Find buttons to turn off the TV.',
+	objective: 'Look around for button combinations to turn off the TV.',
 	inspirations: [
 		'Promotional emails that hide the unsubscribe button amongst a bunch of other text.',
 		'Apps that hide the logout button in the settings menu.',

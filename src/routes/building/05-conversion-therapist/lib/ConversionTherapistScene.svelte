@@ -98,23 +98,24 @@
 <T.Group rotation={$dragPromptRotationLayer}>
 	<T.PointLight
 		position={[-1, 0, 0.187]}
-		intensity={1}
+		intensity={10}
 		color={new THREE.Color(0x0000ff)}
 		distance={5}
 	/>
 	<T.PointLight
 		position={[1, 0, 0.187]}
-		intensity={1}
+		intensity={10}
 		color={new THREE.Color(0x0000ff)}
 		distance={5}
 	/>
 	<T.PointLight
 		position={[0, 0.526, 0.187]}
-		intensity={1}
+		intensity={10}
 		color={new THREE.Color(0x0000ff)}
 		distance={5}
 	/>
 	<ButtonTactile
+		disabled={pressedA}
 		on:click={() => {
 			pressedA = !pressedA;
 		}}
@@ -133,7 +134,7 @@
 				{#if pressedA}
 					<T.MeshPhysicalMaterial
 						side={THREE.DoubleSide}
-						color={new THREE.Color(0xcccccc)}
+						emissive={new THREE.Color(0xcccccc)}
 						transmission={0.5}
 						roughness={0.5}
 						thickness={0.5}
@@ -155,7 +156,7 @@
 		{/each}
 	</ButtonTactile>
 	<ButtonTactile
-		disabled={!pressedA}
+		disabled={!pressedA || pressedB}
 		on:click={() => {
 			pressedB = !pressedB;
 		}}
@@ -174,7 +175,7 @@
 				{#if pressedB}
 					<T.MeshPhysicalMaterial
 						side={THREE.DoubleSide}
-						color={new THREE.Color(0xcccccc)}
+						emissive={new THREE.Color(0xcccccc)}
 						transmission={0.5}
 						roughness={0.5}
 						thickness={0.5}
@@ -196,7 +197,7 @@
 		{/each}
 	</ButtonTactile>
 	<ButtonTactile
-		disabled={!pressedB}
+		disabled={!pressedB || toggledC}
 		on:click={() => {
 			toggledC = !toggledC;
 		}}
@@ -215,7 +216,7 @@
 				{#if toggledC}
 					<T.MeshPhysicalMaterial
 						side={THREE.DoubleSide}
-						color={new THREE.Color(0xcccccc)}
+						emissive={new THREE.Color(0xcccccc)}
 						transmission={0.5}
 						roughness={0.5}
 						thickness={0.5}
@@ -237,7 +238,7 @@
 		{/each}
 	</ButtonTactile>
 	<ButtonTactile
-		disabled={!toggledC}
+		disabled={!toggledC || dialedA}
 		on:click={() => {
 			dialedA = !dialedA;
 		}}
@@ -253,7 +254,7 @@
 				{#if dialedA}
 					<T.MeshPhysicalMaterial
 						side={THREE.DoubleSide}
-						color={new THREE.Color(0xcccccc)}
+						emissive={new THREE.Color(0xcccccc)}
 						transmission={0.5}
 						roughness={0.5}
 						thickness={0.5}
@@ -275,7 +276,7 @@
 		{/each}
 	</ButtonTactile>
 	<ButtonTactile
-		disabled={!toggledC}
+		disabled={!toggledC || dialedB}
 		on:click={() => {
 			dialedB = !dialedB;
 		}}
@@ -291,7 +292,7 @@
 				{#if dialedB}
 					<T.MeshPhysicalMaterial
 						side={THREE.DoubleSide}
-						color={new THREE.Color(0xcccccc)}
+						emissive={new THREE.Color(0xcccccc)}
 						transmission={0.5}
 						roughness={0.5}
 						thickness={0.5}
@@ -347,7 +348,7 @@
 		</T.Mesh>
 	</ButtonTactile>
 	<ButtonTactile
-		disabled={bangCount <= 0}
+		disabled={bangCount <= 0 || offed}
 		on:click={() => {
 			offed = !offed;
 		}}
@@ -362,7 +363,7 @@
 			{#if bangCount}
 				<T.MeshPhysicalMaterial
 					side={THREE.DoubleSide}
-					map={videoTex}
+					emissive={new THREE.Color(0x222222)}
 				/>
 			{:else}
 				<T.MeshStandardMaterial
