@@ -45,11 +45,13 @@
 					bezierQuintInOut,
 				);
 
-				tween.subscribe((value) => {
+				const unsubscribe = tween.subscribe((value) => {
 					window.scrollTo(0, value);
 				});
 
 				await tween.play();
+
+				unsubscribe();
 			}}
 			><svelte:fragment slot="left"
 				><Svg svg={ic_arrow_upward} /></svelte:fragment
