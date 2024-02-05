@@ -25,6 +25,7 @@
 	import { browser } from '$app/environment';
 	import { tick } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { mounted } from '@sxxov/sv/ut/stores';
 
 	export let expanded = false;
 	export let hidden = false;
@@ -47,7 +48,7 @@
 				(prev, curr) => (pos >= curr.top + curr.offset ? curr : prev),
 				$hashes[0],
 			);
-	$: if (!getScrolling()) {
+	$: if ($mounted && !getScrolling()) {
 		const h = Number.isNaN(scrollY)
 			? getHashFromUrl() ?? hashes.get()[0]
 			: getHashFromScroll(scrollY + 1);
@@ -64,7 +65,7 @@
 	const getEffect = () => effect;
 	const getScrollY = () => scrollY;
 	let tween: Tween | undefined;
-	$: if (browser && getEffect() && $hash !== hashPlaceholder) {
+	$: if ($mounted && getEffect() && $hash !== hashPlaceholder) {
 		const { id, top, offset } = $hash;
 
 		void goto(`#${id}`, { noScroll: true });
