@@ -102,7 +102,7 @@
 			name="Story"
 			on:click={() => {
 				$hash =
-					hashes.find(({ id }) => id === 'welcome') ??
+					hashes.find(({ id }) => id === 'story') ??
 					raise(new UnreachableError());
 			}}
 		/>
