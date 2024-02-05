@@ -4,6 +4,7 @@
 	import { Spacer } from '@sxxov/sv/layout';
 	import { Svg } from '@sxxov/sv/svg';
 	import {
+		ic_alternate_email,
 		ic_arrow_outward,
 		ic_attach_email,
 		ic_category,
@@ -11,9 +12,12 @@
 		ic_email,
 		ic_emoji_objects,
 		ic_face,
+		ic_forward_to_inbox,
 		ic_groups,
+		ic_mark_email_unread,
 		ic_message,
 		ic_question_mark,
+		ic_send,
 	} from 'maic/two_tone';
 	import { Levels } from '@sxxov/sv/common/enums';
 	import { dropIn, dropOut } from '@sxxov/sv/ut/transition/transitions';
@@ -136,7 +140,7 @@
 							width="100%"
 						>
 							<svelte:fragment slot="left">
-								<Svg svg={ic_attach_email} />
+								<Svg svg={ic_mark_email_unread} />
 							</svelte:fragment>
 							hello@ljs.lol
 							<svelte:fragment slot="right">
@@ -298,7 +302,7 @@
 							disabled={sending}
 						>
 							<svelte:fragment slot="left">
-								<Svg svg={ic_done} />
+								<Svg svg={ic_send} />
 							</svelte:fragment>
 							{#if sending}
 								Sending…
@@ -378,7 +382,7 @@
 				font-size: clamp(4rem, 5vw, 20rem);
 				font-weight: 100;
 				letter-spacing: -0.05em;
-				color: var(--colour-text);
+				color: var(----colour-text-primary);
 				margin: 0;
 
 				/* max-width: 400px; */
@@ -393,7 +397,7 @@
 					font-size: 1rem;
 					font-weight: 900;
 					text-transform: uppercase;
-					color: var(--colour-text);
+					color: var(----colour-text-primary);
 					margin: 0;
 					margin-bottom: 28px;
 					line-height: 1.5;
@@ -406,7 +410,7 @@
 
 						padding: 7px;
 						border-radius: var(----roundness);
-						border: 1px solid var(--colour-text);
+						border: 1px solid var(----colour-text-tertiary);
 						margin-right: 7px;
 					}
 				}

@@ -240,7 +240,7 @@
 	.paper {
 		position: relative;
 
-		color: var(--colour-text);
+		color: var(----colour-text-primary);
 		width: var(--width);
 		height: var(--height);
 		padding: var(--padding);
