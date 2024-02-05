@@ -23,13 +23,18 @@
 
 	::-webkit-scrollbar-thumb {
 		background: var(----colour-background-secondary);
-		border-radius: var(----roundness);
 
-		border: solid 4px var(----colour-background-primary);
+		border: solid 4px black;
+		outline: solid 1px var(----colour-background-secondary);
+		outline-offset: -5px;
+		border-radius: 999px;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
 		background: var(----colour-background-tertiary);
+
+		outline: solid 1px var(----colour-text-tertiary);
+		outline-offset: -4px;
 	}
 
 	::-webkit-scrollbar-thumb:active {
@@ -37,7 +42,7 @@
 	}
 
 	::-webkit-scrollbar-track {
-		background: var(----colour-background-primary);
+		background: black;
 		border-radius: var(----roundness);
 	}
 
