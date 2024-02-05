@@ -19,8 +19,9 @@
 	</div>
 	<div class="centre">
 		<p>
-			<a href="mailto:hello@ljs.lol"
-				><Svg svg={ic_arrow_outward} />Hire me</a
+			<a
+				href="https://ljs.lol"
+				target="_blank"><Svg svg={ic_arrow_outward} />Hire me</a
 			>
 		</p>
 		<p>
