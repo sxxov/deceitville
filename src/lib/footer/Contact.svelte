@@ -346,6 +346,11 @@
 			width: 100%;
 
 			background: black;
+			/* background: radial-gradient(
+				circle at 0% 50%,
+				var(----colour-background-primary) 0%,
+				black 50%
+			); */
 
 			border-top: 1px solid var(----colour-background-secondary);
 			border-bottom: 1px solid var(----colour-background-secondary);
@@ -425,12 +430,6 @@
 			flex-wrap: wrap;
 
 			width: 100%;
-
-			background: radial-gradient(
-				circle at center,
-				var(----colour-background-primary) 0%,
-				var(----colour-background-transparent) 50%
-			);
 
 			& > .container {
 				width: 100%;
