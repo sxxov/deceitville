@@ -21,10 +21,8 @@ export const useEphemeralCamera = (camera: THREE.Camera) => {
 		const indexOfInit = cameraStack.indexOf(init);
 
 		if (indexOfInit >= 0) {
-			if (c.current === camera) {
-				cameraStack.splice(indexOfInit, Infinity);
-				c.set(init);
-			} else cameraStack.splice(indexOfInit, 1);
+			cameraStack.splice(indexOfInit, Infinity);
+			c.set(init);
 		}
 	});
 };
