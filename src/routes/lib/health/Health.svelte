@@ -7,7 +7,7 @@
 	import { ic_heart_broken, ic_favorite } from 'maic/filled';
 	import HealthScene from './HealthScene.svelte';
 	import { completable } from './completion';
-	import { Store } from '@sxxov/ut/store';
+	import type { Store } from '@sxxov/ut/store';
 	import type { BuildingInfo } from '../../building/lib/info/BuildingInfo';
 	import { onDestroy } from 'svelte';
 
@@ -79,7 +79,6 @@
 		<div class="hearts">
 			{#each heartsBlueprint as { icon, predicate }}
 				{#each completableEntries as [k, r]}
-					{@const hovering = new Store(false)}
 					<R
 						{r}
 						let:v={completed}
@@ -97,28 +96,23 @@
 									href={url}
 									on:pointerover={(e) => {
 										if (e.pointerType === 'mouse') {
-											hovering.set(true);
 											info = v;
 										}
 									}}
 									on:pointerleave={() => {
-										hovering.set(false);
 										info = undefined;
 									}}
 									on:keyup={(e) => {
 										if (e.key === 'Tab') {
-											hovering.set(true);
 											info = v;
 										}
 									}}
 									on:blur={() => {
-										hovering.set(false);
 										info = undefined;
 									}}
 									on:click={(e) => {
-										if (!hovering.get()) {
+										if (!info) {
 											e.preventDefault();
-											hovering.set(true);
 											info = v;
 										}
 									}}
