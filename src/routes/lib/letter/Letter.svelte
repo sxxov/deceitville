@@ -75,23 +75,26 @@
 							<h2>Memo</h2>
 						</div>
 						<table>
-							<tr>
-								<td>To:</td>
-								<td>Executive Committee of De Corp.®</td>
-							</tr>
-							<tr>
-								<td>From:</td>
-								<td
-									><span class="redacted">Prof. De</span>, CEO</td
-								>
-							</tr>
-							<tr>
-								<td>Subject:</td>
-								<td
-									><div class="chip">Urgent</div>
-									&nbsp;What is the point of Deceitville?</td
-								>
-							</tr>
+							<tbody>
+								<tr>
+									<td>To:</td>
+									<td>Executive Committee of De Corp.®</td>
+								</tr>
+								<tr>
+									<td>From:</td>
+									<td
+										><span class="redacted">Prof. De</span>,
+										CEO</td
+									>
+								</tr>
+								<tr>
+									<td>Subject:</td>
+									<td
+										><div class="chip">Urgent</div>
+										&nbsp;What is the point of Deceitville?</td
+									>
+								</tr>
+							</tbody>
 						</table>
 						<span class="greetings">Dear Committee,</span>
 						<p>
@@ -426,15 +429,21 @@
 							margin-block: 28px;
 							border-collapse: collapse;
 
-							& > tr {
-								& > td {
-									padding: 14px;
-									border-bottom: 1px solid
-										var(----colour-background-tertiary);
-									color: var(----colour-background-primary);
-									font-weight: 100;
-									font-size: 1.5rem;
-									letter-spacing: -0.04em;
+							& > tbody {
+								display: contents;
+
+								& > tr {
+									& > td {
+										padding: 14px;
+										border-bottom: 1px solid
+											var(----colour-background-tertiary);
+										color: var(
+											----colour-background-primary
+										);
+										font-weight: 100;
+										font-size: 1.5rem;
+										letter-spacing: -0.04em;
+									}
 								}
 							}
 						}
