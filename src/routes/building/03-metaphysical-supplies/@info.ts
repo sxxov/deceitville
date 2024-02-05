@@ -3,15 +3,17 @@
 import { ic_self_improvement } from 'maic/two_tone';
 import type { ReadonlyDeep } from 'type-fest';
 import { gltfs } from '../../../assets/routes/lib/village/buildings/parts';
-import { resolveRouteUrl } from '../../../lib/url/resolveRouteUrl';
 import type { BuildingInfo } from '../lib/info/BuildingInfo';
+import { resolveBuildingRouteUrl } from '../lib/info/resolveBuildingRouteUrl';
 
 export const info = {
-	id: resolveRouteUrl(__dirname),
+	id: resolveBuildingRouteUrl(__dirname),
 	name: 'Metaphysical Supplies',
 	description:
 		"The town's place to buy improvements to your mind, body, & soul. However, it all seems a little too good to be true. Figure out what actually goes on.",
 	objective: 'Buy a jewel without paying extra.',
+	analogy:
+		'The true cost of the product is hidden until the last moment, fooling you into thinking that you are getting a good deal, when in reality, you are not.',
 	inspirations: [
 		'Food delivery apps that hide additional fees until the last moment.',
 		'Online stores that hide shipping costs until the last moment.',

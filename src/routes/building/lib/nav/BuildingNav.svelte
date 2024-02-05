@@ -184,13 +184,13 @@
 					<h2>{info.name}</h2>
 				</div>
 				<section>
+					<h3>What's the point?</h3>
+					<p>{info.analogy}</p>
+				</section>
+				<section>
 					<h3>Objective</h3>
 					<p>{info.objective}</p>
 				</section>
-				<!-- <section>
-					<h3>Description</h3>
-					<p>{info.description}</p>
-				</section> -->
 				<section>
 					<h3>Lessons</h3>
 					<ul>

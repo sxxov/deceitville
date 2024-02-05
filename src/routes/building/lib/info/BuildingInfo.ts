@@ -6,6 +6,7 @@ export interface BuildingInfo {
 	name: string;
 	description: string;
 	objective: string;
+	analogy: string;
 	inspirations: string[];
 	lessons: string[];
 	brignulls: {
