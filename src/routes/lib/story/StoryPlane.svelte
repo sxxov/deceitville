@@ -201,9 +201,9 @@
 						<h6 use:revealable><b>De Corp.®</b></h6>
 					</div>
 					<Spacer height={14} />
-					<p use:revealable>Creators & maintainers,</p>
-					<Spacer height={14} />
-					<p use:revealable>Deceitville.</p>
+					<p use:revealable>
+						Creators & maintainers,<br />Deceitville.
+					</p>
 				</div>
 			</div>
 		</div>
@@ -256,7 +256,7 @@
 					class="grow"
 					use:revealable
 				>
-					very
+					all
 				</h6>
 				<div class="sparse-y wrap">
 					<div class="put-y">
