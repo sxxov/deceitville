@@ -70,7 +70,7 @@
 								<Svg
 									width={16}
 									svg={ic_warning}
-								/> Internal
+								/> Confidential
 							</div>
 							<h2>Memo</h2>
 						</div>
@@ -87,37 +87,54 @@
 							</tr>
 							<tr>
 								<td>Subject:</td>
-								<td>Preparation: Company Profile.</td>
+								<td
+									><div class="chip">Urgent</div>
+									&nbsp;What is the point of Deceitville?</td
+								>
 							</tr>
 						</table>
-						<span class="greetings">Dear De Corp.® EXCO,</span>
+						<span class="greetings">Dear Committee,</span>
 						<p>
-							We trust this message finds you well as we continue
-							to steer the course of Deceitville, our illustrious
-							creation. Today, I have an important announcement
-							that requires your full attention & commitment.
+							I trust this message finds you all well. Recently
+							I've received many questions regarding the goals of
+							our operation, which I believe can be boiled down to
+							a single line:
+						</p>
+						<h1>What is the point of Deceitville?</h1>
+						<p>
+							In short, we aim to create a confirming public using
+							coersions that can be implemented without knowledge
+							by our consumers. We need to find ways to sell a
+							product, paint an idea, push a narrative, or even
+							create a new reality without the consumer being
+							aware of it. We are not the first company to do
+							something like this, but we are the first that aims
+							to do it in a way that <i>captivates</i> our guests through
+							pretty visuals, luxury, & experience.
 						</p>
 						<blockquote>
-							Deceitville has reached public facing readiness
-							stage.
+							If we succeed—we will—we'll have a group of people
+							at our bottom line.
 						</blockquote>
 						<p>
-							Thus, we shall be pleased to invite visitors to
-							explore selected areas of our finely crafted town,
-							Deceitville. It is imperative that we extend this
-							invitation discreetly & with precision. This
-							endeavor aligns perfectly with our overarching
-							objective to curate a set of residents that aligns
-							with our current year consumption goals.
+							We are now at a critical juncture in our operation,
+							as we are about to welcome our first group of new
+							guests into Deceitville. These guests are visitors
+							from the outside world, who have been unknowingly
+							volunteered to participate in our experiment. They
+							will be arriving in the coming weeks, and will be
+							staying with us for a period of a few minutes at a
+							time.
 						</p>
 						<p>
-							In the spirit of hospitality, we urge you to welcome
-							these visitors warmly, offering them an
-							unforgettable experience in our uniquely designed
-							town. However, we must maintain our corporate
-							posture even in the face of friendliness. Hence, we
-							remind you to adhere strictly to the following
-							guidelines when engaging with our guests:
+							Thus, in the spirit of hospitality, we urge you to
+							welcome these visitors warmly, offering them an
+							unforgettable experience in our town. Each shop,
+							building, & outlet must be at their top performance.
+							As a reminder of corporate posture even in the face
+							of friendliness or foeness, I have taken the liberty
+							to attach below, our guidelines for engaging with
+							guests:
 						</p>
 						<ol>
 							<li>
@@ -125,15 +142,13 @@
 								or its employees.
 							</li>
 							<li>
-								Do not reveal any additional information beyond
-								the production design to the residents.
+								Attempt to achieve your goal with the guests at
+								all costs.
 							</li>
 							<li>
 								<div class="chip">Important</div>
-								&nbsp;Always be mindful of the implemented production
-								coersions &&nbsp;<b
-									>avoid falling for them yourself</b
-								>.
+								&nbsp;<b>Always be aware of adversaries</b> attempting
+								to circumvent our operations.
 							</li>
 						</ol>
 						<p>
