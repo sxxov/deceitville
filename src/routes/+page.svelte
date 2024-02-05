@@ -1,6 +1,23 @@
 <script lang="ts">
+	import { UnreachableError } from '@sxxov/ut/errors';
+	import { raise } from '@sxxov/ut/functional';
+	import {
+		ic_chat_bubble,
+		ic_directions,
+		ic_favorite,
+		ic_home,
+		ic_local_fire_department,
+	} from 'maic/two_tone';
 	import { expoIn, expoOut } from 'svelte/easing';
 	import { useAmbientRendererSize } from '../lib/3d/canvas/useAmbientRendererSize';
+	import Contact from '../lib/footer/Contact.svelte';
+	import Footer from '../lib/footer/Footer.svelte';
+	import { selfDestruct } from '../lib/history/selfDestruct';
+	import Meta from '../lib/meta/Meta.svelte';
+	import Hash from '../lib/nav/Hash.svelte';
+	import { hash, hashes } from '../lib/nav/Hasher.svelte';
+	import Nav from '../lib/nav/Nav.svelte';
+	import Topping from '../lib/nav/Topping.svelte';
 	import Caution from './lib/caution/Caution.svelte';
 	import Continuation from './lib/continuation/Continuation.svelte';
 	import Directory from './lib/directory/Directory.svelte';
@@ -10,24 +27,6 @@
 	import Waze from './lib/waze/Waze.svelte';
 	import { WazeDirection } from './lib/waze/WazeDirection';
 	import type { WazeTimeline } from './lib/waze/WazeTimeline';
-	import Meta from '../lib/meta/Meta.svelte';
-	import Nav from '../lib/nav/Nav.svelte';
-	import Topping from '../lib/nav/Topping.svelte';
-	import {
-		ic_book,
-		ic_chat_bubble,
-		ic_directions,
-		ic_favorite,
-		ic_home,
-		ic_house_siding,
-		ic_warning,
-	} from 'maic/two_tone';
-	import Hash from '../lib/nav/Hash.svelte';
-	import { hash, hashes } from '../lib/nav/Hasher.svelte';
-	import { raise } from '@sxxov/ut/functional';
-	import { UnreachableError } from '@sxxov/ut/errors';
-	import Contact from '../lib/footer/Contact.svelte';
-	import Footer from '../lib/footer/Footer.svelte';
 
 	export const dropDown = (
 		element: Element,
@@ -141,16 +140,9 @@
 		<hr />
 		<Topping
 			{ctx}
-			icon={ic_warning}
+			icon={ic_local_fire_department}
 			name="Self Destruct"
-			on:click={() => {
-				history.pushState(undefined, '', location.href);
-				document.write(
-					`<${
-						/* oh svelte 4 parser, my sweet child */ ''
-					}script>let s='_'.repeat(10000),t=s;for(;;)history.replaceState(0,0,t+=s)</script>`,
-				);
-			}}
+			on:click={selfDestruct}
 		/>
 	</svelte:fragment>
 </Nav>
