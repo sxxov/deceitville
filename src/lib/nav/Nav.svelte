@@ -23,7 +23,7 @@
 	</div>
 	<div class="centre">
 		<div class="spacer" />
-		<Hasher />
+		<Hasher hidden />
 	</div>
 	<div class="right">
 		<slot name="cta" />
@@ -92,12 +92,6 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
-
-			/*
-			Hack for still mounting `Hasher` to handle `$hash` events,
-			but not rendering it
-			*/
-			display: none;
 
 			.vacated& {
 				margin-top: -168px;

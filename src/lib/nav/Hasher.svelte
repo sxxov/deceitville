@@ -27,6 +27,7 @@
 	import { goto } from '$app/navigation';
 
 	export let expanded = false;
+	export let hidden = false;
 
 	let scrollY = NaN;
 	let scrolling = false;
@@ -80,87 +81,90 @@
 </script>
 
 <svelte:window bind:scrollY />
-<div class="nav hasher">
-	<div class="spacer" />
-	<div class="content">
-		{#if $hashes.length > 0}
-			<!-- <Dropdown
-		width="max(100%, 200px)"
-		name="hash"
-		bind:selectedItemId={$selected.id}
-		items={hashItems}
-		heightMaxItems={$inner.height || 999}
-		inputProps={{
-			colourBackground: '----colour-background-primary',
-			placeholder: $strings.common.loading,
-		}}
-	/> -->
-			{#if expanded}
-				<div
-					class="overlay"
-					role="presentation"
-					on:click={() => {
-						expanded = false;
+{#if !hidden}
+	<div class="nav hasher">
+		<div class="spacer" />
+		<div class="content">
+			{#if $hashes.length > 0}
+				<!-- <Dropdown
+					width="max(100%, 200px)"
+					name="hash"
+					bind:selectedItemId={$selected.id}
+					items={hashItems}
+					heightMaxItems={$inner.height || 999}
+					inputProps={{
+						colourBackground: '----colour-background-primary',
+						placeholder: $strings.common.loading,
 					}}
-				/>
-			{/if}
-			<div class="expander">
-				<Button
-					{...ButtonVariants.Transparent}
-					width="min(100%, max-content)"
-					on:click={() => (expanded = !expanded)}
-					on:keydown={(e) => e.key === 'Escape' && (expanded = false)}
-				>
-					<div slot="left" />
-					<div class="content">
-						<h3>
-							{#key $hashes}
-								{$hash.name}
-							{/key}
-						</h3>
-						<div class="spacer" />
-					</div>
-					<svelte:fragment slot="right">
-						<Svg
-							svg={expanded ? ic_expand_less : ic_expand_more}
-							colour="----colour-accent-primary"
-						/>
-					</svelte:fragment>
-				</Button>
-			</div>
-			<div class="expanded">
-				{#each $hashes.sort( (a, b) => (a.top + a.offset > b.top + b.offset ? 1 : -1), ) as h, i}
-					{#if expanded}
-						<div
-							class="hash"
-							in:dropIn={{ delay: i * 100 }}
-							out:dropOut={{
-								delay: ($hashes.length - 1 - i) * 50,
-								duration: 70,
-							}}
-						>
-							<Button
-								width="100%"
-								{...$hash === h
-									? ButtonVariants.Primary
-									: ButtonVariants.Secondary}
-								{...ButtonVariants.Shadow.Sm}
-								on:click={() => {
-									$hash = h;
-									expanded = false;
+				/> -->
+				{#if expanded}
+					<div
+						class="overlay"
+						role="presentation"
+						on:click={() => {
+							expanded = false;
+						}}
+					/>
+				{/if}
+				<div class="expander">
+					<Button
+						{...ButtonVariants.Transparent}
+						width="min(100%, max-content)"
+						on:click={() => (expanded = !expanded)}
+						on:keydown={(e) =>
+							e.key === 'Escape' && (expanded = false)}
+					>
+						<div slot="left" />
+						<div class="content">
+							<h3>
+								{#key $hashes}
+									{$hash.name}
+								{/key}
+							</h3>
+							<div class="spacer" />
+						</div>
+						<svelte:fragment slot="right">
+							<Svg
+								svg={expanded ? ic_expand_less : ic_expand_more}
+								colour="----colour-accent-primary"
+							/>
+						</svelte:fragment>
+					</Button>
+				</div>
+				<div class="expanded">
+					{#each $hashes.sort( (a, b) => (a.top + a.offset > b.top + b.offset ? 1 : -1), ) as h, i}
+						{#if expanded}
+							<div
+								class="hash"
+								in:dropIn={{ delay: i * 100 }}
+								out:dropOut={{
+									delay: ($hashes.length - 1 - i) * 50,
+									duration: 70,
 								}}
 							>
-								<div class="text">
-									<h3>{h.name}</h3>
-								</div>
-							</Button>
-						</div>
-					{/if}
-				{/each}
-			</div>
-		{/if}
+								<Button
+									width="100%"
+									{...$hash === h
+										? ButtonVariants.Primary
+										: ButtonVariants.Secondary}
+									{...ButtonVariants.Shadow.Sm}
+									on:click={() => {
+										$hash = h;
+										expanded = false;
+									}}
+								>
+									<div class="text">
+										<h3>{h.name}</h3>
+									</div>
+								</Button>
+							</div>
+						{/if}
+					{/each}
+				</div>
+			{/if}
+		</div>
 	</div>
-</div>
+{/if}
 
 <style lang="postcss">
 	.hasher {
