@@ -1,6 +1,14 @@
 import { browser } from '$app/environment';
 import type { OrAnyNumber } from '@sxxov/ut/types';
 
+const isPaceAvailable = () => typeof Pace !== 'undefined';
+const waitForPace = async () => {
+	while (!isPaceAvailable())
+		await new Promise((r) => {
+			setTimeout(r, 10);
+		});
+};
+
 export class PartPaceSource implements Pace.ProgressSource {
 	public static readonly instance = new PartPaceSource();
 
@@ -21,7 +29,9 @@ export class PartPaceSource implements Pace.ProgressSource {
 	}
 
 	public async track<T>(promise: Promise<T>): Promise<T> {
-		if (browser && this.trackedPartCount <= 0 && !Pace.running)
+		if (!browser) return promise;
+
+		if (isPaceAvailable() && this.trackedPartCount <= 0 && !Pace.running)
 			Pace.restart();
 
 		++this.trackedPartCount;
@@ -34,7 +44,7 @@ export class PartPaceSource implements Pace.ProgressSource {
 				this.loadingPartCount = 0;
 				this.trackedPartCount = 0;
 
-				if (browser) Pace.stop();
+				if (isPaceAvailable()) Pace.stop();
 			}
 		});
 
@@ -49,10 +59,7 @@ export class PartPaceSource implements Pace.ProgressSource {
 
 if (browser)
 	void (async () => {
-		while (typeof Pace === 'undefined')
-			await new Promise((r) => {
-				setTimeout(r, 10);
-			});
+		await waitForPace();
 
 		(Pace.options.extraSources ??= []).push(PartPaceSource);
 		Pace.restart();
