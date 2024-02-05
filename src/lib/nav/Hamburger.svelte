@@ -9,9 +9,8 @@
 
 <script lang="ts">
 	import { Button, ButtonVariants } from '@sxxov/sv/button';
-	import { Svg } from '@sxxov/sv/svg';
+	import { Lottie } from '@sxxov/sv/lottie';
 	import { Store } from '@sxxov/ut/store';
-	import { ic_menu } from 'maic/two_tone';
 
 	export let expanded = false;
 
@@ -22,6 +21,13 @@
 
 	$: expandedStore.set(expanded);
 	$: expanded = $expandedStore;
+
+	let animationData: Lottie['animationData'] | undefined;
+	(async () => {
+		({ default: animationData } = await import(
+			'../../assets/lib/nav/hamburger.json'
+		));
+	})();
 </script>
 
 <div
@@ -40,11 +46,22 @@
 	<Button
 		{...ButtonVariants.Fab.Md}
 		{...ButtonVariants.Secondary}
-		{...ButtonVariants.Shadow.Sm}
-		colourBackground="var(----colour-background-primary)"
+		{...ButtonVariants.Shadow.None}
+		colourBackground="var(----colour-background-transparent)"
 		on:click={() => (expanded = !expanded)}
 		on:keydown={(e) => e.key === 'Escape' && (expanded = false)}
-		><Svg svg={ic_menu} /></Button
+		>{#if animationData}<Lottie
+				colourOverride="var(----colour-accent-primary)"
+				{animationData}
+				options={{
+					loop: false,
+					autoplay: false,
+				}}
+				let:animation
+				>{#if animation}{(animation.setDirection(expanded ? 1 : -1),
+					animation.play(),
+					'')}{/if}</Lottie
+			>{/if}</Button
 	>
 	<div class="container">
 		<div class="toppings">

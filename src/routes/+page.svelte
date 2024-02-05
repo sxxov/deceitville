@@ -11,6 +11,23 @@
 	import { WazeDirection } from './lib/waze/WazeDirection';
 	import type { WazeTimeline } from './lib/waze/WazeTimeline';
 	import Meta from '../lib/meta/Meta.svelte';
+	import Nav from '../lib/nav/Nav.svelte';
+	import Topping from '../lib/nav/Topping.svelte';
+	import {
+		ic_book,
+		ic_chat_bubble,
+		ic_directions,
+		ic_favorite,
+		ic_home,
+		ic_house_siding,
+		ic_warning,
+	} from 'maic/two_tone';
+	import Hash from '../lib/nav/Hash.svelte';
+	import { hash, hashes } from '../lib/nav/Hasher.svelte';
+	import { raise } from '@sxxov/ut/functional';
+	import { UnreachableError } from '@sxxov/ut/errors';
+	import Contact from '../lib/footer/Contact.svelte';
+	import Footer from '../lib/footer/Footer.svelte';
 
 	export const dropDown = (
 		element: Element,
@@ -74,6 +91,69 @@
 	]}
 	src=""
 />
+<Nav>
+	<svelte:fragment
+		slot="toppings"
+		let:ctx
+	>
+		<Topping
+			{ctx}
+			icon={ic_home}
+			name="Story"
+			on:click={() => {
+				$hash =
+					hashes.find(({ id }) => id === 'welcome') ??
+					raise(new UnreachableError());
+			}}
+		/>
+		<Topping
+			{ctx}
+			icon={ic_directions}
+			name="Directory"
+			on:click={() => {
+				$hash =
+					hashes.find(({ id }) => id === 'directory') ??
+					raise(new UnreachableError());
+			}}
+		/>
+		<Topping
+			{ctx}
+			icon={ic_favorite}
+			name="Progress"
+			on:click={() => {
+				$hash =
+					hashes.find(({ id }) => id === 'progress') ??
+					raise(new UnreachableError());
+			}}
+		/>
+		<hr />
+		<Topping
+			{ctx}
+			icon={ic_chat_bubble}
+			name="Contact"
+			on:click={() => {
+				$hash =
+					hashes.find(({ id }) => id === 'contact') ??
+					raise(new UnreachableError());
+			}}
+		/>
+
+		<hr />
+		<Topping
+			{ctx}
+			icon={ic_warning}
+			name="Self Destruct"
+			on:click={() => {
+				history.pushState(undefined, '', location.href);
+				document.write(
+					`<${
+						/* oh svelte 4 parser, my sweet child */ ''
+					}script>let s='_'.repeat(10000),t=s;for(;;)history.replaceState(0,0,t+=s)</script>`,
+				);
+			}}
+		/>
+	</svelte:fragment>
+</Nav>
 <svelte:window bind:scrollY />
 <div class="route home">
 	<div class="frame">
@@ -91,12 +171,30 @@
 		{/if}
 	</div>
 
+	<Hash
+		id="story"
+		name="Story"
+	/>
 	<Story />
+	<Hash
+		id="directory"
+		name="Directory"
+	/>
 	<Directory />
+	<Hash
+		id="progress"
+		name="Progress"
+	/>
 	<Health />
 	<Caution />
 	<Letter />
 	<Continuation />
+	<Hash
+		id="contact"
+		name="Contact"
+	/>
+	<Contact />
+	<Footer />
 </div>
 
 <style lang="postcss">

@@ -104,8 +104,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="contact"><Contact /></div>
-		<div class="footer"><Footer /></div>
 	</div>
 </div>
 
@@ -207,7 +205,7 @@
 
 								padding: 7px;
 								border-radius: var(----roundness);
-								border: 1px solid var(--colour-text);
+								border: 1px solid var(----colour-text-tertiary);
 								margin-right: 7px;
 							}
 						}
@@ -374,11 +372,6 @@
 						}
 					}
 				}
-			}
-
-			& > .footer {
-				position: relative;
-				z-index: 1;
 			}
 		}
 	}

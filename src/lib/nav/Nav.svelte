@@ -19,7 +19,7 @@
 	class:vacated={$navVacated}
 >
 	<div class="left">
-		<Logo />
+		<!-- <Logo /> -->
 	</div>
 	<div class="centre">
 		<div class="spacer" />
@@ -42,7 +42,10 @@
 						$theme = $theme === 'light' ? 'dark' : 'light';
 					}}
 				/> -->
-				<slot name="toppings" />
+				<slot
+					name="toppings"
+					{ctx}
+				/>
 			</svelte:fragment>
 		</Hamburger>
 	</div>
@@ -89,6 +92,12 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			/*
+			Hack for still mounting `Hasher` to handle `$hash` events,
+			but not rendering it
+			*/
+			display: none;
 
 			.vacated& {
 				margin-top: -168px;

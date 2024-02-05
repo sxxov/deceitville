@@ -67,7 +67,6 @@
 <Splash />
 <main>
 	<Toaster />
-	<!-- <Nav /> -->
 
 	<AmbientCanvas
 		size={$client}
