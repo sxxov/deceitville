@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { Button } from '@sxxov/sv/button';
 	import { Svg } from '@sxxov/sv/svg';
-	import { map01 } from '@sxxov/ut/math';
+	import { clamp01, map01 } from '@sxxov/ut/math';
 	import { inner } from '@sxxov/ut/viewport';
-	import { ic_warning } from 'maic/two_tone';
+	import { ic_logout, ic_warning } from 'maic/two_tone';
+	import { useAmbientRendererSize } from '../../../lib/3d/canvas/useAmbientRendererSize';
 	import ScrollPosition from '../layout/ScrollPosition.svelte';
 
 	const dtf = new Intl.DateTimeFormat(undefined, {
@@ -16,12 +18,39 @@
 	let bottom = 0;
 	const heightShred = 224;
 
+	const size = useAmbientRendererSize();
+
 	$: shred = $inner.width > 500;
 </script>
 
 <svelte:window bind:scrollY />
 <ScrollPosition bind:top />
 <div class="letter">
+	<div
+		class="background"
+		style="--p: {clamp01(map01(scrollY, top, top + (bottom - top) / 2))}"
+	>
+		<div class="button">
+			<!-- <Logo
+				colour="#2d2e30"
+				width={400}
+				height={200}
+			/> -->
+			<Button
+				roundness={28}
+				on:click={async () => {
+					window.scrollTo({
+						top: 0,
+						behavior: 'smooth',
+					});
+					await new Promise((resolve) => {
+						setTimeout(resolve, 500);
+					});
+					location.href = 'about:blank';
+				}}><Svg svg={ic_logout} />Emergency Exit</Button
+			>
+		</div>
+	</div>
 	<div
 		class="content"
 		style="--height-shred: {heightShred}px;"
@@ -30,7 +59,7 @@
 			<div
 				class="cover"
 				class:visible={scrollY > top - heightShred &&
-					scrollY <= bottom - heightShred}
+					scrollY <= bottom - heightShred - Number($size?.height)}
 			></div>
 		{/if}
 		{#each Array(shred ? 13 : 1).fill(undefined) as _, i}
@@ -183,11 +212,52 @@
 
 		z-index: 1;
 
+		background: black;
+
+		& *::selection {
+			background: var(----colour-background-primary);
+			color: var(----colour-text-primary);
+		}
+
+		& > .background {
+			position: sticky;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-sizing: border-box;
+			top: 0;
+			width: 100%;
+			height: 100vh;
+			height: 100lvh;
+			--background: repeating-linear-gradient(
+				180deg,
+				#000,
+				#000 12.5vh,
+				#2d2e30 12.5vh,
+				#2d2e30 calc(12.5vh + 1px)
+			);
+			background: var(--background);
+			pointer-events: auto;
+
+			transform: scaleY(var(--p));
+
+			& > .button {
+				outline: 1px solid var(----colour-background-tertiary);
+				outline-offset: 4px;
+				border-radius: 28px;
+			}
+		}
+
 		& > .content {
 			/* position: sticky;
 			top: 0; */
 			position: relative;
-			top: 0;
+			top: -100vh;
+			top: -100lvh;
+			/* margin-bottom: calc(-50vh - 30px);
+			margin-bottom: calc(-50lvh - 30px); */
+			/* margin-bottom: -80vh;
+			margin-bottom: -80lvh; */
 
 			width: 100%;
 			/* height: 300vh;
@@ -204,19 +274,10 @@
 
 			/* border-top: 1px solid var(----colour-text-primary); */
 
-			--background: repeating-linear-gradient(
-				180deg,
-				#000,
-				#000 8rem,
-				var(----colour-text-tertiary) 8rem,
-				var(----colour-text-tertiary) calc(8rem + 1px)
-			);
-			background: var(--background);
-
 			& > .cover {
 				position: fixed;
 				top: 0;
-				height: calc(var(--height-shred) - 4px);
+				height: calc((var(--height-shred) - 4px));
 				width: 100%;
 				max-width: 800px;
 				margin: 0 auto;
