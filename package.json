@@ -76,6 +76,7 @@
 		"@threlte/flex": "^0.1.1",
 		"@threlte/rapier": "^1.1.4",
 		"color": "^4.2.3",
+		"detect-gpu": "^5.0.38",
 		"dotenv": "^16.3.1",
 		"draco3d": "^1.5.6",
 		"http-status-codes": "^2.3.0",

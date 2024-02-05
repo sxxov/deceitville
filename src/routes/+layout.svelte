@@ -23,6 +23,7 @@
 	import { useClientHistoryInitialisation } from '../lib/history/clientHistory';
 	import Splash from '../lib/splash/Splash.svelte';
 	import { DRACO_DECODER_URL } from '../lib/3d/part/dracoLoader';
+	import PerformanceDisclaimer from './lib/disclaimer/PerformanceDisclaimer.svelte';
 
 	useLenisInitialisation();
 	useClientHistoryInitialisation();
@@ -68,6 +69,8 @@
 <main>
 	<Toaster />
 
+	<PerformanceDisclaimer />
+
 	<AmbientCanvas
 		size={$client}
 		shadows={THREE.PCFSoftShadowMap}
@@ -77,6 +80,7 @@
 			antialias: true,
 			alpha: true,
 			premultipliedAlpha: false,
+			powerPreference: 'high-performance',
 		}}
 	>
 		<DefaultExrHdriProvider>
