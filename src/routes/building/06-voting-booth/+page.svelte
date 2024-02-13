@@ -35,7 +35,7 @@
 {#if done}
 	{#if good}
 		<BuildingSuccess
-			on:complete={exit}
+			on:exit={exit}
 			on:retry={retry}
 		>
 			{(completable[info.id]?.set(true), '')}

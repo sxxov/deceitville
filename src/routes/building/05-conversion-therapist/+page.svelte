@@ -32,7 +32,7 @@
 
 {#if broken}
 	<BuildingFailure
-		on:complete={exit}
+		on:exit={exit}
 		on:retry={retry}
 	>
 		You broke the TV.
