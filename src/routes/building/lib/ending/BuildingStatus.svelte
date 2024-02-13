@@ -121,6 +121,7 @@
 						0% {
 							font-size: 80rem;
 							opacity: 0;
+							padding-right: 112px;
 						}
 
 						10% {
@@ -129,6 +130,7 @@
 
 						60% {
 							font-size: 70rem;
+							padding-right: 112px;
 						}
 
 						100% {
